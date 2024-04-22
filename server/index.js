@@ -5,7 +5,7 @@ const app = express();
 const codeBotRouter = require("./routers/codeBot");
 
 // 使用路由
-app.use("/api", codeBotRouter);
+app.use("/fapi", codeBotRouter);
 
 // 设置端口
 const PORT = process.env.PORT || 3001;
