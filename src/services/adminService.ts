@@ -7,7 +7,7 @@ interface LoginResponse {
 }
 
 interface LoginCredentials {
-    phone_number: number;
+    phone_number: string;
     password: string;
 }
 

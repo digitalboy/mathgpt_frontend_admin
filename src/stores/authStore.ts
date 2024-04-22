@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', {
         isLoggedIn: (state) => !!state.accessToken
     },
     actions: {
-        async login(phoneNumber: number, password: string) {
+        async login(phoneNumber: string, password: string) {
             if (!this.isLoginInProgress) {
                 this.isLoginInProgress = true;
                 try {
