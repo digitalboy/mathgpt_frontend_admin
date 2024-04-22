@@ -1,6 +1,6 @@
 <!-- src\components\SchoolEdit.vue -->
 <template>
-    <el-dialog title="编辑学校信息" :visible.sync="visible">
+    <el-dialog title="编辑学校信息" v-model="visible">
         <el-form :model="school" :rules="rules" ref="schoolForm">
             <el-form-item label="学校ID" prop="id">
                 <el-input v-model="school.id" disabled></el-input>
