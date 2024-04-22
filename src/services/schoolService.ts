@@ -1,7 +1,7 @@
 // services/schoolService.ts
 import { BaseService } from './baseService';
 
-interface School {
+export interface School {
     id?: number;
     name: string;
     description: string;
