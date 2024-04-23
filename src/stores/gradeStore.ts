@@ -8,7 +8,7 @@ export const useGradeStore = defineStore('grade', {
         currentGrade: null as Grade | null,
     }),
     actions: {
-        setCurrentGrade(grade: Grade) {
+        setCurrentGrade(grade: Grade | null) {
             this.currentGrade = grade;
         },
         async fetchGrades() {

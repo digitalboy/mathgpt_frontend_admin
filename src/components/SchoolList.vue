@@ -1,6 +1,6 @@
 <!-- // components/SchoolList.vue -->
 <template>
-    <el-table :data="schools" style="width: 100%">
+    <el-table :data="schools" >
         <el-table-column prop="name" label="学校名称"></el-table-column>
         <el-table-column prop="description" label="描述"></el-table-column>
         <el-table-column prop="location" label="位置"></el-table-column>
