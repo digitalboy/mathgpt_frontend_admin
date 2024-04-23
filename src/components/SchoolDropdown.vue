@@ -1,4 +1,4 @@
-<!-- // components/SchoolDropdown.vue -->
+<!-- components/SchoolDropdown.vue -->
 <template>
     <el-select v-model="selectedSchool" placeholder="请选择学校" @change="handleSchoolChange">
         <el-option v-for="school in schools" :key="school.id" :label="school.name" :value="school">
@@ -9,37 +9,27 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useSchoolStore } from '@/stores/schoolStore';
-import { SchoolService } from '@/services/schoolService';
 import { School } from '@/services/schoolService';
 import { ElMessage } from 'element-plus';
 
 const schoolStore = useSchoolStore();
-const schools = ref < School[] > ([]);
-const selectedSchool = ref(null);
+const selectedSchool = ref<School | null>(null);
 
-const fetchSchools = async () => {
-    try {
-        const data = await SchoolService.getSchools();
-        if (data) {
-            schools.value = data;
-        } else {
-            throw new Error('未能获取学校数据');
-        }
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error('加载学校数据失败: ' + error.message);
-        } else {
-            ElMessage.error('发生未知错误');
-        }
-    }
-};  
+// 使用Pinia状态管理获取schools数组
+const schools = ref<School[]>(schoolStore.schools);
 
-const handleSchoolChange = (newSchool:School) => {
+const handleSchoolChange = (newSchool: School) => {
     schoolStore.setCurrentSchool(newSchool);
 };
 
 onMounted(() => {
-    fetchSchools();
+    if (schoolStore.schools.length === 0) {
+        schoolStore.fetchSchools().catch(error => {
+            ElMessage.error('加载学校数据时发生错误: ' + error.message);
+        });
+    } else {
+        schools.value = schoolStore.schools;  // 确保组件获取到最新的学校数据
+    }
 });
 </script>
 
