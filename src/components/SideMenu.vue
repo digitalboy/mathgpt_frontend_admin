@@ -7,16 +7,16 @@
             <span>学校管理</span>
         </el-menu-item>
 
-        <el-menu-item index="2" @click="goToRoute('Dashboard')">
-            <el-icon><icon-menu /></el-icon>
-            <span>Dashboard</span>
-        </el-menu-item>
-
-        <el-menu-item index="3" @click="goToRoute('SomeOtherRoute')">
+        <el-menu-item index="3" @click="goToRoute('Grades')">
             <el-icon>
                 <document />
             </el-icon>
-            <span>Navigator Three</span>
+            <span>年级管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="2" @click="goToRoute('Dashboard')">
+            <el-icon><icon-menu /></el-icon>
+            <span>Dashboard</span>
         </el-menu-item>
 
         <el-menu-item index="4" @click="goToRoute('YetAnotherRoute')">
