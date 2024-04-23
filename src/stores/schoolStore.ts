@@ -8,6 +8,7 @@ export const useSchoolStore = defineStore('school', {
     }),
     actions: {
         setCurrentSchool(school: School) {
+            console.log('setCurrentSchool', school);
             this.currentSchool = school;
         },
         // 添加更新学校信息的方法，便于在组件中调用

@@ -1,6 +1,8 @@
 // src/App.vue
 <template>
+  <div claskk>
   <router-view />
+  </div>
 </template>
 
 <script lang="ts">

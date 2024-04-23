@@ -1,6 +1,7 @@
 <!-- src\components\SchoolEdit.vue -->
 <template>
-    <el-dialog title="编辑学校信息" v-model="visible">
+
+    <el-dialog title="编辑学校信息" v-model="editSchoolVisible">
         <el-form :model="school" :rules="rules" ref="schoolForm">
             <el-form-item label="学校ID" prop="id">
                 <el-input v-model="school.id" disabled></el-input>
@@ -32,9 +33,8 @@ import { School } from '@/services/schoolService'; // 引入 School 接口
 import { ElMessage, FormInstance } from 'element-plus';
 
 const schoolStore = useSchoolStore();
-const visible = ref(false);
+const editSchoolVisible = ref(false);
 const schoolForm = ref<FormInstance | null>(null);
-// 初始化 school，所有属性为空字符串，临时处理ID为空字符串问题
 const school = ref<School>({
     id: 0, // 初始化时可以使用 0 或空字符串，根据后端需求
     name: '',
@@ -57,9 +57,10 @@ const rules = {
 
 // 监视学校状态的变化
 watch(() => schoolStore.currentSchool, (newSchool) => {
+    console.log("school")
     if (newSchool) {
         school.value = { ...newSchool };
-        visible.value = true;
+        editSchoolVisible.value = true;
     }
 }, { immediate: true });
 
@@ -71,7 +72,7 @@ const submitForm = () => {
                 schoolStore.updateSchool(school.value.id, school.value).then(response => {
                     if (response) {
                         ElMessage.success('学校信息已更新');
-                        visible.value = false;
+                        editSchoolVisible.value = false;
                     } else {
                         ElMessage.error('更新失败，请重试');
                     }
@@ -88,7 +89,7 @@ const submitForm = () => {
 
 
 const cancel = () => {
-    visible.value = false;
+    editSchoolVisible.value = false;
 };
 </script>
 

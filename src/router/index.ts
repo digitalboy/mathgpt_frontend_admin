@@ -1,9 +1,10 @@
 // src/router/index.ts
 
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { useAuthStore } from '../stores/authStore';
-import Login from '../views/Login.vue';
-import Dashboard from '../views/Dashboard.vue'; 
+import { useAuthStore } from '@/stores/authStore';
+import Login from '@/views/Login.vue';
+import Dashboard from '@/views/Dashboard.vue'; 
+import Schools from '@/views/Schools.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -21,7 +22,13 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Dashboard',
     component: Dashboard,
     meta: { requiresAuth: true }
-  }
+  },
+  {
+    path: '/schools',
+    name: 'Schools',
+    component: Schools,
+    meta: { requiresAuth: true }
+}
 ];
 
 const router = createRouter({

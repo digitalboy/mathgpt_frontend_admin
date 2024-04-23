@@ -13,8 +13,5 @@ export default {
 </script>
 
 <style scoped>
-.dashboard {
-    padding: 20px;
-    /* 你可以在这里添加 CSS 样式 */
-}
+
 </style>

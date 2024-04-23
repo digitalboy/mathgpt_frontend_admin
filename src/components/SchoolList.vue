@@ -7,7 +7,7 @@
         <el-table-column prop="contact" label="联系方式"></el-table-column>
         <el-table-column label="操作">
             <template #default="{ row }">
-                <el-button type="primary" icon="el-icon-edit" @click="editSchool(row)">编辑</el-button>
+                <el-button type="primary" :icon="Edit" circle @click="editSchool(row)" />                
             </template>
         </el-table-column>
     </el-table>
@@ -18,10 +18,12 @@ import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import { SchoolService } from '@/services/schoolService';
 import { useSchoolStore } from '@/stores/schoolStore'; // 导入学校的状态管理
-import { School } from '@/services/schoolService'; 
+import { School } from '@/services/schoolService';
+import { Edit, } from '@element-plus/icons-vue';
+
 
 const schoolStore = useSchoolStore(); // 使用学校的状态存储
-const schools = ref < School[] > ([]); // 明确指定 schools 的类型为 School[]
+const schools = ref<School[]>([]); // 明确指定 schools 的类型为 School[]
 
 const fetchSchools = async () => {
     try {
@@ -40,8 +42,8 @@ const fetchSchools = async () => {
     }
 };
 
-const editSchool = (school: School) => { // 明确指定 school 的类型
-    schoolStore.setCurrentSchool(school); // 保存当前编辑的学校到状态管理
+const editSchool = (school: School) => { 
+    schoolStore.setCurrentSchool(school); 
     console.log('当前编辑的学校已保存：', school);
     // 你可能需要路由到一个编辑页面或打开一个模态框进行具体的编辑操作
 };
