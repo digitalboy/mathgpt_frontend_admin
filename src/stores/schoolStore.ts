@@ -12,7 +12,6 @@ export const useSchoolStore = defineStore('school', {
             console.log('setCurrentSchool', school);
             this.currentSchool = school;
         },
-        // 添加获取所有学校的方法
         async fetchSchools() {
             try {
                 const schools = await SchoolService.getSchools();
@@ -30,7 +29,6 @@ export const useSchoolStore = defineStore('school', {
                 if (response) {
                     console.log('学校信息更新成功！');
                     this.setCurrentSchool(response); // 更新当前学校信息
-                    // 更新列表中的学校信息
                     const index = this.schools.findIndex(s => s.id === schoolId);
                     if (index !== -1) {
                         this.schools[index] = response;
@@ -39,6 +37,22 @@ export const useSchoolStore = defineStore('school', {
                 }
             } catch (error) {
                 console.error('更新学校信息失败：', error);
+                return false;
+            }
+        },
+        async deleteSchool(schoolId: number) {
+            try {
+                const response = await SchoolService.deleteSchool(schoolId);
+                if (response) {
+                    console.log('学校删除成功！');
+                    this.schools = this.schools.filter(s => s.id !== schoolId);
+                    if (this.currentSchool?.id === schoolId) {
+                        this.currentSchool = null; // 如果删除的是当前选中的学校，清除选中状态
+                    }
+                    return true;
+                }
+            } catch (error) {
+                console.error('删除学校失败：', error);
                 return false;
             }
         }
