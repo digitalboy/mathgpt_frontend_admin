@@ -23,9 +23,11 @@ export interface GraphData {
 export class GraphService extends BaseService {
     // 获取节点和边
     public static async getNodesAndEdges(): Promise<GraphData | undefined> {
+        console.log('获取节点和边...');
         try {
             const response = await this.axiosInstance.get<GraphData>('/graph/get_nodes_edges');
-            console.log('节点和边获取成功！');
+            console.log('服务：节点和边获取成功！');
+            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('获取节点和边失败：', error);

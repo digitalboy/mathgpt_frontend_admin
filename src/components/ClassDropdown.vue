@@ -19,7 +19,7 @@ const classes = ref(classStore.classes);
 
 // 传递班级ID而非对象
 const handleClassChange = (newClassId: number) => {
-    selectedClassId.value = newClassId; // 只更新班级ID
+    selectedClassId.value = newClassId; // 只更新班级ID    
 };
 
 onMounted(() => {

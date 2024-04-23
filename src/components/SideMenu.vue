@@ -28,11 +28,18 @@
             <span>学科管理</span>
         </el-menu-item>
 
-        <el-menu-item index="5" @click="goToRoute('students')">
+        <el-menu-item index="5" @click="goToRoute('Students')">
             <el-icon>
                 <document />
             </el-icon>
             <span>学生管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="6" @click="goToRoute('Graph')">
+            <el-icon>
+                <document />
+            </el-icon>
+            <span>知识图谱</span>
         </el-menu-item>
 
         <el-menu-item index="9" @click="goToRoute('Dashboard')">

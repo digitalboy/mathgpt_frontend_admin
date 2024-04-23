@@ -9,6 +9,7 @@ import Grades from '@/views/Grades.vue';
 import Classes from '@/views/Classes.vue';
 import Subjects from '@/views/Subjects.vue';
 import Students from '@/views/Students.vue';
+import Graph from '@/views/Graph.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,6 +57,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/students',
     name: 'students',
     component: Students,
+    meta: { requiresAuth: true }
+  }
+  ,
+  {
+    path: '/graph',
+    name: 'Graph',
+    component: Graph,
     meta: { requiresAuth: true }
   }
 ];
