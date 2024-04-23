@@ -1,6 +1,7 @@
 <!-- src/views/Subjects.vue -->
 <template>
     <div>
+        <h1>学科管理</h1>
         <SubjectEdit />
         <SubjectList />
     </div>

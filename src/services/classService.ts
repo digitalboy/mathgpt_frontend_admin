@@ -28,6 +28,7 @@ export class ClassService extends BaseService {
         try {
             const response = await this.axiosInstance.get<Class[]>('/class/get');
             console.log('班级列表获取成功！');
+            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('获取班级列表失败：', error);

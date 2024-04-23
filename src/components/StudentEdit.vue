@@ -8,8 +8,8 @@
             <el-form-item label="学生名称" prop="name" required>
                 <el-input v-model="student.name"></el-input>
             </el-form-item>
-            <el-form-item label="班级" prop="class_name" required>
-                <el-input v-model="student.class_id" disabled></el-input>
+            <el-form-item label="班级" prop="class_id" required>
+                <ClassDropdown v-model="student.class_id" />
             </el-form-item>
             <el-form-item label="电话号码" prop="phone_number">
                 <el-input v-model="student.phone_number"></el-input>
@@ -27,6 +27,7 @@ import { ref, watch } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
 import { Student } from '@/services/studentService'; // 引入 Student 接口
 import { ElMessage, FormInstance } from 'element-plus';
+import ClassDropdown from './ClassDropdown.vue'; // 确保已经导入班级下拉选择组件
 
 const studentStore = useStudentStore();
 const editStudentVisible = ref(false);
@@ -34,9 +35,8 @@ const studentForm = ref<FormInstance | null>(null);
 const student = ref<Student>({
     id: 0,
     name: '',
-    phone_number: '',
-    class_id: 0,
-    // password: '',
+    class_id: 0, // 初始化时的班级ID
+    phone_number: ''
 });
 
 const rules = {
@@ -45,6 +45,9 @@ const rules = {
     ],
     phone_number: [
         { required: true, message: '请输入电话号码', trigger: 'blur' }
+    ],
+    class_id: [
+        { required: true, message: '请选择班级', trigger: 'change' }
     ]
 };
 
@@ -85,7 +88,6 @@ const submitForm = () => {
         }
     });
 };
-
 
 const cancel = () => {
     editStudentVisible.value = false;

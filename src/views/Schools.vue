@@ -1,6 +1,7 @@
 <!-- src/views/Schools.vue -->
 <template>
     <div>
+        <h1>学校管理</h1>
         <SchoolEdit />
         <SchoolList />
     </div>

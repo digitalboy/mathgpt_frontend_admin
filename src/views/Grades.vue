@@ -1,6 +1,7 @@
 <!-- src/views/Grades.vue -->
 <template>
     <div>
+        <h1>年级管理</h1>
         <GradeEdit />
         <GradeList />
     </div>

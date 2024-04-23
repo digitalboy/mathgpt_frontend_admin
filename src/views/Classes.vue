@@ -1,6 +1,7 @@
 <!-- src/views/Classes.vue -->
 <template>
     <div>
+        <h1>班级管理</h1>
         <ClassEdit />
         <ClassList />
     </div>
