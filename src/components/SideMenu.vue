@@ -47,11 +47,11 @@
             <span>Dashboard</span>
         </el-menu-item>
 
-        <el-menu-item index="10" @click="goToRoute('YetAnotherRoute')">
+        <el-menu-item index="10" @click="goToRoute('Test')">
             <el-icon>
                 <setting />
             </el-icon>
-            <span>Navigator Four</span>
+            <span>测试</span>
         </el-menu-item>
     </el-menu>
 </template>

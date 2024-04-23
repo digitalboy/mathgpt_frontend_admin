@@ -22,16 +22,19 @@ export const useGraphStore = defineStore('graph', {
         },
 
         async fetchNodesAndEdges() {
-            console.log('获取节点和边...');
+            console.log('Fetching nodes and edges...');
             try {
                 const graphData = await GraphService.getNodesAndEdges();
                 if (graphData) {
+                    // 直接使用从服务返回的节点和边数组
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;
-                    console.log('状态：节点和边获取成功！');
+                    console.log('Processed nodes:', this.nodes);
+                    console.log('Processed edges:', this.edges);
+                    console.log('Status: Nodes and edges fetched successfully!');
                 }
             } catch (error) {
-                console.error('获取节点和边失败：', error);
+                console.error('Failed to fetch nodes and edges:', error);
             }
         },
         
@@ -46,6 +49,7 @@ export const useGraphStore = defineStore('graph', {
                 console.error('添加节点和边失败：', error);
             }
         },
+
         async updateNodesAndEdges(updates: any[]) {
             try {
                 const graphData = await GraphService.updateNodesAndEdges(updates);

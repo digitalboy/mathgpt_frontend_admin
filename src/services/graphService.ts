@@ -1,24 +1,34 @@
 // services/graphService.ts
 import { BaseService } from './baseService';
 
-export interface Node {
-    identity: number;
-    labels: string[];
-    properties: any;
-    elementId?: string;
+export interface Node {    
+    labels: string;
+    properties: {
+        description: string;
+        grade: string;
+        node_name: string;
+        publisher: string;
+        subject: string;
+        uuid: string;  // 确保包括这个属性
+    };
+    elementId?: string;  // 如果这个是用于某些特定逻辑，保留它
+    
 }
 
 export interface Edge {
     type: string;
     start_uuid: string;
     end_uuid: string;
-    properties: any;
+    properties: {
+        since: number;  // 明确属性的类型
+    };
 }
 
 export interface GraphData {
     nodes: Node[];
     edges: Edge[];
 }
+
 
 export class GraphService extends BaseService {
     // 获取节点和边

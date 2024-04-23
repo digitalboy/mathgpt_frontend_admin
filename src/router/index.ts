@@ -10,6 +10,7 @@ import Classes from '@/views/Classes.vue';
 import Subjects from '@/views/Subjects.vue';
 import Students from '@/views/Students.vue';
 import Graph from '@/views/Graph.vue';
+// import Test from '@/views/Test.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -66,6 +67,13 @@ const routes: Array<RouteRecordRaw> = [
     component: Graph,
     meta: { requiresAuth: true }
   }
+  ,
+  // {
+  //   path: '/test',
+  //   name: 'Test',
+  //   component: Test,
+  //   meta: { requiresAuth: true }
+  // }
 ];
 
 const router = createRouter({
