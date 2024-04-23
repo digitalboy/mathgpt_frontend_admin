@@ -12,7 +12,7 @@
                 <el-input v-model="grade.description"></el-input>
             </el-form-item>
             <el-form-item label="所属学校ID" prop="school_id" required>
-                <el-input v-model="grade.school_id"></el-input>
+                <el-input v-model="grade.school_id" disabled></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm">提交</el-button>

@@ -6,6 +6,9 @@ import Login from '@/views/Login.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import Schools from '@/views/Schools.vue';
 import Grades from '@/views/Grades.vue';
+import Classes from '@/views/Classes.vue';
+import Subjects from '@/views/Subjects.vue';
+import Students from '@/views/Students.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,6 +37,25 @@ const routes: Array<RouteRecordRaw> = [
     path: '/grades',
     name: 'Grades',
     component: Grades,
+    meta: { requiresAuth: true }
+  }
+  ,
+  {
+    path: '/classes',
+    name: 'Classes',
+    component: Classes,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/subjects',
+    name: 'Subjects',
+    component: Subjects,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/students',
+    name: 'students',
+    component: Students,
     meta: { requiresAuth: true }
   }
 ];

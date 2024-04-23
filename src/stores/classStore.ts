@@ -8,7 +8,7 @@ export const useClassStore = defineStore('class', {
         currentClass: null as Class | null,
     }),
     actions: {
-        setCurrentClass(classInfo: Class) {
+        setCurrentClass(classInfo: Class | null) {
             this.currentClass = classInfo;
         },
         async fetchClasses() {

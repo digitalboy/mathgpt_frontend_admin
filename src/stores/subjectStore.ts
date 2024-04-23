@@ -8,7 +8,7 @@ export const useSubjectStore = defineStore('subject', {
         currentSubject: null as Subject | null,
     }),
     actions: {
-        setCurrentSubject(subject: Subject) {
+        setCurrentSubject(subject: Subject | null) {
             this.currentSubject = subject;
         },
         async fetchSubjects() {

@@ -3,7 +3,7 @@ import { BaseService } from './baseService';
 
 export interface Class {
     id?: number;
-    class_name: string;
+    name: string;
     grade_id: number;
     num_of_students?: number;
     description?: string;

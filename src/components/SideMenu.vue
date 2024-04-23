@@ -7,19 +7,40 @@
             <span>学校管理</span>
         </el-menu-item>
 
-        <el-menu-item index="3" @click="goToRoute('Grades')">
+        <el-menu-item index="2" @click="goToRoute('Grades')">
             <el-icon>
                 <document />
             </el-icon>
             <span>年级管理</span>
         </el-menu-item>
 
-        <el-menu-item index="2" @click="goToRoute('Dashboard')">
+        <el-menu-item index="3" @click="goToRoute('Classes')">
+            <el-icon>
+                <document />
+            </el-icon>
+            <span>班级管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="4" @click="goToRoute('Subjects')">
+            <el-icon>
+                <document />
+            </el-icon>
+            <span>学科管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="5" @click="goToRoute('students')">
+            <el-icon>
+                <document />
+            </el-icon>
+            <span>学生管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="9" @click="goToRoute('Dashboard')">
             <el-icon><icon-menu /></el-icon>
             <span>Dashboard</span>
         </el-menu-item>
 
-        <el-menu-item index="4" @click="goToRoute('YetAnotherRoute')">
+        <el-menu-item index="10" @click="goToRoute('YetAnotherRoute')">
             <el-icon>
                 <setting />
             </el-icon>

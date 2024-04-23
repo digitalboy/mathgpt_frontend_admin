@@ -8,7 +8,7 @@ export const useStudentStore = defineStore('student', {
         currentStudent: null as Student | null,
     }),
     actions: {
-        setCurrentStudent(student: Student) {
+        setCurrentStudent(student: Student | null) {
             this.currentStudent = student;
         },
         async fetchStudents() {
