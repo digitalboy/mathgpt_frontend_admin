@@ -1,21 +1,21 @@
 // services/graphService.ts
 import { BaseService } from './baseService';
 
-interface Node {
+export interface Node {
     identity: number;
     labels: string[];
     properties: any;
     elementId?: string;
 }
 
-interface Edge {
+export interface Edge {
     type: string;
     start_uuid: string;
     end_uuid: string;
     properties: any;
 }
 
-interface GraphData {
+export interface GraphData {
     nodes: Node[];
     edges: Edge[];
 }

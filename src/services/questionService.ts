@@ -1,7 +1,7 @@
 // services/questionService.ts
 import { BaseService } from './baseService';
 
-interface Question {
+export interface Question {
     id?: number;
     question_type: string;
     bloom_taxonomy_level: string;

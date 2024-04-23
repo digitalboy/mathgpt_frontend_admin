@@ -1,7 +1,7 @@
 // services/classService.ts
 import { BaseService } from './baseService';
 
-interface Class {
+export interface Class {
     id?: number;
     class_name: string;
     grade_id: number;

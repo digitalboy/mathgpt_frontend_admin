@@ -1,7 +1,7 @@
 // services/textbookVersionService.ts
 import { BaseService } from './baseService';
 
-interface TextbookVersion {
+export interface TextbookVersion {
     id?: number;
     publisher: string;
     subject_id: number;
