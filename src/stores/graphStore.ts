@@ -1,6 +1,6 @@
 // stores/graphStore.ts
 import { defineStore } from 'pinia';
-import { GraphData, GraphService, Node, Edge } from '@/services/graphService';
+import { GraphService, Node, Edge } from '@/services/graphService';
 
 export const useGraphStore = defineStore('graph', {
     state: () => ({

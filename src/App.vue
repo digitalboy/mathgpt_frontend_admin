@@ -1,10 +1,10 @@
 <!-- src\App.vue -->
 <template>
   <el-row :gutter="20">
-    <el-col :span="6" class="hidden-md-and-down">
+    <el-col :span="4" class="hidden-md-and-down">
       <SideMenu />
     </el-col>
-    <el-col :span="18" class="hidden-md-and-down">
+    <el-col :span="20" class="hidden-md-and-down">
       <router-view />
     </el-col>
     <el-col :span="24" class="hidden-md-and-up">
