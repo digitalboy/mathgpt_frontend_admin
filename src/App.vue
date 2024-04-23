@@ -1,13 +1,27 @@
-// src/App.vue
+<!-- src\App.vue -->
 <template>
-  <div claskk>
-  <router-view />
-  </div>
+  <el-row :gutter="20">
+    <el-col :span="6" class="hidden-md-and-down">
+      <SideMenu />
+    </el-col>
+    <el-col :span="18" class="hidden-md-and-down">
+      <router-view />
+    </el-col>
+    <el-col :span="24" class="hidden-md-and-up">
+      <router-view />
+    </el-col>
+  </el-row>
 </template>
 
 <script lang="ts">
+import 'element-plus/theme-chalk/display.css'
+import SideMenu from '@/components/SideMenu.vue';
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    SideMenu
+  }
 };
 </script>
 
