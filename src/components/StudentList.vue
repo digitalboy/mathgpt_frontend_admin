@@ -6,10 +6,10 @@
         <el-table-column prop="class_name" label="班级"></el-table-column>
         <el-table-column prop="grade_name" label="年级"></el-table-column>
         <el-table-column prop="school_name" label="学校"></el-table-column>
-        <el-table-column prop="phone_number" label="电话号码"></el-table-column>
-        <el-table-column prop="created_at" label="创建时间"></el-table-column>
+        <el-table-column prop="phone_number" label="电话"></el-table-column>
+        <el-table-column prop="created_at" label="创建"></el-table-column>
         <el-table-column prop="updated_at" label="更新时间"></el-table-column>
-        <el-table-column prop="last_login_at" label="最后登录时间"></el-table-column>
+        <el-table-column prop="last_login_at" label="最后登录"></el-table-column>
         <el-table-column label="操作">
             <template #default="{ row }">
                 <el-button type="primary" :icon="Edit" circle @click="editStudent(row)" />

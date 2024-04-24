@@ -21,14 +21,17 @@ const selectedClassId = ref<number | null>(null);
 const classes = computed(() => classStore.classes);
 
 // 当选中的班级 ID 变化时，更新当前班级状态
-watch(selectedClassId, (newId) => {
+watch(selectedClassId, (newId, _oldId) => {
+    // console.log('Selected Class ID changed from', oldId, 'to', newId);
     if (newId !== null) {
-        const classInfo = classes.value.find(c => c.id === newId) || null;  // 确保返回类型为 Class 或 null
+        const classInfo = classes.value.find(c => c.id === newId) || null;
+        // console.log('Found class info:', classInfo);
         classStore.setCurrentClass(classInfo);
     } else {
-        classStore.setCurrentClass(null);  // 如果 newId 是 null，则显式设置 currentClass 为 null
+        classStore.setCurrentClass(null);
     }
 });
+
 
 const handleClassChange = (newClassId: number | null) => {
     console.log(`Selected Class ID: ${newClassId}`);

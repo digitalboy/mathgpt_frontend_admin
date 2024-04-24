@@ -9,7 +9,7 @@
                 <el-input v-model="student.name"></el-input>
             </el-form-item>
             <el-form-item label="班级" prop="class_id" required>
-                <ClassDropdown v-model="student.class_id" />
+                <ClassDropdown style="width: 100%;" />
             </el-form-item>
             <el-form-item label="电话号码" prop="phone_number">
                 <el-input v-model="student.phone_number"></el-input>
@@ -25,18 +25,27 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
-import { Student } from '@/services/studentService'; // 引入 Student 接口
+import { useClassStore } from '@/stores/classStore'; // 导入班级状态
+import { Student } from '@/services/studentService';
 import { ElMessage, FormInstance } from 'element-plus';
-import ClassDropdown from './ClassDropdown.vue'; // 确保已经导入班级下拉选择组件
+import ClassDropdown from './ClassDropdown.vue';
 
 const studentStore = useStudentStore();
+const classStore = useClassStore(); // 使用班级状态
 const editStudentVisible = ref(false);
 const studentForm = ref<FormInstance | null>(null);
 const student = ref<Student>({
     id: 0,
     name: '',
-    class_id: 0, // 初始化时的班级ID
+    class_id: 0,
     phone_number: ''
+});
+
+// 当对话框显示时加载班级数据
+watch(editStudentVisible, async (visible) => {
+    if (visible && classStore.classes.length === 0) {
+        await classStore.fetchClasses();
+    }
 });
 
 const rules = {
@@ -67,8 +76,10 @@ watch(editStudentVisible, (newValue) => {
 });
 
 const submitForm = () => {
+    
     studentForm.value?.validate((valid: boolean) => {
         if (valid) {
+            console.log(student.value)
             // 检查 id 是否已定义且为数字
             if (typeof student.value.id === 'number') {
                 studentStore.updateStudent(student.value.id, student.value)

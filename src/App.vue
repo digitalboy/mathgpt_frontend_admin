@@ -27,4 +27,7 @@ export default {
 
 <style>
 /* 你的全局样式 */
+h1{
+  color: #525457;
+}
 </style>
