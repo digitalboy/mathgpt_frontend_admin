@@ -8,7 +8,7 @@ export const useTextbookVersionStore = defineStore('textbookVersion', {
         currentTextbookVersion: null as TextbookVersion | null,
     }),
     actions: {
-        setCurrentTextbookVersion(textbookVersion: TextbookVersion) {
+        setCurrentTextbookVersion(textbookVersion: TextbookVersion | null) {
             this.currentTextbookVersion = textbookVersion;
         },
         async fetchTextbookVersions() {

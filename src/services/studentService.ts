@@ -7,6 +7,8 @@ export interface Student {
     phone_number: string;
     class_id: number;
     password?: string;
+    grade_name?:string;
+    class_name?:string;
 }
 
 export class StudentService extends BaseService {

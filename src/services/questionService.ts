@@ -1,7 +1,7 @@
 // services/questionService.ts
 import { BaseService } from './baseService';
 
-interface Question {
+export interface Question {
     id?: number;
     content: string;
     knowledge_point_uuid: string;

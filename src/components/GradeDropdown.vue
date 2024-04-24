@@ -1,36 +1,52 @@
-<!-- src/components/GradeDropdown.vue -->
+<!-- src\components\GradeDropdown.vue -->
 <template>
-    <el-select v-model="selectedGrade" placeholder="请选择年级" @change="handleGradeChange">
-        <el-option v-for="grade in grades" :key="grade.id" :label="grade.name" :value="grade">
-        </el-option>
-    </el-select>
+    <div>
+        <el-select v-if="grades.length > 0" v-model="selectedGradeId" placeholder="请选择年级" @change="handleGradeChange">
+            <el-option v-for="grade in grades" :key="grade.id" :label="grade.name" :value="grade.id"></el-option>
+        </el-select>
+        <div v-else><el-text class="mx-1" type="warning">正在加载数据...</el-text></div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useGradeStore } from '@/stores/gradeStore';
-import { Grade } from '@/services/gradeService';
 import { ElMessage } from 'element-plus';
 
 const gradeStore = useGradeStore();
-const selectedGrade = ref<Grade | null>(null);
+const selectedGradeId = ref<number | null>(null);
 
-// 使用Pinia状态管理获取grades数组
-const grades = ref<Grade[]>(gradeStore.grades);
+// 使用计算属性确保响应式更新
+const grades = computed(() => gradeStore.grades);
 
-const handleGradeChange = (newGrade: Grade) => {
-    gradeStore.setCurrentGrade(newGrade);
+// 当选中的年级 ID 变化时，更新当前年级状态
+watch(selectedGradeId, (newId) => {
+  if (newId !== null) {
+    const grade = grades.value.find(g => g.id === newId) || null;  // 确保返回类型为 Grade 或 null
+    gradeStore.setCurrentGrade(grade);
+  } else {
+    gradeStore.setCurrentGrade(null);  // 如果 newId 是 null，则显式设置 currentGrade 为 null
+  }
+});
+
+
+const handleGradeChange = (newGradeId: number | null) => {
+  console.log(`Selected Grade ID: ${newGradeId}`);
 };
 
-onMounted(() => {
-    if (gradeStore.grades.length === 0) {
-        gradeStore.fetchGrades().catch(error => {
-            ElMessage.error('加载年级数据时发生错误: ' + error.message);
-        });
-    } else {
-        grades.value = gradeStore.grades;  // 确保组件获取到最新的年级数据
+onMounted(async () => {
+  // 确保在组件挂载时加载并刷新年级数据
+  try {
+    await gradeStore.fetchGrades();
+    if (grades.value.length > 0) {
+      selectedGradeId.value = grades.value[0].id ?? null; // 默认选择第一个年级
     }
+  } catch (error: any) {
+    ElMessage.error('加载年级数据时发生错误: ' + error.message);
+  }
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+/* 添加适当的样式 */
+</style>

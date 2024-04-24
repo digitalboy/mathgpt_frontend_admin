@@ -2,7 +2,7 @@
     <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
         <el-menu-item index="1" @click="goToRoute('Schools')">
             <el-icon>
-                <Location />
+                <School />
             </el-icon>
             <span>学校管理</span>
         </el-menu-item>
@@ -23,23 +23,30 @@
 
         <el-menu-item index="4" @click="goToRoute('Subjects')">
             <el-icon>
-                <document />
+                <EditPen />
             </el-icon>
             <span>学科管理</span>
         </el-menu-item>
 
         <el-menu-item index="5" @click="goToRoute('Students')">
             <el-icon>
-                <document />
+                <User />
             </el-icon>
             <span>学生管理</span>
         </el-menu-item>
 
         <el-menu-item index="6" @click="goToRoute('Graph')">
             <el-icon>
+                <DataAnalysis />
+            </el-icon>
+            <span>图谱管理</span>
+        </el-menu-item>
+
+        <el-menu-item index="7" @click="goToRoute('Questions')">
+            <el-icon>
                 <document />
             </el-icon>
-            <span>知识图谱</span>
+            <span>试题管理</span>
         </el-menu-item>
 
         <el-menu-item index="9" @click="goToRoute('Dashboard')">
@@ -60,11 +67,12 @@
 import {
     Document,
     Menu as IconMenu,
-    Location,
+    User,
     Setting,
+    DataAnalysis,
+    EditPen,
 } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
 
 const handleOpen = (key: string, keyPath: string[]) => {

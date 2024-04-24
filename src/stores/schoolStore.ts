@@ -8,7 +8,7 @@ export const useSchoolStore = defineStore('school', {
         currentSchool: null as School | null, // 明确指定类型为 School 或 null
     }),
     actions: {
-        setCurrentSchool(school: School) {
+        setCurrentSchool(school: School | null) {
             console.log('setCurrentSchool', school);
             this.currentSchool = school;
         },

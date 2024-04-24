@@ -5,7 +5,6 @@ export interface Grade {
     id?: number;
     name: string;
     description: string;
-    school_id: number;
 }
 
 export class GradeService extends BaseService {
@@ -36,9 +35,9 @@ export class GradeService extends BaseService {
     }
 
     // 获取单个年级的详细信息
-    public static async getGradeById(gradeId: number): Promise<Grade | undefined> {
+    public static async getGradeById(grade_id: number): Promise<Grade | undefined> {
         try {
-            const response = await this.axiosInstance.get<Grade>(`/grade/get/${gradeId}`);
+            const response = await this.axiosInstance.get<Grade>(`/grade/get/${grade_id}`);
             console.log('年级详细信息获取成功！');
             return response.data;
         } catch (error) {
@@ -49,9 +48,9 @@ export class GradeService extends BaseService {
     }
 
     // 更新年级信息
-    public static async updateGrade(gradeId: number, gradeData: Grade): Promise<Grade | undefined> {
+    public static async updateGrade(grade_id: number, gradeData: Grade): Promise<Grade | undefined> {
         try {
-            const response = await this.axiosInstance.put<Grade>(`/grade/update/${gradeId}`, gradeData);
+            const response = await this.axiosInstance.put<Grade>(`/grade/update/${grade_id}`, gradeData);
             console.log('年级信息更新成功！');
             return response.data;
         } catch (error) {
@@ -62,9 +61,9 @@ export class GradeService extends BaseService {
     }
 
     // 删除年级
-    public static async deleteGrade(gradeId: number): Promise<void | undefined> {
+    public static async deleteGrade(grade_id: number): Promise<{ success: string } | undefined> {
         try {
-            const response = await this.axiosInstance.delete(`/grade/delete/${gradeId}`);
+            const response = await this.axiosInstance.delete(`/grade/delete/${grade_id}`);
             console.log('年级删除成功！');
             return response.data;
         } catch (error) {

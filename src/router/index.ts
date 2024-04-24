@@ -10,7 +10,8 @@ import Classes from '@/views/Classes.vue';
 import Subjects from '@/views/Subjects.vue';
 import Students from '@/views/Students.vue';
 import Graph from '@/views/Graph.vue';
-// import Test from '@/views/Test.vue';
+import Questions from '@/views/Questions.vue';
+import Test from '@/views/Test.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/students',
-    name: 'students',
+    name: 'Students',
     component: Students,
     meta: { requiresAuth: true }
   }
@@ -68,12 +69,19 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true }
   }
   ,
-  // {
-  //   path: '/test',
-  //   name: 'Test',
-  //   component: Test,
-  //   meta: { requiresAuth: true }
-  // }
+  {
+    path: '/questions',
+    name: 'Questions',
+    component: Questions,
+    meta: { requiresAuth: true }
+  }
+  ,
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
+    meta: { requiresAuth: true }
+  }
 ];
 
 const router = createRouter({

@@ -16,6 +16,7 @@ export const useGradeStore = defineStore('grade', {
                 const grades = await GradeService.getGrades();
                 if (grades) {
                     this.grades = grades;
+                    console.log(this.grades)
                 }
             } catch (error) {
                 console.error('加载年级列表失败:', error);
