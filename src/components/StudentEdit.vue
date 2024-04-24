@@ -48,6 +48,12 @@ watch(editStudentVisible, async (visible) => {
     }
 });
 
+
+// 监视班级状态的变化
+watch(() => classStore.currentClass, (newClass) => {
+    student.value.class_id = newClass?.id as number; // 使用类型断言，假定 id 总是有效
+}, { immediate: true });
+
 const rules = {
     name: [
         { required: true, message: '请输入学生名称', trigger: 'blur' }
@@ -76,10 +82,8 @@ watch(editStudentVisible, (newValue) => {
 });
 
 const submitForm = () => {
-    
     studentForm.value?.validate((valid: boolean) => {
         if (valid) {
-            console.log(student.value)
             // 检查 id 是否已定义且为数字
             if (typeof student.value.id === 'number') {
                 studentStore.updateStudent(student.value.id, student.value)
@@ -104,5 +108,6 @@ const cancel = () => {
     editStudentVisible.value = false;
 };
 </script>
+
 
 <style scoped></style>
