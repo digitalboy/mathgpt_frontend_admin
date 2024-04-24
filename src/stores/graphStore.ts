@@ -14,27 +14,27 @@ export const useGraphStore = defineStore('graph', {
         currentEdgeDetails: (state) => state.currentEdge
     },
     actions: {
-        setCurrentNode(node: Node) {
+        setCurrentNode(node: Node | null) {
             this.currentNode = node;
         },
-        setCurrentEdge(edge: Edge) {
+        setCurrentEdge(edge: Edge | null) {
             this.currentEdge = edge;
         },
 
         async fetchNodesAndEdges() {
-            console.log('Fetching nodes and edges...');
+            // console.log('Fetching nodes and edges...');
             try {
                 const graphData = await GraphService.getNodesAndEdges();
                 if (graphData) {
                     // 直接使用从服务返回的节点和边数组
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;
-                    console.log('Processed nodes:', this.nodes);
-                    console.log('Processed edges:', this.edges);
-                    console.log('Status: Nodes and edges fetched successfully!');
+                    // console.log('Processed nodes:', this.nodes);
+                    // console.log('Processed edges:', this.edges);
+                    console.log('状态：成功获取节点和边。');
                 }
             } catch (error) {
-                console.error('Failed to fetch nodes and edges:', error);
+                console.error('状态：获取节点和边失败', error);
             }
         },
         
@@ -52,13 +52,15 @@ export const useGraphStore = defineStore('graph', {
 
         async updateNodesAndEdges(updates: any[]) {
             try {
-                const graphData = await GraphService.updateNodesAndEdges(updates);
+                const updatePayload = { updates }; // 构造符合预期的对象
+                const graphData = await GraphService.updateNodesAndEdges(updatePayload);
                 if (graphData) {
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;
+                    console.log('Nodes and edges updated successfully!');
                 }
             } catch (error) {
-                console.error('更新节点和边失败：', error);
+                console.error('Failed to update nodes and edges:', error);
             }
         },
         async deleteNode(uuid: string) {

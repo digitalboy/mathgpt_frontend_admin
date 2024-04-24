@@ -15,7 +15,7 @@ const graphStore = useGraphStore();
 onMounted(async () => {
     // console.log("开始加载图形数据...");
     await graphStore.fetchNodesAndEdges();
-    console.log("加载图形数据完成:", graphStore.nodes, graphStore.edges);
+    // console.log("加载图形数据完成:", graphStore.nodes, graphStore.edges);
 });
 
 watchEffect(() => {
@@ -36,7 +36,7 @@ watchEffect(() => {
             }))
         };
 
-        console.log("graphStore.edges:::",graphStore.edges)
+        // console.log("graphStore.edges:::",graphStore.edges)
         const options = {
             interaction: { hover: true },
             nodes: {
@@ -45,8 +45,13 @@ watchEffect(() => {
             },
             edges: {
                 smooth: true,
-                
+                font:{
+                    size:10,
+                    color:'#aaaaaa',
+                    align:'middle'
+                }
             }
+
         };
         const network = new Network(visContainer.value, graphData, options);
         network.on("click", function (params) {
@@ -60,7 +65,7 @@ watchEffect(() => {
 
 
 function handleGraphClick(params: any) {
-    console.log("点击事件: ", params);
+    // console.log("点击事件: ", params);
     if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         // 确保使用图形中用作ID的同一属性

@@ -2,12 +2,14 @@
 <template>
     <div>
         <h1>知识图谱</h1>
+        <NodeEdit/>
         <GraphVisualize />
     </div>
 </template>
 
 <script setup lang="ts">
 import GraphVisualize from '@/components/GraphVisualize.vue';  // 导入图谱可视化组件
+import NodeEdit from '@/components/NodeEdit.vue';
 </script>
 
 <style scoped>

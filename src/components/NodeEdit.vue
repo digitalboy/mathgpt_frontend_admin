@@ -1,8 +1,8 @@
 <template>
     <el-dialog title="编辑节点信息" v-model="editNodeVisible">
-        <el-form :model="nodeData" :rules="rules" ref="nodeForm">
+        <el-form :model="nodeData.properties" :rules="rules" ref="nodeForm" label-position="right" label-width="auto">
             <el-form-item label="节点ID" prop="uuid">
-                <el-input v-model="nodeData.uuid" disabled></el-input>
+                <el-input v-model="nodeData.properties.uuid" disabled></el-input>
             </el-form-item>
             <el-form-item label="节点名称" prop="node_name" required>
                 <el-input v-model="nodeData.properties.node_name"></el-input>
@@ -37,15 +37,15 @@ const graphStore = useGraphStore();
 const editNodeVisible = ref(false);
 const nodeForm = ref<FormInstance | null>(null);
 const nodeData = ref<Node>({
-    labels:'',
+    labels: '',
     properties: {
         node_name: '',
         description: '',
         publisher: '',
         subject: '',
         grade: '',
-        uuid:'',
-    }
+        uuid: ''
+    },
 });
 
 const rules = {
@@ -63,6 +63,9 @@ const rules = {
     ],
     grade: [
         { required: true, message: '请输入年级', trigger: 'blur' }
+    ],
+    uuid: [
+        { required: true, message: 'UUID是必需的', trigger: 'blur' }
     ]
 };
 
@@ -75,15 +78,24 @@ watch(() => graphStore.currentNode, (newNode) => {
 
 watch(editNodeVisible, (newValue) => {
     if (!newValue) {
-        graphStore.setCurrentNode([null]); // 当对话框关闭时清除当前节点状态
+        graphStore.setCurrentNode(null); // 当对话框关闭时清除当前节点状态
     }
 });
 
 const submitForm = () => {
     nodeForm.value?.validate((valid: boolean) => {
         if (valid) {
-            console.log('更新数据：', nodeData.value);
-            graphStore.updateNode(nodeData.value.uuid, nodeData.value)
+            const updates = [
+                {
+                    type: "node",
+                    uuid: nodeData.value.properties.uuid,
+                    properties: {
+                        ...nodeData.value.properties
+                    }
+                }
+            ];
+            console.log('更新数据：', updates);
+            graphStore.updateNodesAndEdges(updates) // 直接传递 updates 数组
                 .then(() => {
                     ElMessage.success('节点信息已更新');
                     editNodeVisible.value = false;
@@ -98,7 +110,9 @@ const submitForm = () => {
     });
 };
 
+
 const cancel = () => {
     editNodeVisible.value = false;
 };
 </script>
+

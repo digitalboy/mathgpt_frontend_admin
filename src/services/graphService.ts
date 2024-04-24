@@ -37,7 +37,7 @@ export class GraphService extends BaseService {
         try {
             const response = await this.axiosInstance.get<GraphData>('/graph/get_nodes_edges');
             console.log('服务：节点和边获取成功！');
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('获取节点和边失败：', error);
@@ -73,9 +73,9 @@ export class GraphService extends BaseService {
     }
 
     // 更新节点和边
-    public static async updateNodesAndEdges(updates: any[]): Promise<GraphData | undefined> {
+    public static async updateNodesAndEdges(data: { updates: any[] }): Promise<GraphData | undefined> {
         try {
-            const response = await this.axiosInstance.put<GraphData>('/graph/update_nodes_edges', { updates });
+            const response = await this.axiosInstance.put<GraphData>('/graph/update_nodes_edges', data);
             console.log('节点和边更新成功！');
             return response.data;
         } catch (error) {
