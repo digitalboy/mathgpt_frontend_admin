@@ -2,16 +2,6 @@
 
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
-import Login from '@/views/Login.vue';
-import Dashboard from '@/views/Dashboard.vue';
-import Schools from '@/views/Schools.vue';
-import Grades from '@/views/Grades.vue';
-import Classes from '@/views/Classes.vue';
-import Subjects from '@/views/Subjects.vue';
-import Students from '@/views/Students.vue';
-import Graph from '@/views/Graph.vue';
-import Questions from '@/views/Questions.vue';
-import Test from '@/views/Test.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -22,70 +12,66 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: () => import('@/views/Login.vue')
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard,
+    component: () => import('@/views/Dashboard.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/schools',
     name: 'Schools',
-    component: Schools,
+    component: () => import('@/views/Schools.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/grades',
     name: 'Grades',
-    component: Grades,
+    component: () => import('@/views/Grades.vue'),
     meta: { requiresAuth: true }
-  }
-  ,
+  },
   {
     path: '/classes',
     name: 'Classes',
-    component: Classes,
+    component: () => import('@/views/Classes.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/subjects',
     name: 'Subjects',
-    component: Subjects,
+    component: () => import('@/views/Subjects.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/students',
     name: 'Students',
-    component: Students,
+    component: () => import('@/views/Students.vue'),
     meta: { requiresAuth: true }
-  }
-  ,
+  },
   {
     path: '/graph',
     name: 'Graph',
-    component: Graph,
+    component: () => import('@/views/Graph.vue'),
     meta: { requiresAuth: true }
-  }
-  ,
+  },
   {
     path: '/questions',
     name: 'Questions',
-    component: Questions,
+    component: () => import('@/views/Questions.vue'),
     meta: { requiresAuth: true }
-  }
-  ,
+  },
   {
     path: '/test',
     name: 'Test',
-    component: Test,
+    component: () => import('@/views/Test.vue'),
     meta: { requiresAuth: true }
   }
 ];
 
 const router = createRouter({
-  history: createWebHistory('/admin/'),
+  history: createWebHistory('/admin/'),  // 注意这里设置 base 为 '/admin/'
   routes
 });
 
