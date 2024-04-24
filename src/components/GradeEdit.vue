@@ -10,10 +10,7 @@
             </el-form-item>
             <el-form-item label="描述" prop="description">
                 <el-input v-model="grade.description"></el-input>
-            </el-form-item>
-            <el-form-item label="所属学校ID" prop="school_id" required>
-                <el-input v-model="grade.school_id" disabled></el-input>
-            </el-form-item>
+            </el-form-item>            
             <el-form-item>
                 <el-button type="primary" @click="submitForm">提交</el-button>
                 <el-button @click="cancel">取消</el-button>
@@ -34,8 +31,7 @@ const gradeForm = ref<FormInstance | null>(null);
 const grade = ref<Grade>({
     id: 0,
     name: '',
-    description: '',  // 确保包含 description
-    school_id: 0      // 确保包含 school_id
+    description: '',  // 确保包含 description    
 });
 
 const rules = {
@@ -65,7 +61,7 @@ watch(editGradeVisible, (newValue) => {
 const submitForm = () => {
     gradeForm.value?.validate((valid: boolean) => {
         if (valid) {
-            if (typeof grade.value.id === 'number' && typeof grade.value.school_id === 'number') {
+            if (typeof grade.value.id === 'number' ) {
                 console.log('更新数据：', grade.value);
                 gradeStore.updateGrade(grade.value.id, grade.value)
                     .then(() => {
