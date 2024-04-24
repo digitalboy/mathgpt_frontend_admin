@@ -1,7 +1,7 @@
 <!-- src/components/StudentEdit.vue -->
 <template>
     <el-dialog title="编辑学生信息" v-model="editStudentVisible">
-        <el-form :model="student" :rules="rules" ref="studentForm">
+        <el-form :model="student" :rules="rules" ref="studentForm" label-position="right" label-width="auto">
             <el-form-item label="学生ID" prop="id">
                 <el-input v-model="student.id" disabled></el-input>
             </el-form-item>
