@@ -1,16 +1,14 @@
 // services/questionService.ts
 import { BaseService } from './baseService';
 
-export interface Question {
+interface Question {
     id?: number;
-    question_type: string;
-    bloom_taxonomy_level: string;
-    question_text: string;
-    options: Array<{ option_id: string; option_text: string }>;
-    correct_answer: string[];
-    explanation: string;
-    difficulty_level: string;
-    source?: string;
+    content: string;
+    knowledge_point_uuid: string;
+    subject_id: number;
+    textbook_version_id: number;
+    grade_id: number;
+    description?: string;
 }
 
 export class QuestionService extends BaseService {
@@ -27,10 +25,10 @@ export class QuestionService extends BaseService {
         }
     }
 
-    // 获取所有题目的列表
-    public static async getQuestions(): Promise<Question[] | undefined> {
+    // 获取题目列表，可通过年级和科目ID过滤
+    public static async getQuestions(grade_id?: number, subject_id?: number): Promise<Question[] | undefined> {
         try {
-            const response = await this.axiosInstance.get<Question[]>('/question/get');
+            const response = await this.axiosInstance.get<Question[]>('/question/get', { params: { grade_id, subject_id } });
             console.log('题目列表获取成功！');
             return response.data;
         } catch (error) {
@@ -41,9 +39,9 @@ export class QuestionService extends BaseService {
     }
 
     // 获取单个题目的详细信息
-    public static async getQuestionById(questionId: number): Promise<Question | undefined> {
+    public static async getQuestionById(question_id: number): Promise<Question | undefined> {
         try {
-            const response = await this.axiosInstance.get<Question>(`/question/get/${questionId}`);
+            const response = await this.axiosInstance.get<Question>(`/question/get/${question_id}`);
             console.log('题目详细信息获取成功！');
             return response.data;
         } catch (error) {
@@ -54,9 +52,9 @@ export class QuestionService extends BaseService {
     }
 
     // 更新题目信息
-    public static async updateQuestion(questionId: number, questionData: Question): Promise<Question | undefined> {
+    public static async updateQuestion(question_id: number, questionData: Question): Promise<Question | undefined> {
         try {
-            const response = await this.axiosInstance.put<Question>(`/question/update/${questionId}`, questionData);
+            const response = await this.axiosInstance.put<Question>(`/question/update/${question_id}`, questionData);
             console.log('题目信息更新成功！');
             return response.data;
         } catch (error) {
@@ -67,9 +65,9 @@ export class QuestionService extends BaseService {
     }
 
     // 删除题目
-    public static async deleteQuestion(questionId: number): Promise<void | undefined> {
+    public static async deleteQuestion(question_id: number): Promise<{ success: string } | undefined> {
         try {
-            const response = await this.axiosInstance.delete(`/question/delete/${questionId}`);
+            const response = await this.axiosInstance.delete(`/question/delete/${question_id}`);
             console.log('题目删除成功！');
             return response.data;
         } catch (error) {

@@ -3,7 +3,6 @@
     <el-table :data="grades" style="width: 100%">
 
         <el-table-column prop="id" label="年级ID"></el-table-column>
-        <el-table-column prop="school_name" label="学校名称"></el-table-column>
         <el-table-column prop="name" label="年级名称"></el-table-column>
         <el-table-column prop="description" label="年级介绍"></el-table-column>
         <el-table-column label="操作">
