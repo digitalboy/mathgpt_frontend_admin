@@ -11,6 +11,7 @@ export class BaseService {
 
     // 新添加的axios实例用于 "/ai/" 路径下的端点
     protected static axiosAIInstance: AxiosInstance = axios.create({
+        // baseURL: 'http://127.0.0.1:5000',
         baseURL: 'https://math.beike.ai/ai',
         headers: {
             'Content-Type': 'application/json'

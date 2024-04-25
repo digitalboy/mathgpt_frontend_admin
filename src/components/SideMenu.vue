@@ -49,6 +49,13 @@
             <span>试题管理</span>
         </el-menu-item>
 
+        <el-menu-item index="8" @click="goToRoute('QuestionDesign')">
+            <el-icon>
+                <document />
+            </el-icon>
+            <span>试题设计</span>
+        </el-menu-item>
+
         <el-menu-item index="9" @click="goToRoute('Dashboard')">
             <el-icon><icon-menu /></el-icon>
             <span>Dashboard</span>

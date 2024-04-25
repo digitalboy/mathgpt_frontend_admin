@@ -64,6 +64,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/questiondesign',
+    name: 'QuestionDesign',
+    component: () => import('@/views/QuestionDesign.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/test',
     name: 'Test',
     component: () => import('@/views/Test.vue'),
