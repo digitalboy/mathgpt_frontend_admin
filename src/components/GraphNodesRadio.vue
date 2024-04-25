@@ -1,3 +1,4 @@
+<!-- src\components\GraphNodesRadio.vue -->
 <template>
     <el-radio-group class="radio-group" v-model="selectedNodeId" @change="handleNodeChange">
         <el-radio v-for="node in nodes" :key="node.properties.uuid" :label="node.properties.uuid" class="radio-item">
@@ -21,6 +22,7 @@ const handleNodeChange = (newNodeId: string) => {
     // 找到被选择的节点对象
     const selectedNode = graphStore.nodes.find(node => node.properties.uuid === newNodeId);
     graphStore.setCurrentNode(selectedNode || null);
+    console.log(selectedNode)
 };
 
 // 在组件挂载时获取节点和边数据

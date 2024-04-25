@@ -1,3 +1,4 @@
+<!-- src\components\QuestionCard.vue -->
 <template>
     <el-form :model="editableData" @submit.prevent="handleSubmit" label-width="auto" label-position="right">
         <el-form-item label="题干">

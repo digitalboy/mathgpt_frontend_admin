@@ -1,3 +1,4 @@
+<!-- src\components\QuestionDesign.vue -->
 <template>
     <div>
         <GraphNodesRadio />
@@ -28,6 +29,7 @@ const loading = ref(false)
 
 // 使用Pinia的store来监视当前节点的变化
 watch(() => graphStore.currentNode, (newNode) => {
+    aiResponse.value = null
     if (newNode && newNode.properties.node_name) {
         // 直接使用JSON文件中的提示语，并替换占位符
         promptMessage.value = JSON.stringify(prompts).replace('<user_question>', newNode.properties.node_name);
