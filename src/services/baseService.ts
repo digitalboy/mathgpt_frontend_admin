@@ -9,6 +9,14 @@ export class BaseService {
         }
     });
 
+    // 新添加的axios实例用于 "/ai/" 路径下的端点
+    protected static axiosAIInstance: AxiosInstance = axios.create({
+        baseURL: 'https://math.beike.ai/ai',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
     static initialize() {
         this.initializeResponseInterceptor();
         this.initializeRequestInterceptor();
@@ -28,6 +36,18 @@ export class BaseService {
             },
             error => Promise.reject(error)
         );
+
+        // 初始化 "/ai/" 端点的请求拦截器
+        this.axiosAIInstance.interceptors.request.use(
+            config => {
+                const token = this.getToken();
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+                return config;
+            },
+            error => Promise.reject(error)
+        );
     }
 
     private static initializeResponseInterceptor() {
@@ -39,6 +59,12 @@ export class BaseService {
                 }
                 return Promise.reject(error);
             }
+        );
+
+        // 初始化 "/ai/" 端点的响应拦截器
+        this.axiosAIInstance.interceptors.response.use(
+            response => response,
+            error => Promise.reject(error)
         );
     }
 
