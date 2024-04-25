@@ -8,6 +8,7 @@
         <SchoolDropdown/>
         <TextbookVersionDropdown/>
         <StudentDropdown/>
+        <GraphNodesRadio/>
     </div>
 </template>
 
@@ -18,6 +19,7 @@ import SubjectDropdown from '@/components/SubjectDropdown.vue';
 import SchoolDropdown from '@/components/SchoolDropdown.vue';
 import TextbookVersionDropdown from '@/components/TextbookVersionDropdown.vue';
 import StudentDropdown from '@/components/StudentDropdown.vue';
+import GraphNodesRadio from '@/components/GraphNodesRadio.vue';
 </script>
 
 <style scoped></style>
