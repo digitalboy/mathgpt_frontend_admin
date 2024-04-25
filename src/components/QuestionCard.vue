@@ -4,7 +4,7 @@
         <el-form-item label="题干">
             <el-input v-model="editableData.question_text" type="textarea" rows="3"></el-input>
         </el-form-item>
-        <el-form-item v-for="(option, index) in editableData.options" :key="option.option_id"
+        <el-form-item v-for="(option, _index) in editableData.options" :key="option.option_id"
             :label="`选项 ${option.option_id}`">
             <el-input v-model="option.option_text"></el-input>
         </el-form-item>
@@ -33,6 +33,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useGraphStore } from '@/stores/graphStore';
+import { findSubjectId, findGradeId, findTextbookVersionId } from '@/utils/lookupHelpers';
+import { useQuestionStore } from '@/stores/questionStore';
 import type { QuestionData } from '@/types';
 
 const props = defineProps<{ questionData: QuestionData }>();
@@ -43,12 +46,42 @@ watch(() => props.questionData, (newValue) => {
     editableData.value = JSON.parse(JSON.stringify(newValue));
 }, { deep: true, immediate: true });
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
     console.log('提交的数据:', editableData.value);
-    // 这里可以添加提交逻辑，例如API调用等
+    const graphStore = useGraphStore();
+    const questionStore = useQuestionStore();
+    const currentNode = graphStore.currentNodeDetails;
+
+    if (currentNode) {
+        const subjectId = findSubjectId(currentNode.properties.subject);
+        const textbookVersionId = findTextbookVersionId(currentNode.properties.publisher);
+        const gradeId = findGradeId(currentNode.properties.grade);
+
+        if (subjectId === undefined || textbookVersionId === undefined || gradeId === undefined) {
+            console.error('无法提交：科目、教材版本或年级ID未找到。');
+            // 这里可以添加额外的用户反馈逻辑，如弹窗或消息提示
+            return;
+        }
+
+        const completeData = {
+            content: editableData.value.question_text,
+            knowledge_point_uuid: currentNode.properties.uuid,
+            subject_id: subjectId,
+            textbook_version_id: textbookVersionId,
+            grade_id: gradeId,
+            description: editableData.value.explanation
+        };
+
+        try {
+            await questionStore.createQuestion(completeData);
+            console.log('题目创建成功！');
+        } catch (error) {
+            console.error('题目创建失败:', error);
+        }
+    } else {
+        console.error('当前没有选择任何知识点');
+    }
 };
+
 </script>
 
-<style scoped>
-/* 可以根据需要添加样式 */
-</style>
