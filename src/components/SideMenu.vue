@@ -159,7 +159,6 @@ const authStore = useAuthStore();
 
 // Computed properties to check roles
 const isAdmin = computed(() => authStore.user?.role === 'admin');
-const isTeacher = computed(() => authStore.user?.role === 'teacher');
 const isStudent = computed(() => authStore.user?.role === 'student');
 
 

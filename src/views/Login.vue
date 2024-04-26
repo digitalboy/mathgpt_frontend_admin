@@ -97,9 +97,5 @@ const logout = () => {
 </script>
 
 <style scoped>
-.login-container {
-    /* style remains the same */
-}
 
-/* other styles remain the same */
 </style>
