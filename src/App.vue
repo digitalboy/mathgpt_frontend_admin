@@ -1,5 +1,10 @@
 <!-- src\App.vue -->
 <template>
+  <el-row>
+    <el-col :span="24">
+      <AppHeader /> <!-- AppHeader 组件现在能被识别和渲染 -->
+    </el-col>
+  </el-row>
   <el-row :gutter="20">
     <!-- 只在 hideMenu 不为 true 时显示侧边菜单 -->
     <el-col :span="4" class="hidden-md-and-down" v-if="!$route.meta.hideMenu">
@@ -16,12 +21,14 @@
 </template>
 
 <script lang="ts">
-import 'element-plus/theme-chalk/display.css'
+import 'element-plus/theme-chalk/display.css';
+import AppHeader from '@/components/AppHeader.vue'; // 确保路径正确
 import SideMenu from '@/components/SideMenu.vue';
 
 export default {
   name: 'App',
   components: {
+    AppHeader, // 这里需要把AppHeader组件注册
     SideMenu
   }
 };

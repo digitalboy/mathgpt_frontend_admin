@@ -1,14 +1,13 @@
 <!-- components/NodesBySearch.vue -->
 <template>
     <div>
-        <!-- 输入框仅用于显示当前学生的年级和科目，不允许编辑 -->
+        <!-- 输入框显示当前学生的年级和科目，不允许编辑 -->
         <el-input v-model="grade" placeholder="年级" disabled></el-input>
         <el-input v-model="subject" placeholder="科目" disabled></el-input>
         <el-radio-group class="radio-group" v-model="selectedNodeId" @change="handleNodeChange">
             <el-radio v-for="node in nodes" :key="node.properties.uuid" :label="node.properties.node_name"
-                class="radio-item">
-                {{ node.properties.node_name }}
-            </el-radio>
+                class="radio-item"/>
+                
         </el-radio-group>
     </div>
 </template>
@@ -16,38 +15,30 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
-import { useStudentStore } from '@/stores/studentStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const graphStore = useGraphStore();
-const studentStore = useStudentStore();
+const authStore = useAuthStore();
+const selectedNodeId = ref(null);
 
-const selectedNodeId = ref('');
-
-// 在组件加载时根据当前登录学生的年级和科目进行搜索
+// 由于用户的认证信息已经在 main.ts 初始化完成，我们可以直接使用它们
 onMounted(async () => {
-    console.log(studentStore.currentStudent)
-    // 在这进行非空检查
-    if (studentStore.currentStudent) {
-        console.log(studentStore.currentStudent)
-        const { grade_name, class_name } = studentStore.currentStudent;
-        if (grade_name && class_name) { // 确保grade_name和class_name都不是undefined
-            await graphStore.searchNodes(grade_name, class_name);
-        }
+    if (authStore.user && authStore.user.role === 'student') {
+        await graphStore.searchNodes(authStore.user.grade_name);
     }
 });
 
-// 使用计算属性来访问学生的年级和科目信息
-const grade = computed(() => studentStore.currentStudent?.grade_name);
-const subject = computed(() => studentStore.currentStudent?.class_name);
+// 使用计算属性来访问用户的年级和科目信息
+const grade = computed(() => authStore.user?.grade_name ?? '未知年级');
+const subject = computed(() => authStore.user?.class_name ?? '未知科目');
 
 // 节点选择变化处理函数
-const handleNodeChange = (newNodeId: string) => {
-    // 处理节点的选择变化
+const handleNodeChange = (newNodeId: string | null) => {
+    // 在这里处理节点的选择变化
 };
 
-// 使用计算属性来获取节点列表，确保它是响应式的
+// 使用计算属性来获取节点列表
 const nodes = computed(() => graphStore.nodes);
-
 </script>
 
 <style scoped>
