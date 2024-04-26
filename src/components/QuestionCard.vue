@@ -56,9 +56,9 @@ const handleSubmit = async () => {
     const currentNode = graphStore.currentNodeDetails;
 
     if (currentNode) {
-        const subjectId = findSubjectId(currentNode.properties.subject);
-        const textbookVersionId = findTextbookVersionId(currentNode.properties.publisher);
-        const gradeId = findGradeId(currentNode.properties.grade);
+        const subjectId = await findSubjectId(currentNode.properties.subject);
+        const textbookVersionId = await findTextbookVersionId(currentNode.properties.publisher);
+        const gradeId = await findGradeId(currentNode.properties.grade);
 
         if (subjectId === undefined || textbookVersionId === undefined || gradeId === undefined) {
             console.error('无法提交：科目、教材版本或年级ID未找到。');
@@ -78,6 +78,7 @@ const handleSubmit = async () => {
 
         try {
             await questionStore.createQuestion(completeData);
+            resetFormData();
             console.log('题目创建成功！');
         } catch (error) {
             console.error('题目创建失败:', error);
@@ -87,5 +88,17 @@ const handleSubmit = async () => {
     }
 };
 
-
+function resetFormData() {
+    // 重置 editableData 为初始状态或默认模板
+    editableData.value = {
+        question_type:'',
+        question_text: '',
+        bloom_taxonomy_level: '',
+        options: [],
+        correct_answer: [],
+        explanation: '',
+        difficulty_level: ''
+        // 确保其他所有必要字段都被适当重置
+    };
+}
 </script>
