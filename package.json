@@ -14,14 +14,14 @@
     "axios": "^1.6.8",
     "element-plus": "^2.7.1",
     "express": "^4.19.2",
-    "js-cookie": "^3.0.5",
+    
     "pinia": "^2.1.7",
     "vis-network": "^9.1.9",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
+    
     "@types/node": "^20.12.7",
     "@vitejs/plugin-vue": "^5.0.4",
     "ts-node": "^10.9.2",
