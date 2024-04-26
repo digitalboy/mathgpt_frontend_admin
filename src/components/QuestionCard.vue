@@ -1,8 +1,12 @@
 <!-- src\components\QuestionCard.vue -->
 <template>
+    <el-input v-model="currentNode.properties.uuid" readonly></el-input>
     <el-form :model="editableData" @submit.prevent="handleSubmit" label-width="auto" label-position="right">
         <el-form-item label="题干">
             <el-input v-model="editableData.question_text" type="textarea" rows="3"></el-input>
+        </el-form-item>
+        <el-form-item label="布鲁姆目标">
+            <el-input v-model="editableData.bloom_taxonomy_level"></el-input>
         </el-form-item>
         <el-form-item v-for="(option, _index) in editableData.options" :key="option.option_id"
             :label="`选项 ${option.option_id}`">
@@ -59,12 +63,13 @@ const handleSubmit = async () => {
 
         if (subjectId === undefined || textbookVersionId === undefined || gradeId === undefined) {
             console.error('无法提交：科目、教材版本或年级ID未找到。');
-            // 这里可以添加额外的用户反馈逻辑，如弹窗或消息提示
             return;
         }
 
         const completeData = {
-            content: editableData.value.question_text,
+            question_type: editableData.value.question_type,
+            bloom_taxonomy_level: editableData.value.bloom_taxonomy_level,
+            content: JSON.stringify(editableData.value),  // 将整个题目JSON字符串化
             knowledge_point_uuid: currentNode.properties.uuid,
             subject_id: subjectId,
             textbook_version_id: textbookVersionId,
@@ -73,7 +78,6 @@ const handleSubmit = async () => {
         };
 
         try {
-            
             await questionStore.createQuestion(completeData);
             console.log('题目创建成功！');
         } catch (error) {
@@ -84,5 +88,5 @@ const handleSubmit = async () => {
     }
 };
 
-</script>
 
+</script>
