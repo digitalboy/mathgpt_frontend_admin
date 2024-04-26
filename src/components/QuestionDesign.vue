@@ -4,12 +4,12 @@
         <GraphNodesRadio />
         <el-row :gutter="20">
             <el-col :span="12">
-                <el-input v-model="promptMessage" type="textarea" :rows="20"></el-input>
+                <el-input v-model="promptMessage" type="textarea" :rows="20" placeholder="请选择知识点"></el-input>
                 <el-button @click="sendQuestion">发送</el-button>
             </el-col>
             <el-col :span="12">
-                <QuestionCard v-if="aiResponse" :questionData="aiResponse" v-loading="loading" />
-                <el-skeleton :rows="5" v-else/>
+                <QuestionEdit v-if="aiResponse" :questionData="aiResponse" v-loading="loading" />
+                <el-skeleton :rows="5" v-else />
             </el-col>
         </el-row>
     </div>
@@ -21,7 +21,7 @@ import { useGraphStore } from '@/stores/graphStore';
 import prompts from '@/assets/prompts/question.json';
 import { ChatService } from '@/services/chatService';
 import GraphNodesRadio from './GraphNodesRadio.vue';
-import QuestionCard from '@/components/QuestionCard.vue';
+import QuestionEdit from '@/components/QuestionEdit.vue';
 
 const graphStore = useGraphStore();
 const promptMessage = ref('');
@@ -48,7 +48,8 @@ const sendQuestion = async () => {
     if (response && response.response) {
         loading.value = false
         console.log(JSON.parse(response.response))
-        aiResponse.value = JSON.parse(response.response);  // 假设 response.response 已经是 QuestionData 类型
+        aiResponse.value = JSON.parse(response.response); 
+        promptMessage.value='' 
     }
 };
 </script>

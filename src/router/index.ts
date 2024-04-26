@@ -61,7 +61,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/questions',
     name: 'Questions',
     component: () => import('@/views/Questions.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, roles: ['admin'] }
   },
   {
     path: '/questiondesign',
@@ -74,7 +74,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Test',
     component: () => import('@/views/Test.vue'),
     meta: { requiresAuth: true }
-  }
+  },
 ];
 
 const router = createRouter({
@@ -85,11 +85,22 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore();
 
-  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+  // 检查是否需要权限认证，如果未登录则跳转至登录页面
+  if (to.meta.requiresAuth && !authStore.user?.isLoggedIn) {
     next({ name: 'Login' });
   } else {
-    next();
+    // 检查路由是否定义了需要特定角色访问
+    if (to.meta.roles) {
+      const roles = to.meta.roles as string[]; // 这里通过类型断言，明确 roles 的类型为字符串数组
+      if (!roles.includes(authStore.user?.role as string)) {
+        // 如果未包含相应角色，重定向到未授权访问页面
+        next({ path: '/unauthorized' });
+      } else {
+        next(); // 角色匹配，正常导航
+      }
+    } else {
+      next(); // 若未设置 roles 属性，则无需角色限制，正常导航
+    }
   }
 });
-
 export default router;
