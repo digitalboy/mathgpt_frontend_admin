@@ -1,6 +1,5 @@
 <!-- src\components\QuestionCard.vue -->
 <template>
-    <el-input v-model="currentNode.properties.uuid" readonly></el-input>
     <el-form :model="editableData" @submit.prevent="handleSubmit" label-width="auto" label-position="right">
         <el-form-item label="题干">
             <el-input v-model="editableData.question_text" type="textarea" rows="3"></el-input>
