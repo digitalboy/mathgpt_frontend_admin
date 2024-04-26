@@ -21,11 +21,11 @@ export const useQuestionStore = defineStore('question', {
                 console.error('加载题目列表失败:', error);
             }
         },
-        async fetchQuestionById(questionId: number) {
+        async fetchQuestionById(UUID: string) {
             try {
-                const question = await QuestionService.getQuestionById(questionId);
-                if (question) {
-                    this.setCurrentQuestion(question);
+                const questions = await QuestionService.getQuestionByUUID(UUID);
+                if (questions) {
+                    this.setCurrentQuestion(questions);
                 }
             } catch (error) {
                 console.error('获取题目详细信息失败:', error);

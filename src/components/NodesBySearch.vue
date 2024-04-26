@@ -5,9 +5,10 @@
         <el-input v-model="grade" placeholder="年级" disabled></el-input>
         <el-input v-model="subject" placeholder="科目" disabled></el-input>
         <el-radio-group class="radio-group" v-model="selectedNodeId" @change="handleNodeChange">
-            <el-radio v-for="node in nodes" :key="node.properties.uuid" :label="node.properties.node_name"
-                class="radio-item"/>
-                
+
+            <el-radio v-for="node in nodes" :key="node.properties.uuid" :value="node.properties.uuid"
+                class="radio-item">{{ node.properties.node_name }}</el-radio>
+
         </el-radio-group>
     </div>
 </template>
@@ -34,7 +35,9 @@ const subject = computed(() => authStore.user?.class_name ?? '未知科目');
 
 // 节点选择变化处理函数
 const handleNodeChange = (newNodeId: string | null) => {
-    // 在这里处理节点的选择变化
+    const selectedNode = graphStore.nodes.find(node => node.properties.uuid === newNodeId);
+    graphStore.setCurrentNode(selectedNode || null);
+    console.log(selectedNode)
 };
 
 // 使用计算属性来获取节点列表

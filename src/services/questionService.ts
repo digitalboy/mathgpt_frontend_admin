@@ -39,9 +39,9 @@ export class QuestionService extends BaseService {
     }
 
     // 获取单个题目的详细信息
-    public static async getQuestionById(question_id: number): Promise<Question | undefined> {
+    public static async getQuestionByUUID(UUID: string): Promise<Question | undefined> {
         try {
-            const response = await this.axiosInstance.get<Question>(`/question/get/${question_id}`);
+            const response = await this.axiosInstance.get<Question>(`/question/get/${UUID}`);
             console.log('题目详细信息获取成功！');
             return response.data;
         } catch (error) {

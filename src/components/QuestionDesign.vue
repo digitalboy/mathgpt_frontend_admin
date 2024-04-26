@@ -1,7 +1,7 @@
 <!-- src\components\QuestionDesign.vue -->
 <template>
     <div>
-        <GraphNodesRadio />
+        <NodesBySearch />
         <el-row :gutter="20">
             <el-col :span="12">
                 <el-input v-model="promptMessage" type="textarea" :rows="20" placeholder="请选择知识点"></el-input>
@@ -20,7 +20,7 @@ import { ref, watch } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import prompts from '@/assets/prompts/question.json';
 import { ChatService } from '@/services/chatService';
-import GraphNodesRadio from './GraphNodesRadio.vue';
+import NodesBySearch from '@/components/NodesBySearch.vue';
 import QuestionEdit from '@/components/QuestionEdit.vue';
 
 const graphStore = useGraphStore();
