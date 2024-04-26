@@ -1,9 +1,8 @@
 <!-- src\components\GraphNodesRadio.vue -->
 <template>
     <el-radio-group class="radio-group" v-model="selectedNodeId" @change="handleNodeChange">
-        <el-radio v-for="node in nodes" :key="node.properties.uuid" :label="node.properties.uuid" class="radio-item">
-            {{ node.properties.node_name }}
-        </el-radio>
+        <el-radio v-for="node in nodes" :key="node.properties.uuid" :value="node.properties.uuid"
+            :label="node.properties.node_name" class="radio-item" />       
     </el-radio-group>
 </template>
 
@@ -58,5 +57,3 @@ onMounted(async () => {
     flex-basis: auto;
 }
 </style>
-
-

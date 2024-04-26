@@ -73,6 +73,7 @@ const handleSubmit = async () => {
         };
 
         try {
+            
             await questionStore.createQuestion(completeData);
             console.log('题目创建成功！');
         } catch (error) {

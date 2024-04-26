@@ -7,8 +7,9 @@
                 <el-input v-model="promptMessage" type="textarea" :rows="20"></el-input>
                 <el-button @click="sendQuestion">发送</el-button>
             </el-col>
-            <el-col :span="12" v-loading="loading">
+            <el-col :span="12">
                 <QuestionCard v-if="aiResponse" :questionData="aiResponse" v-loading="loading" />
+                <el-skeleton :rows="5" v-else/>
             </el-col>
         </el-row>
     </div>
