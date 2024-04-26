@@ -51,6 +51,7 @@ export class GraphService extends BaseService {
         try {
             const response = await this.axiosInstance.get<Node[]>('/graph/search_nodes', { params: { grade, subject } });
             console.log('节点搜索成功！');
+            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('节点搜索失败：', error);

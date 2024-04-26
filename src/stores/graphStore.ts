@@ -7,7 +7,7 @@ export const useGraphStore = defineStore('graph', {
         nodes: [] as Node[],
         edges: [] as Edge[],
         currentNode: null as Node | null,
-        currentEdge: null as Edge | null
+        currentEdge: null as Edge | null,
     }),
     getters: {
         currentNodeDetails: (state) => state.currentNode,
@@ -37,6 +37,19 @@ export const useGraphStore = defineStore('graph', {
                 console.error('状态：获取节点和边失败', error);
             }
         },
+
+        async searchNodes(grade?: string, subject?: string) {
+            try {
+                const nodesData = await GraphService.searchNodes(grade, subject);
+                console.log(grade,subject)
+                console.log('nodesData:', nodesData);
+                if (nodesData) {
+                this.nodes = nodesData;
+            }
+            } catch (error) {
+                console.error('Failed to search nodes:', error);
+            }
+        },
         
         async addNodesAndEdges(nodes: Node[], edges: Edge[]) {
             try {
@@ -63,6 +76,8 @@ export const useGraphStore = defineStore('graph', {
                 console.error('Failed to update nodes and edges:', error);
             }
         },
+        
+
         async deleteNode(uuid: string) {
             try {
                 const response = await GraphService.deleteNode(uuid);

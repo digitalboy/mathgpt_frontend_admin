@@ -75,6 +75,12 @@
                 <el-icon><icon-menu /></el-icon>
                 <span>我的记录</span>
             </el-menu-item>
+
+            <el-menu-item index="101" @click="goToRoute('DoQuestions')">
+                <el-icon><icon-menu /></el-icon>
+                <span>测试练习</span>
+            </el-menu-item>
+
         </template>
         <el-menu-item index="10" @click="goToRoute('Test')">
             <el-icon>
