@@ -2,8 +2,7 @@
 <template>
     <div>
         <!-- 输入框显示当前学生的年级和科目，不允许编辑 -->
-        <el-input v-model="grade" placeholder="年级" disabled></el-input>
-        <el-input v-model="subject" placeholder="科目" disabled></el-input>
+        
         <el-radio-group class="radio-group" v-model="selectedNodeId" @change="handleNodeChange">
 
             <el-radio v-for="node in nodes" :key="node.properties.uuid" :value="node.properties.uuid"
@@ -28,10 +27,6 @@ onMounted(async () => {
         await graphStore.searchNodes(authStore.user.grade_name);
     }
 });
-
-// 使用计算属性来访问用户的年级和科目信息
-const grade = computed(() => authStore.user?.grade_name ?? '未知年级');
-const subject = computed(() => authStore.user?.class_name ?? '未知科目');
 
 // 节点选择变化处理函数
 const handleNodeChange = (newNodeId: string | null) => {
