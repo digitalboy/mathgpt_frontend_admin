@@ -76,7 +76,7 @@
                 <span>我的记录</span>
             </el-menu-item>
 
-            <el-menu-item index="6" @click="goToRoute('Graph')">
+            <el-menu-item index="101" @click="goToRoute('StudentAllGraph')">
                 <el-icon>
                     <DataAnalysis />
                 </el-icon>

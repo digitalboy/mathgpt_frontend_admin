@@ -87,6 +87,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/student/DoQuestions.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/student/allgraph',
+    name: 'StudentAllGraph',
+    component: () => import('@/views/student/StudentAllGraph.vue'),
+    meta: { requiresAuth: true }
+  },
 ];
 
 const router = createRouter({
