@@ -73,7 +73,7 @@
         <template v-if="isStudent">
             <el-menu-item index="100" @click="goToRoute('StudentDashboard')">
                 <el-icon><icon-menu /></el-icon>
-                <span>我的记录</span>
+                <span>我的报告</span>
             </el-menu-item>
 
             <el-menu-item index="101" @click="goToRoute('StudentAllGraph')">
@@ -85,7 +85,17 @@
 
             <el-menu-item index="102" @click="goToRoute('DoQuestions')">
                 <el-icon><icon-menu /></el-icon>
-                <span>测试练习</span>
+                <span>自选练习</span>
+            </el-menu-item>
+
+            <el-menu-item index="103" @click="goToRoute('DoQuestions')">
+                <el-icon><icon-menu /></el-icon>
+                <span>随机练习</span>
+            </el-menu-item>
+
+            <el-menu-item index="104" @click="goToRoute('DoQuestions')">
+                <el-icon><icon-menu /></el-icon>
+                <span>根因分析</span>
             </el-menu-item>
 
         </template>
