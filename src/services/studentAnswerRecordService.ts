@@ -6,6 +6,7 @@ export interface StudentAnswerRecord {
     student_id: number;
     question_id: number;
     student_answer: string;
+    knowlage_point_uuid?:string;
     // Include any additional properties returned by the backend
     question_content?: string;
     is_partially_correct?: boolean;
