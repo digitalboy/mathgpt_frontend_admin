@@ -1,11 +1,12 @@
 // stores/studentStore.ts
 import { defineStore } from 'pinia';
-import { Student, StudentService } from '@/services/studentService';
+import { Student, StudentService, StudentPerformanceResponse } from '@/services/studentService';
 
 export const useStudentStore = defineStore('student', {
     state: () => ({
         students: [] as Student[],
         currentStudent: null as Student | null,
+        studentPerformance: {} as StudentPerformanceResponse,
     }),
     actions: {
         setCurrentStudent(student: Student | null) {
@@ -76,6 +77,16 @@ export const useStudentStore = defineStore('student', {
             } catch (error) {
                 console.error('学生登录失败:', error);
             }
-        }
+        },
+        async fetchStudentPerformance(studentId: number) {
+            try {
+                const performance = await StudentService.getStudentPerformance(studentId);
+                if (performance) {
+                    this.studentPerformance = performance;
+                }
+            } catch (error) {
+                console.error('获取学生表现数据失败:', error);
+            }
+        },
     }
 });

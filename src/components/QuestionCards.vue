@@ -1,15 +1,24 @@
 <template>
     <div class="question-cards-container">
-        <el-card class="question-card" v-for="(question, index) in questionDetails" :key="index"
-            :body-style="{ padding: '20px' }">
-            <!-- 显示问题文本 -->
-            <div>{{ question.question_text}}</div>
-            <!-- 渲染单选按钮组
-            <el-radio-group v-model="question.options">
+        <el-card class="question-card" v-for="(question, index) in questionDetails" :key="index">
+
+            <template #header>
+                <div>
+                    <span>
+                        {{ question.question_text }}
+                    </span>
+                </div>
+            </template>
+            <el-radio-group v-model="question.selectedOption">
                 <el-radio v-for="option in question.options" :value="option.option_id" :key="option.option_id">
                     {{ option.option_text }}
                 </el-radio>
-            </el-radio-group> -->
+            </el-radio-group>
+
+            <template #footer>
+                <el-button type="primary" @click="submitAnswer(question)">提交答案</el-button>
+            </template>
+
         </el-card>
     </div>
 </template>
@@ -18,11 +27,20 @@
 import { ref, watch } from 'vue';
 import { useQuestionStore } from '@/stores/questionStore';
 import { useGraphStore } from '@/stores/graphStore';
+import { useAuthStore } from '@/stores/authStore';
+import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
 import type { QuestionData } from '@/types';
 
+
+const authStore = useAuthStore();
 const questionStore = useQuestionStore();
 const graphStore = useGraphStore();
-const questionDetails = ref < QuestionData[] > ([]);
+const studentAnswerRecordStore = useStudentAnswerRecordStore();
+
+const questionDetails = ref<QuestionData[]>([]);
+
+authStore.initializeAuth();
+const studentId = authStore.user?.id || null;
 
 // Fetch questions based on the UUID from the currentNode
 const getQuestionDetails = async () => {
@@ -30,7 +48,15 @@ const getQuestionDetails = async () => {
         try {
             await questionStore.fetchQuestionByUUID(graphStore.currentNode.properties.uuid);
             if (questionStore.questions) {
-                questionDetails.value = questionStore.questions as unknown as QuestionData[]
+                questionDetails.value = questionStore.questions.map(question => {
+                    // 解析每个问题的 content JSON 字符串
+                    let parsedQuestion = JSON.parse(question.content);
+                    console.log("qid::::", question.id)
+                    // 初始化每个问题的选中选项
+                    parsedQuestion.id = question.id;
+                    parsedQuestion.selectedOption = null;
+                    return parsedQuestion;
+                });
             }
         } catch (error) {
             console.error('获取题目详细信息失败:', error);
@@ -38,8 +64,32 @@ const getQuestionDetails = async () => {
         }
     }
 };
+const submitAnswer = async (question: QuestionData) => {
+    if (studentId && question.selectedOption) {
+        try {
+            // 创建答案记录对象
+            const record = {
+                student_id: studentId,
+                question_id: question.id as number,
+                student_answer: question.selectedOption,
+                // 添加其他必需的记录字段
+            };
+            console.log(record)
+            // 调用 store 方法创建答案记录
+            await studentAnswerRecordStore.createStudentAnswerRecord(record);
+            // 处理答案提交成功的情况，如更新UI或通知用户
+        } catch (error) {
+            // 处理错误的情况
+            console.error('提交答案失败:', error);
+        }
+    } else {
+        // 处理未选择答案的情况
+        console.error('未选择答案或未登录学生');
+    }
+};
 
 watch(() => graphStore.currentNode, () => {
+    questionDetails.value = [];
     getQuestionDetails();
 }, { immediate: true });
 </script>

@@ -11,6 +11,19 @@ export interface Student {
     class_name?:string;
 }
 
+export interface SubjectPerformance {
+    answer_rate: string;
+    answered_questions: number;
+    correct_answers: number;
+    correct_rate: string;
+    total_questions: number;
+}
+
+// 使用索引签名来允许任意的科目名称作为键，导出以便其他部分使用
+export interface StudentPerformanceResponse {
+    [subject: string]: SubjectPerformance;
+}
+
 export class StudentService extends BaseService {
     // 创建学生
     public static async createStudent(studentData: Student): Promise<Student | undefined> {
@@ -85,6 +98,18 @@ export class StudentService extends BaseService {
             return response.data;
         } catch (error) {
             console.error('学生登录失败：', error);
+            this.handleError(error);
+            return undefined;
+        }
+    }
+
+    public static async getStudentPerformance(student_id: number): Promise<StudentPerformanceResponse | undefined> {
+        try {
+            const response = await this.axiosInstance.get<StudentPerformanceResponse>(`/student/performance/${student_id}`);
+            console.log('学生表现数据获取成功！');
+            return response.data;
+        } catch (error) {
+            console.error('获取学生表现数据失败：', error);
             this.handleError(error);
             return undefined;
         }

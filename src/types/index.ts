@@ -10,4 +10,6 @@ export interface QuestionData {
     correct_answer: string[];
     explanation: string;
     difficulty_level: string;
+    selectedOption?: string;
+    id?: number;
 }
