@@ -9,14 +9,16 @@
     </div>
 </template>
 
-<script setup>
-import { ref, watch, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, watch} from 'vue';
 import { useQuestionStore } from '@/stores/questionStore';
 import { useGraphStore } from '@/stores/graphStore';
+import type { QuestionData } from '@/types';
 
 const questionStore = useQuestionStore();
 const graphStore = useGraphStore();
-const questionDetails = ref([]);
+// const props = defineProps<{ questionData: QuestionData }>();
+const questionDetails = ref<QuestionData[]>([]);
 
 const getQuestionDetails = async () => {
     // console.log(graphStore.currentNode?.properties.uuid)
@@ -26,7 +28,7 @@ const getQuestionDetails = async () => {
             await questionStore.fetchQuestionByUUID(graphStore.currentNode.properties.uuid);
             // console.log(questionStore.questions)
             if (questionStore.questions) {
-                questionDetails.value = questionStore.questions;
+                questionDetails.value = questionStore.questions as unknown as QuestionData[];
             }
         } catch (error) {
             console.error('获取题目详细信息失败:', error);

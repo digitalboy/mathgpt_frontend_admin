@@ -21,7 +21,7 @@ const graphStore = useGraphStore();
 const authStore = useAuthStore();
 const selectedNodeId = ref(null);
 
-// 由于用户的认证信息已经在 main.ts 初始化完成，我们可以直接使用它们
+// 由于用户的认证信息已经在 main.ts 
 onMounted(async () => {
     if (authStore.user && authStore.user.role === 'student') {
         await graphStore.searchNodes(authStore.user.grade_name);

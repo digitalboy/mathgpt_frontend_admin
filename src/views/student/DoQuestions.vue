@@ -13,7 +13,6 @@ import NodesBySearch from '@/components/NodesBySearch.vue';
 import QuestionList from '@/components/QuestionList.vue';
 import QuestionCards from '@/components/QuestionCards.vue';
 
-
 </script>
 
 <style scoped></style>
