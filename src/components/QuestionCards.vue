@@ -6,7 +6,7 @@
             <div>{{ question.content.question_text }}</div>
             <!-- 渲染单选按钮组 -->
             <el-radio-group v-model="question.selectedOption">
-                <el-radio v-for="option in question.content.options" :label="option.option_id" :key="option.option_id">
+                <el-radio v-for="option in question.content.options" :value="option.option_id" :key="option.option_id">
                     {{ option.option_text }}
                 </el-radio>
             </el-radio-group>
