@@ -40,12 +40,27 @@ const nodes = computed(() => graphStore.nodes);
 </script>
 
 <style scoped>
-.radio-group,
-.el-input {
-    margin-bottom: 10px;
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .radio-item {
-    /* 调整布局，使其更适合你的UI设计 */
+    margin-right: 10px;
+    /* 添加一些右边距 */
+    min-width: 70px;
+    /* 设定一个最小宽度 */
+    width: 150px;
+    /* 设定具体宽度 */
+    white-space: nowrap;
+    /* 防止文本换行 */
+    overflow: hidden;
+    /* 隐藏溢出部分 */
+    text-overflow: ellipsis;
+    /* 使用省略号表示被截断的文本 */
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
 }
 </style>

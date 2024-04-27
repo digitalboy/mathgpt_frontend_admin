@@ -76,6 +76,13 @@
                 <span>我的记录</span>
             </el-menu-item>
 
+            <el-menu-item index="6" @click="goToRoute('Graph')">
+                <el-icon>
+                    <DataAnalysis />
+                </el-icon>
+                <span>知识图谱</span>
+            </el-menu-item>
+
             <el-menu-item index="101" @click="goToRoute('DoQuestions')">
                 <el-icon><icon-menu /></el-icon>
                 <span>测试练习</span>

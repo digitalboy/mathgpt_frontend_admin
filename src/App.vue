@@ -39,4 +39,7 @@ export default {
 h1 {
   color: #525457;
 }
+h2 {
+  color: #525457;
+}
 </style>

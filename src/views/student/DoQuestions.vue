@@ -2,9 +2,17 @@
 <template>
     <div>
         <h1>练习</h1>
-        <NodesBySearch />
+        <el-row :gutter="20">
+            <el-card>
+                <NodesBySearch />
+            </el-card>
+
+        </el-row>
+        <el-row :gutter="20">
+            <QuestionCards />
+        </el-row>
         <!-- <QuestionList/> -->
-        <QuestionCards/>
+
     </div>
 </template>
 

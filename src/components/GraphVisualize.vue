@@ -1,25 +1,29 @@
 <!-- src/components/GraphVisualize.vue -->
 <template>
-    <div ref="visContainer" class="vis-container"></div>
+    <div v-loading="loading">
+        <div ref="visContainer" class="vis-container"></div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watchEffect } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { Network } from 'vis-network/standalone';
-import { ElMessage } from 'element-plus';
+// import { ElMessage } from 'element-plus';
 
 const visContainer = ref(null);
 const graphStore = useGraphStore();
+const loading =ref(true)
 
 onMounted(async () => {
     // console.log("开始加载图形数据...");
+    loading.value=true
     await graphStore.fetchNodesAndEdges();
     // console.log("加载图形数据完成:", graphStore.nodes, graphStore.edges);
 });
 
 watchEffect(() => {
-    if (visContainer.value && graphStore.nodes?.length > 0 && graphStore.edges?.length > 0) {
+    if (!graphStore.isDataLoading && visContainer.value && graphStore.nodes?.length > 0 && graphStore.edges?.length > 0) {
         const graphData = {
             nodes: graphStore.nodes.map(node => ({
                 id: node.properties.uuid,  // 使用 uuid 作为唯一标识符
@@ -41,14 +45,14 @@ watchEffect(() => {
             interaction: { hover: true },
             nodes: {
                 shape: 'dot',
-                size: 10,                
+                size: 10,
             },
             edges: {
                 smooth: true,
-                font:{
-                    size:10,
-                    color:'#aaaaaa',
-                    align:'middle'
+                font: {
+                    size: 10,
+                    color: '#aaaaaa',
+                    align: 'middle'
                 }
             }
 
@@ -57,8 +61,9 @@ watchEffect(() => {
         network.on("click", function (params) {
             handleGraphClick(params);
         });
-    } else {
-        ElMessage.warning('未加载任何图形数据');
+        loading.value = false
+    } else if (!graphStore.isDataLoading) {
+        // ElMessage.warning('未加载任何图形数据');
     }
 });
 

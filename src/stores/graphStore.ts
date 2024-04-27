@@ -8,6 +8,7 @@ export const useGraphStore = defineStore('graph', {
         edges: [] as Edge[],
         currentNode: null as Node | null,
         currentEdge: null as Edge | null,
+        isDataLoading: false,
     }),
     getters: {
         currentNodeDetails: (state) => state.currentNode,
@@ -23,6 +24,7 @@ export const useGraphStore = defineStore('graph', {
 
         async fetchNodesAndEdges() {
             // console.log('Fetching nodes and edges...');
+            this.isDataLoading = true;
             try {
                 const graphData = await GraphService.getNodesAndEdges();
                 if (graphData) {
@@ -35,6 +37,8 @@ export const useGraphStore = defineStore('graph', {
                 }
             } catch (error) {
                 console.error('状态：获取节点和边失败', error);
+            } finally {
+                this.isDataLoading = false;
             }
         },
 

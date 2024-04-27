@@ -3,23 +3,47 @@
 <template>
     <el-row :gutter="20">
         <el-col :span="8" v-for="(data, subject) in performanceData" :key="subject">
-            <div class="performance-card">
-                <div class="performance-circle">
-                    <el-progress type="circle" :percentage="data.correct_rate"
-                        :status="getProgressStatus(data.correct_rate)" />
+            <el-card>
+                <template #header>
+                    <span>
+                        <h2>{{ subject }}</h2>
+                    </span>
+                </template>
+                <div class="performance-card">
+                    <el-row :gutter="10">
+                        <el-col :span="12">
+                            <div class="performance-circle">
+                                <el-progress type="circle" :percentage="data.correct_rate" />
+                            </div>
+                            <el-statistic :title="subject" :value="data.correct_rate" suffix="% 正确率">
+                                <template #title>
+                                    <div style="display: inline-flex; align-items: center">
+                                        {{ data.correct_answers }}/{{ data.answered_questions }}
+                                    </div>
+                                </template>
+                            </el-statistic>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="performance-circle">
+                                <el-progress type="circle" :percentage="data.answer_rate" />
+                            </div>
+
+                            <el-statistic :title="subject" :value="data.correct_rate" suffix="% 作答率">
+                                <template #title>
+                                    <div style="display: inline-flex; align-items: center">
+                                         {{ data.answered_questions }}/{{ data.total_questions }}
+                                        
+                                    </div>
+                                </template>
+                            </el-statistic>
+
+                            
+                        </el-col>
+                    </el-row>
+
+
                 </div>
-                <el-statistic :title="subject" :value="data.correct_rate" suffix="% 正确率">
-                    <template #title>
-                        <div style="display: inline-flex; align-items: center">
-                            {{ subject }}
-                        </div>
-                    </template>
-                </el-statistic>
-                <div class="performance-footer">
-                    <div>回答问题: {{ data.answered_questions }} / {{ data.total_questions }}</div>
-                    <div>回答率: {{ data.answer_rate }}</div>
-                </div>
-            </div>
+            </el-card>
         </el-col>
     </el-row>
 </template>
@@ -66,7 +90,7 @@ export default defineComponent({
     text-align: center;
     padding: 20px;
     border-radius: 4px;
-    background-color: #f7f7f8;
+    /* background-color: #636366; */
     transition: box-shadow 0.3s;
 }
 
