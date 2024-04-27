@@ -1,10 +1,15 @@
-// components/QuestionCards.vue
-
 <template>
     <div class="question-cards-container">
         <el-card class="question-card" v-for="(question, index) in questionDetails" :key="index"
             :body-style="{ padding: '20px' }">
-            <div class="content" v-html="formatQuestionContent(question.content)"></div>
+            <!-- 显示问题文本 -->
+            <div>{{ question.content.question_text }}</div>
+            <!-- 渲染单选按钮组 -->
+            <el-radio-group v-model="question.selectedOption">
+                <el-radio v-for="option in question.content.options" :label="option.option_id" :key="option.option_id">
+                    {{ option.option_text }}
+                </el-radio>
+            </el-radio-group>
         </el-card>
     </div>
 </template>
@@ -24,33 +29,16 @@ const getQuestionDetails = async () => {
         try {
             await questionStore.fetchQuestionByUUID(graphStore.currentNode.properties.uuid);
             if (questionStore.questions) {
-                questionDetails.value = questionStore.questions;
-                console.log("questionDetails::::",questionDetails.value)
+                questionDetails.value = questionStore.questions.map(q => ({
+                    ...q,
+                    content: JSON.parse(q.content),
+                    selectedOption: null // 初始化每个问题的选中选项
+                }));
             }
         } catch (error) {
             console.error('获取题目详细信息失败:', error);
             questionDetails.value = [];
         }
-    }
-};
-
-// Formatting Question Content to display the options and question text properly
-const formatQuestionContent = (content) => {
-    if (!content) return '';
-    try {
-        const questionObject = JSON.parse(content);
-        let formattedContent = `<div><strong>${questionObject.question_text}</strong></div>`;
-        if (questionObject.options) {
-            formattedContent += '<ul>';
-            for (const option of questionObject.options) {
-                formattedContent += `<li>${option.option_id}: ${option.option_text}</li>`;
-            }
-            formattedContent += '</ul>';
-        }
-        return formattedContent;
-    } catch (e) {
-        console.error('格式化题目内容时出错:', e);
-        return '<div>问题内容无法显示</div>';
     }
 };
 
@@ -60,14 +48,5 @@ watch(() => graphStore.currentNode, () => {
 </script>
 
 <style scoped>
-.question-cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.question-card {
-    flex: 1;
-    min-width: 250px;
-}
+/* ...以前的样式... */
 </style>
