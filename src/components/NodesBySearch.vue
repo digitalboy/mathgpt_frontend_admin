@@ -1,8 +1,6 @@
 <!-- components/NodesBySearch.vue -->
 <template>
     <div>
-        <!-- 输入框显示当前学生的年级和科目，不允许编辑 -->
-
         <el-radio-group class="radio-group" v-model="selectedNodeId" @change="handleNodeChange">
 
             <el-radio v-for="node in nodes" :key="node.properties.uuid" :value="node.properties.uuid"
@@ -13,11 +11,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watchEffect } from 'vue';
+import { ref, onMounted, computed, watchEffect, defineProps } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
 import { StudentAnswerRecord } from '@/services/studentAnswerRecordService';
+
+// 定义新的prop以指示想要显示的节点类型：'all', 'correct', 'wrong', 'uninvolved'
+const props = defineProps({
+    displayType: {
+        type: String,
+        default: 'all' // 默认显示全部
+    }
+});
 
 const graphStore = useGraphStore();
 const authStore = useAuthStore();
@@ -78,10 +84,24 @@ const handleNodeChange = (newNodeId: string | null) => {
 };
 
 // 使用计算属性来获取并动态更新带有颜色的节点列表
-const nodes = computed(() => graphStore.nodes.map(node => ({
-    ...node,
-   
-})));
+// 使用计算属性来筛选节点，基于displayType的值
+const nodes = computed(() => {
+    switch (props.displayType) {
+        case 'correct':
+            // 只显示正确的知识点
+            return graphStore.nodes.filter(node => node.color && node.color.background === '#a5d6a7');
+        case 'wrong':
+            // 只显示错误的知识点
+            return graphStore.nodes.filter(node => node.color && node.color.background === '#ffaaaa');
+        case 'uninvolved':
+            // 只显示未涉及的知识点
+            return graphStore.nodes.filter(node => !node.color);
+        case 'all':
+        default:
+            // 显示所有知识点
+            return graphStore.nodes;
+    }
+});
 
 const getNodeClass = (node:any) => {
     if (node.color) {
@@ -114,7 +134,7 @@ const getNodeClass = (node:any) => {
 /* 注意：此处选择更加具体的元素并使用了!important来应用样式 */
 .el-radio.node-wrong {
     color: #ff0000;
-    font-weight: bold;
+    /* font-weight: bold; */
     /* background-color: #ffaaaa !important; */
     border-color: #ff0000 !important;
 }

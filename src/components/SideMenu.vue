@@ -83,17 +83,27 @@
                 <span>知识图谱</span>
             </el-menu-item>
 
-            <el-menu-item index="102" @click="goToRoute('DoQuestions')">
+            <el-menu-item index="101" @click="goToRoute('DoQuestions', 'all')">
                 <el-icon><icon-menu /></el-icon>
-                <span>自选练习</span>
+                <span>知识点练习-自选</span>
             </el-menu-item>
 
-            <el-menu-item index="103" @click="goToRoute('DoQuestions')">
+            <el-menu-item index="102" @click="goToRoute('DoQuestions', 'correct')">
                 <el-icon><icon-menu /></el-icon>
-                <span>随机练习</span>
+                <span>知识点练习-正确</span>
             </el-menu-item>
 
-            <el-menu-item index="104" @click="goToRoute('DoQuestions')">
+            <el-menu-item index="103" @click="goToRoute('DoQuestions', 'wrong')">
+                <el-icon><icon-menu /></el-icon>
+                <span>知识点练习-错误</span>
+            </el-menu-item>
+
+            <el-menu-item index="104" @click="goToRoute('DoQuestions', 'uninvolved')">
+                <el-icon><icon-menu /></el-icon>
+                <span>知识点练习-未涉</span>
+            </el-menu-item>
+
+            <el-menu-item index="105" @click="goToRoute('DoQuestions')">
                 <el-icon><icon-menu /></el-icon>
                 <span>根因分析</span>
             </el-menu-item>
@@ -136,7 +146,8 @@ const handleClose = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
 }
 
-const goToRoute = (routeName: string) => {
-    router.push({ name: routeName });
+function goToRoute(routeName: string, displayType?: string) {
+    // 使用vue-router进行路由跳转，并带上查询参数
+    router.push({ name: routeName, query: { displayType } });
 }
 </script>
