@@ -1,6 +1,9 @@
 <!-- src/components/QuestionCards.vue -->
 <template>
     <div class="question-cards-container">
+        <div class="question-counter" v-if="questionDetails.length > 0">
+            <span>问题 {{ currentIndex + 1 }} / {{ questionDetails.length }}</span>
+        </div>
         <!-- Conditions on v-if ensure only one question is displayed at a time -->
         <question-card v-if="currentQuestion" :question-data="currentQuestion" @nextQuestion="showNextQuestion" />
 
