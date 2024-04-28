@@ -12,4 +12,6 @@ export interface QuestionData {
     difficulty_level: string;
     selectedOption?: string;
     id?: number;
+    showResult?: boolean;
+    resultType?: 'success' | 'error';
 }

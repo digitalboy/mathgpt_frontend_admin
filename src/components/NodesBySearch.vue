@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watchEffect, defineProps } from 'vue';
+import { ref, onMounted, computed, watchEffect, defineProps,watch } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
@@ -61,7 +61,7 @@ const markNodesByAnswerStatus = (studentAnswerRecords: StudentAnswerRecord[]) =>
 };
 
 // 获取答题记录和知识点，然后刷新颜色
-onMounted(async () => {
+onMounted(async () => {    
     if (authStore.user && authStore.user.role === 'student') {
         await graphStore.searchNodes(authStore.user.grade_name);
         await studentAnswerRecordStore.fetchStudentAnswerRecordsByStudent(authStore.user.id);
@@ -75,7 +75,10 @@ watchEffect(() => {
     }
 });
 
-
+watch(() => props.displayType, (_newValue, _oldValue) => {
+    // 当displayType变化时，清空当前选择的节点
+    graphStore.setCurrentNode(null);
+});
 
 // 节点选择变化处理函数
 const handleNodeChange = (newNodeId: string | null) => {
@@ -103,7 +106,7 @@ const nodes = computed(() => {
     }
 });
 
-const getNodeClass = (node:any) => {
+const getNodeClass = (node: any) => {
     if (node.color) {
         if (node.color.background === '#a5d6a7') {
             return 'node-correct'; // 正确答题的节点样式类
@@ -122,14 +125,6 @@ const getNodeClass = (node:any) => {
     align-items: center;
 }
 
-.radio-item {
-    margin-right: 10px;
-    min-width: 70px;
-    width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 /* 注意：此处选择更加具体的元素并使用了!important来应用样式 */
 .el-radio.node-wrong {
@@ -137,11 +132,41 @@ const getNodeClass = (node:any) => {
     /* font-weight: bold; */
     /* background-color: #ffaaaa !important; */
     border-color: #ff0000 !important;
+    margin-right: 10px;
+    /* 添加一些右边距 */
+    min-width: 70px;
+    /* 设定一个最小宽度 */
+    width: 150px;
+    /* 设定具体宽度 */
+    white-space: nowrap;
+    /* 防止文本换行 */
+    overflow: hidden;
+    /* 隐藏溢出部分 */
+    text-overflow: ellipsis;
+    /* 使用省略号表示被截断的文本 */
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
 }
 
 .el-radio.node-correct {
     color: #21ba45;
     /* background-color: #a5d6a7 !important; */
     border-color: #21ba45 !important;
+    margin-right: 10px;
+    /* 添加一些右边距 */
+    min-width: 70px;
+    /* 设定一个最小宽度 */
+    width: 150px;
+    /* 设定具体宽度 */
+    white-space: nowrap;
+    /* 防止文本换行 */
+    overflow: hidden;
+    /* 隐藏溢出部分 */
+    text-overflow: ellipsis;
+    /* 使用省略号表示被截断的文本 */
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
 }
 </style>

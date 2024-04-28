@@ -1,48 +1,32 @@
+<!-- src/components/QuestionCards.vue -->
 <template>
     <div class="question-cards-container">
-        <el-card class="question-card" v-for="(question, index) in questionDetails" :key="index">
+        <!-- Conditions on v-if ensure only one question is displayed at a time -->
+        <question-card v-if="currentQuestion" :question-data="currentQuestion" @nextQuestion="showNextQuestion" />
 
-            <template #header>
-                <div>
-                    <span>
-                        {{ question.question_text }}
-                    </span>
-                </div>
-            </template>
-            <el-radio-group v-model="question.selectedOption">
-                <el-radio v-for="option in question.options" :value="option.option_id" :key="option.option_id">
-                    {{ option.option_text }}
-                </el-radio>
-            </el-radio-group>
-
-            <template #footer>
-                <el-button type="primary" @click="submitAnswer(question)">提交答案</el-button>
-            </template>
-
-        </el-card>
+        <!-- This would be a placeholder or loader in case no question is available -->
+        <div v-else class="empty-state">
+            <span>请选择一个知识点</span>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useQuestionStore } from '@/stores/questionStore';
 import { useGraphStore } from '@/stores/graphStore';
-import { useAuthStore } from '@/stores/authStore';
-import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
+import QuestionCard from './QuestionCard.vue';
 import type { QuestionData } from '@/types';
 
-
-const authStore = useAuthStore();
 const questionStore = useQuestionStore();
 const graphStore = useGraphStore();
-const studentAnswerRecordStore = useStudentAnswerRecordStore();
 
+const currentIndex = ref(0);
 const questionDetails = ref<QuestionData[]>([]);
 
-authStore.initializeAuth();
-const studentId = authStore.user?.id || null;
+// Computed property to get current question based on the currentIndex
+const currentQuestion = computed(() => questionDetails.value[currentIndex.value]);
 
-// Fetch questions based on the UUID from the currentNode
 const getQuestionDetails = async () => {
     if (graphStore.currentNode?.properties.uuid) {
         try {
@@ -55,6 +39,8 @@ const getQuestionDetails = async () => {
                     // 初始化每个问题的选中选项
                     parsedQuestion.id = question.id;
                     parsedQuestion.selectedOption = null;
+                    parsedQuestion.showResult = false;
+                    parsedQuestion.resultType = '';
                     return parsedQuestion;
                 });
             }
@@ -64,36 +50,19 @@ const getQuestionDetails = async () => {
         }
     }
 };
-const submitAnswer = async (question: QuestionData) => {
-    if (studentId && question.selectedOption) {
-        try {
-            // 创建答案记录对象
-            const record = {
-                student_id: studentId,
-                question_id: question.id as number,
-                student_answer: question.selectedOption,
-                // 添加其他必需的记录字段
-            };
-            console.log(record)
-            // 调用 store 方法创建答案记录
-            await studentAnswerRecordStore.createStudentAnswerRecord(record);
-            // 处理答案提交成功的情况，如更新UI或通知用户
-        } catch (error) {
-            // 处理错误的情况
-            console.error('提交答案失败:', error);
-        }
+
+const showNextQuestion = () => {
+    if (currentIndex.value < questionDetails.value.length - 1) {
+        currentIndex.value++;
     } else {
-        // 处理未选择答案的情况
-        console.error('未选择答案或未登录学生');
+        // Reset index or show a completion message
+        currentIndex.value = 0;
     }
 };
 
 watch(() => graphStore.currentNode, () => {
     questionDetails.value = [];
+    currentIndex.value = 0;  // Reset index when currentNode changes
     getQuestionDetails();
 }, { immediate: true });
 </script>
-
-<style scoped>
-/* ...以前的样式... */
-</style>

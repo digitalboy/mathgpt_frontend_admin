@@ -43,7 +43,7 @@
                             <div class="performance-circle">
                                 <el-progress type="circle" :percentage="data.knowledge_point_reach_rate" />
                             </div>
-                            <el-statistic :title="subject" value="知识点触达">
+                            <el-statistic :title="subject" value="知识触达">
                                 <template #title>
                                     <div style="display: inline-flex; align-items: center">
                                         {{ data.reached_knowledge_points }}/{{ data.total_knowledge_points }}
