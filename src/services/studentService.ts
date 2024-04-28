@@ -11,15 +11,33 @@ export interface Student {
     class_name?:string;
 }
 
+// 知识点错误分析接口
+interface MissedKnowledgePointAnalysis {
+    error_count: number; // 出错次数
+    knowledge_point_uuid: string; // 知识点的UUID
+}
+
+// 错题分析接口
+interface MissedQuestionAnalysis {
+    error_count: number; // 出错次数
+    question_text: string; // 题目内容
+    question_id: number; // 题目ID
+}
+
+// 科目表现接口
 export interface SubjectPerformance {
-    answer_rate: string;
-    answered_questions: number;
-    correct_answers: number;
-    correct_rate: string;
-    total_questions: number;
-    knowledge_point_reach_rate:number;
-    reached_knowledge_points:number;
-    total_knowledge_points:number;
+    answer_rate: number; // 回答率，百分比形式
+    answered_questions: number; // 回答问题总数
+    correct_answers: number; // 回答正确数
+    correct_rate: number; // 正确率，百分比形式
+    grade_id: number; // 年级ID
+    grade_name: string; // 年级名称
+    knowledge_point_reach_rate: number; // 知识点掌握率，百分比形式
+    most_missed_knowledge_points: MissedKnowledgePointAnalysis[]; // 最常错过的知识点列表
+    most_missed_questions: MissedQuestionAnalysis[]; // 最常错题列表
+    reached_knowledge_points: number; // 掌握的知识点数
+    total_knowledge_points: number; // 总知识点数
+    total_questions: number; // 题总数
 }
 
 // 使用索引签名来允许任意的科目名称作为键，导出以便其他部分使用

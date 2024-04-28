@@ -11,104 +11,103 @@
                 </template>
                 <div class="performance-card">
                     <el-row :gutter="10">
-
                         <el-col :span="8">
+                            <el-statistic :value="data.correct_answers" class="performance-circle">
+                                <template #title>
+                                    <div>
+                                        正确率
+                                    </div>
+                                </template>
+                                <template #suffix>/ {{ data.answered_questions }}</template>
+                            </el-statistic>
                             <div class="performance-circle">
                                 <el-progress type="circle" :percentage="data.correct_rate" />
                             </div>
-                            <el-statistic :title="subject" value="正确率">
+                        </el-col>
+                        <el-col :span="8">
+                            <el-statistic :value="data.answered_questions" class="performance-circle">
                                 <template #title>
-                                    <div style="display: inline-flex; align-items: center">
-                                        {{ data.correct_answers }}/{{ data.answered_questions }}
+                                    <div>
+                                        作答率
                                     </div>
                                 </template>
+                                <template #suffix>/ {{ data.total_questions }}</template>
                             </el-statistic>
-                        </el-col>
-
-                        <el-col :span="8">
                             <div class="performance-circle">
                                 <el-progress type="circle" :percentage="data.answer_rate" />
                             </div>
-
-                            <el-statistic :title="subject" value="作答率">
-                                <template #title>
-                                    <div style="display: inline-flex; align-items: center">
-                                        {{ data.answered_questions }}/{{ data.total_questions }}
-                                    </div>
-                                </template>
-                            </el-statistic>
                         </el-col>
 
                         <el-col :span="8">
+                            <el-statistic :value="data.reached_knowledge_points" class="performance-circle">
+                                <template #title>
+                                    <div>
+                                        知识触达
+                                    </div>
+                                </template>
+                                <template #suffix>/ {{ data.total_knowledge_points }}</template>
+                            </el-statistic>
+
                             <div class="performance-circle">
                                 <el-progress type="circle" :percentage="data.knowledge_point_reach_rate" />
                             </div>
-                            <el-statistic :title="subject" value="知识触达">
-                                <template #title>
-                                    <div style="display: inline-flex; align-items: center">
-                                        {{ data.reached_knowledge_points }}/{{ data.total_knowledge_points }}
-                                    </div>
-                                </template>
-                            </el-statistic>
                         </el-col>
-
                     </el-row>
 
+                    <el-divider content-position="center">最经常出错的知识点</el-divider>
+                    <el-col :span="24">
+                        <el-table :data="data.most_missed_knowledge_points" style="width: 100%" stripe>
+                            <el-table-column prop="knowledge_point_uuid" label="知识点ID" width="300"></el-table-column>
+                            <el-table-column prop="error_count" label="错误次数"></el-table-column>
+                        </el-table>
+                    </el-col>
 
+                    <el-divider content-position="center">最经常出错的试题</el-divider>
+                    <el-col :span="24">
+                        <el-table :data="data.most_missed_questions" style="width: 100%" stripe>
+                            <el-table-column prop="question_text" label="题目" width="300"></el-table-column>
+                            <el-table-column prop="error_count" label="错误次数"></el-table-column>
+                        </el-table>
+                    </el-col>
                 </div>
             </el-card>
         </el-col>
     </el-row>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue';
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
 import { useAuthStore } from '@/stores/authStore';
 
-export default defineComponent({
-    name: 'StudentPerformance',
-    setup() {
-        const studentStore = useStudentStore();
-        const authStore = useAuthStore();
-        const studentId = authStore.user?.id;
+const studentStore = useStudentStore();
+const authStore = useAuthStore();
+const studentId = authStore.user?.id;
 
-        onMounted(() => {
-            if (studentId) {
-                studentStore.fetchStudentPerformance(studentId);
-            }
-        });
-
-        const performanceData = computed(() => {
-            return studentStore.studentPerformance;
-        });
-
-        function getProgressStatus(percentage: string): string {
-            const numPercentage = parseFloat(percentage);
-            if (numPercentage < 40) return 'exception';
-            if (numPercentage < 70) return 'warning';
-            return 'success';
-        }
-
-        return {
-            performanceData,
-            getProgressStatus,
-        };
+onMounted(() => {
+    if (studentId) {
+        studentStore.fetchStudentPerformance(studentId);
     }
 });
+
+const performanceData = computed(() => {
+    return studentStore.studentPerformance;
+});
+
+
 </script>
 
 <style scoped>
 .performance-card {
     text-align: center;
-    padding: 20px;
+    /* padding: 20px; */
     border-radius: 4px;
     /* background-color: #636366; */
     transition: box-shadow 0.3s;
 }
 
 .performance-card:hover {
-    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1); */
 }
 
 .performance-circle {
