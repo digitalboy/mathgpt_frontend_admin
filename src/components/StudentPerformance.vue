@@ -11,11 +11,12 @@
                 </template>
                 <div class="performance-card">
                     <el-row :gutter="10">
-                        <el-col :span="12">
+
+                        <el-col :span="8">
                             <div class="performance-circle">
                                 <el-progress type="circle" :percentage="data.correct_rate" />
                             </div>
-                            <el-statistic :title="subject" :value="data.correct_rate" suffix="% 正确率">
+                            <el-statistic :title="subject" value="正确率">
                                 <template #title>
                                     <div style="display: inline-flex; align-items: center">
                                         {{ data.correct_answers }}/{{ data.answered_questions }}
@@ -23,22 +24,34 @@
                                 </template>
                             </el-statistic>
                         </el-col>
-                        <el-col :span="12">
+
+                        <el-col :span="8">
                             <div class="performance-circle">
                                 <el-progress type="circle" :percentage="data.answer_rate" />
                             </div>
 
-                            <el-statistic :title="subject" :value="data.correct_rate" suffix="% 作答率">
+                            <el-statistic :title="subject" value="作答率">
                                 <template #title>
                                     <div style="display: inline-flex; align-items: center">
-                                         {{ data.answered_questions }}/{{ data.total_questions }}
-                                        
+                                        {{ data.answered_questions }}/{{ data.total_questions }}
                                     </div>
                                 </template>
                             </el-statistic>
-
-                            
                         </el-col>
+
+                        <el-col :span="8">
+                            <div class="performance-circle">
+                                <el-progress type="circle" :percentage="data.knowledge_point_reach_rate" />
+                            </div>
+                            <el-statistic :title="subject" value="知识点触达">
+                                <template #title>
+                                    <div style="display: inline-flex; align-items: center">
+                                        {{ data.reached_knowledge_points }}/{{ data.total_knowledge_points }}
+                                    </div>
+                                </template>
+                            </el-statistic>
+                        </el-col>
+
                     </el-row>
 
 

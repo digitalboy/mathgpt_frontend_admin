@@ -17,6 +17,9 @@ export interface SubjectPerformance {
     correct_answers: number;
     correct_rate: string;
     total_questions: number;
+    knowledge_point_reach_rate:number;
+    reached_knowledge_points:number;
+    total_knowledge_points:number;
 }
 
 // 使用索引签名来允许任意的科目名称作为键，导出以便其他部分使用

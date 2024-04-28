@@ -12,7 +12,10 @@ export interface Node {
         uuid: string;  // 确保包括这个属性
     };
     elementId?: string;  // 如果这个是用于某些特定逻辑，保留它
-    
+    color?: {
+        border: string;
+        background: string;
+    };
 }
 
 export interface Edge {
