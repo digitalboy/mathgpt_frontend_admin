@@ -56,12 +56,19 @@
                     <el-divider content-position="center">最常出错的知识点</el-divider>
                     <el-col :span="24">
                         <el-table :data="data.most_missed_knowledge_points" style="width: 100%" stripe>
-                            <el-table-column label="知识点" width="300">
-                                <template v-slot="{ row }">
-                                    {{ nodesNamesMap.get(row.knowledge_point_uuid) || '知识点未找到' }}
+                            <el-table-column label="知识点">
+                                <template #default="scope">                                    
+                                        {{ nodesNamesMap.get(scope.row.knowledge_point_uuid) || '知识点未找到' }}                                    
                                 </template>
                             </el-table-column>
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
+                            <el-table-column label="错误次数">
+                                <template #default="scope">
+                                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+                                        Edit
+                                    </el-button>
+                                </template>
+                            </el-table-column>
                         </el-table>
                     </el-col>
                     <el-divider content-position="center">最常出错的试题</el-divider>
@@ -75,6 +82,7 @@
             </el-card>
         </el-col>
     </el-row>
+    <GraphNeighborhoodDialog />
 </template>
 
 <script setup lang="ts">
@@ -82,6 +90,7 @@ import { computed, onMounted, ref, nextTick } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useGraphStore } from '@/stores/graphStore';
+import GraphNeighborhoodDialog from './GraphNeighborhoodDialog.vue';
 
 const studentStore = useStudentStore();
 const graphStore = useGraphStore();
@@ -118,6 +127,15 @@ onMounted(async () => {
 
     }
 });
+
+
+
+const handleEdit = async (index: number, row: any) => {
+    console.log(index, row)
+    const node = await graphStore.findNodeByUUID(row.knowledge_point_uuid);
+    graphStore.currentNode = node ? node : null;
+    console.log('Current node:', graphStore.currentNode);
+}
 </script>
 
 <!-- ... 样式 ... -->

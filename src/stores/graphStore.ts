@@ -113,16 +113,25 @@ export const useGraphStore = defineStore('graph', {
             if (this.nodes.length === 0) {
                 await this.fetchNodesAndEdges();
             }
-            // 现在 nodes 已有数据，查找相应节点
-            const node = this.nodes.find(node => node.properties.uuid === uuid);
-            if (node) {
-                // 如果找到节点，设置为当前节点
-                this.setCurrentNode(node);
-            } else {
-                // 否则设置当前节点为 null
-                this.setCurrentNode(null);
-            }
-            return node || null;
+            // 找到 UUID 匹配的 Node
+            return this.nodes.find(node => node.properties.uuid === uuid);
         },
+
+        async getNeighborhood(uuid: string, degree: number = 1) {
+            this.isDataLoading = true;
+            try {
+                const neighborhoodData = await GraphService.getNeighborhood(uuid, degree);
+                console.log('获取与指定UUID相邻的节点和边成功', neighborhoodData);
+                // 这里可以根据实际需求对获取的数据进行处理
+                // 例如更新nodes和edges状态
+                this.nodes = neighborhoodData?.nodes ?? [];
+                this.edges = neighborhoodData?.edges ?? [];
+                return neighborhoodData; // 可根据实际情况决定是否需要返回数据
+            } catch (error) {
+                console.error('获取与指定UUID相邻的节点和边失败:', error);
+            } finally {
+                this.isDataLoading = false;
+            }
+        }
     }
 });
