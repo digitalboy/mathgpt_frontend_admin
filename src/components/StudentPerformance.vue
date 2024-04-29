@@ -1,7 +1,6 @@
-// components/StudentPerformance.vue
-
+<!-- components/StudentPerformance.vue -->
 <template>
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-loading="loading">
         <el-col :span="8" v-for="(data, subject) in performanceData" :key="subject">
             <el-card>
                 <template #header>
@@ -53,15 +52,18 @@
                             </div>
                         </el-col>
                     </el-row>
-
+                    <!-- ... 其他部分 ... -->
                     <el-divider content-position="center">最经常出错的知识点</el-divider>
                     <el-col :span="24">
                         <el-table :data="data.most_missed_knowledge_points" style="width: 100%" stripe>
-                            <el-table-column prop="knowledge_point_uuid" label="知识点ID" width="300"></el-table-column>
+                            <el-table-column label="知识点" width="300">
+                                <template v-slot="{ row }">
+                                    {{ nodesNamesMap.get(row.knowledge_point_uuid) || '知识点未找到' }}
+                                </template>
+                            </el-table-column>
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
                         </el-table>
                     </el-col>
-
                     <el-divider content-position="center">最经常出错的试题</el-divider>
                     <el-col :span="24">
                         <el-table :data="data.most_missed_questions" style="width: 100%" stripe>
@@ -76,26 +78,49 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, nextTick } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
 import { useAuthStore } from '@/stores/authStore';
+import { useGraphStore } from '@/stores/graphStore';
 
 const studentStore = useStudentStore();
+const graphStore = useGraphStore();
 const authStore = useAuthStore();
 const studentId = authStore.user?.id;
+const nodesNamesMap = ref(new Map<string, string>());
 
-onMounted(() => {
-    if (studentId) {
-        studentStore.fetchStudentPerformance(studentId);
-    }
-});
+const loading = ref(true)
 
 const performanceData = computed(() => {
     return studentStore.studentPerformance;
 });
 
+onMounted(async () => {
+    if (studentId) {
+        await studentStore.fetchStudentPerformance(studentId);
 
+        await nextTick(); // 确保DOM已更新，响应式数据已被填充
+
+        for (const subject in performanceData.value) {
+            const missedPoints = performanceData.value[subject].most_missed_knowledge_points;
+
+            for (const point of missedPoints) {
+                if (!nodesNamesMap.value.has(point.knowledge_point_uuid)) {
+                    // 只有当知识点不在映射表中时才异步加载
+                    const node = await graphStore.findNodeByUUID(point.knowledge_point_uuid);
+                    if (node) {
+                        nodesNamesMap.value.set(point.knowledge_point_uuid, node.properties.node_name);
+                    }
+                }
+            }
+        }
+        loading.value = false
+
+    }
+});
 </script>
+
+<!-- ... 样式 ... -->
 
 <style scoped>
 .performance-card {

@@ -107,6 +107,22 @@ export const useGraphStore = defineStore('graph', {
             } catch (error) {
                 console.error('删除边失败：', error);
             }
-        }
+        },
+        async findNodeByUUID(uuid: string) {
+            // 如果 nodes 是空的，则先从服务器获取数据
+            if (this.nodes.length === 0) {
+                await this.fetchNodesAndEdges();
+            }
+            // 现在 nodes 已有数据，查找相应节点
+            const node = this.nodes.find(node => node.properties.uuid === uuid);
+            if (node) {
+                // 如果找到节点，设置为当前节点
+                this.setCurrentNode(node);
+            } else {
+                // 否则设置当前节点为 null
+                this.setCurrentNode(null);
+            }
+            return node || null;
+        },
     }
 });
