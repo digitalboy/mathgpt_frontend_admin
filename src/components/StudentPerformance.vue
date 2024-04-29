@@ -77,8 +77,8 @@
                     </el-col>
                     <el-divider content-position="center">最常出错的试题</el-divider>
                     <el-col :span="24">
-                        <el-table :data="data.most_missed_questions" style="width: 100%" stripe>
-                            <el-table-column prop="question_text" label="题目" width="300"></el-table-column>
+                        <el-table :data="data.most_missed_questions" style="width: 100%" stripe table-layout="fixed">
+                            <el-table-column prop="question_text" label="题目" width="200"></el-table-column>
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
                         </el-table>
                     </el-col>

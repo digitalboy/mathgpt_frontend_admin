@@ -44,12 +44,12 @@ const sendQuestion = async () => {
     loading.value = true
     if (!promptMessage.value.trim()) return;
     const messages = JSON.parse(promptMessage.value);  // 解析字符串为JSON对象
-    const response = await ChatService.ask({ messages });    
+    const response = await ChatService.grokAIResponse({ messages });
     if (response && response.response) {
         loading.value = false
         console.log(JSON.parse(response.response))
-        aiResponse.value = JSON.parse(response.response); 
-        promptMessage.value='' 
+        aiResponse.value = JSON.parse(response.response);
+        promptMessage.value = ''
     }
 };
 </script>
