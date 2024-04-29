@@ -28,11 +28,11 @@ watch(() => graphStore.currentNode, async (newNode) => {
     }
 }, { immediate: true });
 
-// watch(neighborhoodVisible, (newValue) => {
-//     console.log("close")
-//     if (!newValue) {
-//         graphStore.setCurrentNode(null); // 当对话框关闭时清除当前节点状态
-//     }
-// });
+watch(neighborhoodVisible, (newValue) => {
+    console.log("close")
+    if (!newValue) {
+        graphStore.setCurrentNode(null); // 当对话框关闭时清除当前节点状态
+    }
+});
 
 </script>

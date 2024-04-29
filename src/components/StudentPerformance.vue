@@ -55,18 +55,22 @@
                     <!-- ... 其他部分 ... -->
                     <el-divider content-position="center">最常出错的知识点</el-divider>
                     <el-col :span="24">
-                        <el-table :data="data.most_missed_knowledge_points" style="width: 100%" stripe>
-                            <el-table-column label="知识点">
-                                <template #default="scope">                                    
-                                        {{ nodesNamesMap.get(scope.row.knowledge_point_uuid) || '知识点未找到' }}                                    
+                        <el-table :data="data.most_missed_knowledge_points" style="width: 100%" stripe
+                            table-layout="fixed">
+                            <el-table-column label="知识点" width="200">
+                                <template #default="scope">
+
+                                    {{ nodesNamesMap.get(scope.row.knowledge_point_uuid) || '知识点未找到' }}
+
                                 </template>
                             </el-table-column>
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
-                            <el-table-column label="错误次数">
+                            <el-table-column label="讲解">
                                 <template #default="scope">
-                                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-                                        Edit
-                                    </el-button>
+
+                                    <el-button type="primary" :icon="Reading" circle
+                                        @click="handleEdit(scope.$index, scope.row)" />
+
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -91,6 +95,7 @@ import { useStudentStore } from '@/stores/studentStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useGraphStore } from '@/stores/graphStore';
 import GraphNeighborhoodDialog from './GraphNeighborhoodDialog.vue';
+import { Reading } from '@element-plus/icons-vue'
 
 const studentStore = useStudentStore();
 const graphStore = useGraphStore();
@@ -130,11 +135,11 @@ onMounted(async () => {
 
 
 
-const handleEdit = async (index: number, row: any) => {
-    console.log(index, row)
+const handleEdit = async (_index: number, row: any) => {
+    console.log("index:::: ", row.knowledge_point_uuid)
     const node = await graphStore.findNodeByUUID(row.knowledge_point_uuid);
     graphStore.currentNode = node ? node : null;
-    console.log('Current node:', graphStore.currentNode);
+    // console.log('Current node:', graphStore.currentNode);
 }
 </script>
 

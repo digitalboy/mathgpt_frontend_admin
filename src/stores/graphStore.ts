@@ -6,6 +6,7 @@ export const useGraphStore = defineStore('graph', {
     state: () => ({
         nodes: [] as Node[],
         edges: [] as Edge[],
+        
         currentNode: null as Node | null,
         currentEdge: null as Edge | null,
         isDataLoading: false,
@@ -110,10 +111,13 @@ export const useGraphStore = defineStore('graph', {
         },
         async findNodeByUUID(uuid: string) {
             // 如果 nodes 是空的，则先从服务器获取数据
+            console.log("this.nodes.length::::",this.nodes.length)
             if (this.nodes.length === 0) {
                 await this.fetchNodesAndEdges();
             }
             // 找到 UUID 匹配的 Node
+            const thisNode = this.nodes.find(node => node.properties.uuid === uuid);
+            console.log(thisNode)
             return this.nodes.find(node => node.properties.uuid === uuid);
         },
 
@@ -124,8 +128,8 @@ export const useGraphStore = defineStore('graph', {
                 console.log('获取与指定UUID相邻的节点和边成功', neighborhoodData);
                 // 这里可以根据实际需求对获取的数据进行处理
                 // 例如更新nodes和edges状态
-                this.nodes = neighborhoodData?.nodes ?? [];
-                this.edges = neighborhoodData?.edges ?? [];
+                // this.nodes = neighborhoodData?.nodes ?? [];
+                // this.edges = neighborhoodData?.edges ?? [];
                 return neighborhoodData; // 可根据实际情况决定是否需要返回数据
             } catch (error) {
                 console.error('获取与指定UUID相邻的节点和边失败:', error);
