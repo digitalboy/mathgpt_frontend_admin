@@ -53,7 +53,7 @@
                         </el-col>
                     </el-row>
                     <!-- ... 其他部分 ... -->
-                    <el-divider content-position="center">最经常出错的知识点</el-divider>
+                    <el-divider content-position="center">最常出错的知识点</el-divider>
                     <el-col :span="24">
                         <el-table :data="data.most_missed_knowledge_points" style="width: 100%" stripe>
                             <el-table-column label="知识点" width="300">
@@ -64,7 +64,7 @@
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
                         </el-table>
                     </el-col>
-                    <el-divider content-position="center">最经常出错的试题</el-divider>
+                    <el-divider content-position="center">最常出错的试题</el-divider>
                     <el-col :span="24">
                         <el-table :data="data.most_missed_questions" style="width: 100%" stripe>
                             <el-table-column prop="question_text" label="题目" width="300"></el-table-column>

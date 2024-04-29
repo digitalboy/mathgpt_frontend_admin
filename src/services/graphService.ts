@@ -115,6 +115,28 @@ export class GraphService extends BaseService {
         }
     }
 
+    /**
+     * 获取与指定UUID相邻的节点和边
+     * @param uuid 节点的UUID
+     * @param degree 相邻的度数，默认为1
+     * @returns 相邻的节点和边的集合或者在出现错误时返回undefined
+     */
+    public static async getNeighborhood(uuid: string, degree: number = 1): Promise<GraphData | undefined> {
+        console.log('获取相邻节点和边...');
+        try {
+            const response = await this.axiosInstance.get<GraphData>('/graph/get_neighborhood', {
+                params: { uuid, degree }
+            });
+            console.log('获取相邻节点和边成功！');
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('获取相邻节点和边失败：', error);
+            this.handleError(error);
+            return undefined;
+        }
+    }
+
     // 获取节点的隔离级别
     public static async getIsolationRank(limit: number): Promise<Node[] | undefined> {
         try {
