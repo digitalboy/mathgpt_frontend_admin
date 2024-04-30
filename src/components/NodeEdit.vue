@@ -8,7 +8,7 @@
                 <el-input v-model="nodeData.properties.node_name"></el-input>
             </el-form-item>
             <el-form-item label="描述" prop="description" required>
-                <el-input type="textarea" v-model="nodeData.properties.description"></el-input>
+                <el-input type="textarea" v-model="nodeData.properties.description" rows="12"></el-input>
             </el-form-item>
             <el-form-item label="出版社" prop="publisher">
                 <el-input v-model="nodeData.properties.publisher"></el-input>

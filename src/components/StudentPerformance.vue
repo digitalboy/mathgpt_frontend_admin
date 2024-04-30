@@ -86,7 +86,7 @@
             </el-card>
         </el-col>
     </el-row>
-    <GraphNeighborhoodDialog :nodeUuid="selectedNodeUuid" />
+    <KPExplainer :nodeUuid="selectedNodeUuid" />
 </template>
 
 <script setup lang="ts">
@@ -94,7 +94,7 @@ import { computed, onMounted, ref, nextTick } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useGraphStore } from '@/stores/graphStore';
-import GraphNeighborhoodDialog from './GraphNeighborhoodDialog.vue';
+import KPExplainer from '@/components/KPExplainer.vue';
 import { Reading } from '@element-plus/icons-vue'
 
 const studentStore = useStudentStore();

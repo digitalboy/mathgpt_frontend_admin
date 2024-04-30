@@ -42,7 +42,7 @@ watchEffect(() => {
             nodes: graphStore.nodes.map(node => ({
                 id: node.properties.uuid,  // 使用 uuid 作为唯一标识符
                 label: node.properties.node_name,
-                title: node.properties.description,
+                title: node.properties.node_name,
                 color: node.color ? node.color : undefined
             })),
             edges: graphStore.edges.map(edge => ({
