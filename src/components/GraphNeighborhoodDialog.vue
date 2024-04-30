@@ -13,26 +13,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { GraphData } from '@/services/graphService';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    nodeUuid: String
+});
 
 const graphStore = useGraphStore();
 const neighborhoodVisible = ref(false);
 const graphData = ref<GraphData | undefined>();
 
-watch(() => graphStore.currentNode, async (newNode) => {
-    if (newNode) {
-        graphData.value = await graphStore.getNeighborhood(newNode.properties.uuid);
+watchEffect(async () => {
+    if (props.nodeUuid) {
+        graphData.value = await graphStore.getNeighborhood(props.nodeUuid);
         neighborhoodVisible.value = true;
     }
-}, { immediate: true });
-
-watch(neighborhoodVisible, (newValue) => {
-    console.log("close")
-    if (!newValue) {
-        graphStore.setCurrentNode(null); // 当对话框关闭时清除当前节点状态
-    }
 });
-
 </script>

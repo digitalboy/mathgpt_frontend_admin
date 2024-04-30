@@ -122,7 +122,7 @@ export class GraphService extends BaseService {
      * @returns 相邻的节点和边的集合或者在出现错误时返回undefined
      */
     public static async getNeighborhood(uuid: string, degree: number = 1): Promise<GraphData | undefined> {
-        console.log('获取相邻节点和边...');
+        // console.log('获取相邻节点和边...');
         try {
             const response = await this.axiosInstance.get<GraphData>('/graph/get_neighborhood', {
                 params: { uuid, degree }

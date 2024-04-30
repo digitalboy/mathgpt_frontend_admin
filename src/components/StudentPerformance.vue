@@ -86,7 +86,7 @@
             </el-card>
         </el-col>
     </el-row>
-    <GraphNeighborhoodDialog />
+    <GraphNeighborhoodDialog :nodeUuid="selectedNodeUuid" />
 </template>
 
 <script setup lang="ts">
@@ -108,6 +108,8 @@ const loading = ref(true)
 const performanceData = computed(() => {
     return studentStore.studentPerformance;
 });
+
+const selectedNodeUuid = ref<string | null>(null);
 
 onMounted(async () => {
     if (studentId) {
@@ -136,10 +138,9 @@ onMounted(async () => {
 
 
 const handleEdit = async (_index: number, row: any) => {
-    console.log("index:::: ", row.knowledge_point_uuid)
-    const node = await graphStore.findNodeByUUID(row.knowledge_point_uuid);
-    graphStore.currentNode = node ? node : null;
-    // console.log('Current node:', graphStore.currentNode);
+    console.log("index::::", row.knowledge_point_uuid);
+    selectedNodeUuid.value = row.knowledge_point_uuid; // 设置需要查看的UUID
+    // 不再直接设置 graphStore.currentNode
 }
 </script>
 
@@ -154,9 +155,6 @@ const handleEdit = async (_index: number, row: any) => {
     transition: box-shadow 0.3s;
 }
 
-.performance-card:hover {
-    /* box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1); */
-}
 
 .performance-circle {
     margin-bottom: 20px;

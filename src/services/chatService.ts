@@ -6,7 +6,7 @@ export class ChatService extends BaseService {
     static async grokAIResponse(messages: {}): Promise<any> {
         console.log(messages)
         try {
-            const response = await this.axiosAIInstance.post('/ask', messages);
+            const response = await this.axiosAIInstance.post('/groq', messages);
             return response.data;
         } catch (error) {
             console.error('Failed to fetch AI response:', error);
