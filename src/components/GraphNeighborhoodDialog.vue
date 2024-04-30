@@ -19,8 +19,12 @@ import { GraphData } from '@/services/graphService';
 import { defineProps } from 'vue';
 
 const props = defineProps({
-    nodeUuid: String
+    nodeUuid: {
+        type: String,
+        default: undefined
+    }
 });
+
 
 const graphStore = useGraphStore();
 const neighborhoodVisible = ref(false);

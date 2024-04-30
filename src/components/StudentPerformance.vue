@@ -109,7 +109,7 @@ const performanceData = computed(() => {
     return studentStore.studentPerformance;
 });
 
-const selectedNodeUuid = ref<string | null>(null);
+const selectedNodeUuid = ref<string | undefined>(undefined);
 
 onMounted(async () => {
     if (studentId) {
