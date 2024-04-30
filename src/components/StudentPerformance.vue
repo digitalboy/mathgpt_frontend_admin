@@ -139,8 +139,16 @@ onMounted(async () => {
 
 const handleEdit = async (_index: number, row: any) => {
     console.log("index::::", row.knowledge_point_uuid);
-    selectedNodeUuid.value = row.knowledge_point_uuid; // 设置需要查看的UUID
-    // 不再直接设置 graphStore.currentNode
+    selectedNodeUuid.value = row.knowledge_point_uuid;
+
+    // 正确调用 setCurrentNode 方法
+    const node = await graphStore.findNodeByUUID(row.knowledge_point_uuid);
+    if (node) {
+        graphStore.setCurrentNode(node)
+    } else {
+        console.error("找不到对应的节点");
+        // 可以在这里处理节点未找到的情况
+    }
 }
 </script>
 

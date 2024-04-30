@@ -18,6 +18,7 @@
     "pinia": "^2.1.7",
     "vis-network": "^9.1.9",
     "vue": "^3.4.21",
+    "vue-mathjax-next": "^0.0.6",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
