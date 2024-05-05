@@ -2,14 +2,6 @@
 <template>
     <h1>知识图谱</h1>
 
-    <el-row>
-        <el-col :span="12">
-            <GradeDropdown />
-        </el-col>
-        <el-col :span="12">
-            <SubjectDropdown />
-        </el-col>
-    </el-row>
     <el-row :gutter="20">
         <el-col :span="16">
             <GraphVisualize />
@@ -25,8 +17,6 @@
 import { ref, watch } from 'vue';
 import GraphVisualize from '@/components/GraphVisualize.vue';  // 导入图谱可视化组件
 import NodeEdit from '@/components/NodeEdit.vue';
-import GradeDropdown from '@/components/GradeDropdown.vue';
-import SubjectDropdown from '@/components/SubjectDropdown.vue';
 import KPExplanationEdit from '@/components/KPExplanationEdit.vue';
 
 import { useGraphStore } from '@/stores/graphStore';
