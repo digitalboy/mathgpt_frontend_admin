@@ -1,69 +1,76 @@
 <template>
-    <div v-loading="isLoadingAIResponse">
-        <el-form :model="aiResponse" label-width="120px">
-            <el-form-item label="欢迎信息">
-                <el-input type="textarea" v-model="safeAIResponse.welcome_message" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="关系">
-                <el-input type="textarea" v-model="safeAIResponse.response.relationship" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="定义">
-                <el-input type="textarea" v-model="safeAIResponse.response.definition" rows="2"></el-input>
-            </el-form-item>
-            <!-- 给出流行的定义 -->
-            <el-form-item label="通俗的定义">
-                <el-input type="textarea" v-model="safeAIResponse.response.popular_definition" rows="2"></el-input>
-            </el-form-item>
-            <!-- 如果有数学定义，给出数学定义 -->
-            <el-form-item label="数学定义" v-if="safeAIResponse.response.math_definition">
-                <el-input type="textarea" v-model="safeAIResponse.response.math_definition" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="可能的混淆">
-                <el-input type="textarea" v-model="safeAIResponse.response.confusion" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="例子">
-                <el-input type="textarea" v-model="safeAIResponse.response.example" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="符号">
-                <el-input type="textarea" v-model="safeAIResponse.response.symbols" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="生活化举例">
-                <el-input type="textarea" v-model="safeAIResponse.response.popular_example" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="基础数学举例">
-                <el-input type="textarea" v-model="safeAIResponse.response.basic_math_example" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="视觉辅助">
-                <el-input type="textarea" v-model="safeAIResponse.response.visual_aid" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item label="现实生活的联系">
-                <el-input type="textarea" v-model="safeAIResponse.response.real_life_connection" rows="2"></el-input>
-            </el-form-item>
-            <!-- 如果有图表，给出图表选项 -->
-            <el-form-item label="图表" v-if="safeAIResponse.diagram">
-                <el-input type="textarea" v-model="safeAIResponse.diagram" rows="2"></el-input>
-            </el-form-item>
-            <!-- 如果有结论建议，给出结论建议 -->
-            <el-form-item label="结论建议" v-if="safeAIResponse.conclusion_suggestion">
-                <el-input type="textarea" v-model="safeAIResponse.conclusion_suggestion" rows="2"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" native-type="submit">保存</el-button>
-            </el-form-item>
-        </el-form>
-    </div>
-    <!-- <div :loading="isLoadingAIResponse">{{ aiResponse }}</div> -->
-    <el-button type="primary" @click="handleAIAssist()">获取AI辅助内容</el-button>
+    <el-dialog title="编辑知识点解释" v-model="editKPExplanationVisible">
+        <div v-loading="isLoadingAIResponse">
+            <el-form :model="aiResponse" label-width="120px">
+                <el-form-item label="欢迎信息">
+                    <el-input type="textarea" v-model="safeAIResponse.welcome_message" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="关系">
+                    <el-input type="textarea" v-model="safeAIResponse.response.relationship" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="定义">
+                    <el-input type="textarea" v-model="safeAIResponse.response.definition" rows="2"></el-input>
+                </el-form-item>
+                <!-- 给出流行的定义 -->
+                <el-form-item label="通俗的定义">
+                    <el-input type="textarea" v-model="safeAIResponse.response.popular_definition" rows="2"></el-input>
+                </el-form-item>
+                <!-- 如果有数学定义，给出数学定义 -->
+                <el-form-item label="数学定义" v-if="safeAIResponse.response.math_definition">
+                    <el-input type="textarea" v-model="safeAIResponse.response.math_definition" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="可能的混淆">
+                    <el-input type="textarea" v-model="safeAIResponse.response.confusion" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="例子">
+                    <el-input type="textarea" v-model="safeAIResponse.response.example" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="符号">
+                    <el-input type="textarea" v-model="safeAIResponse.response.symbols" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="生活化举例">
+                    <el-input type="textarea" v-model="safeAIResponse.response.popular_example" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="基础数学举例">
+                    <el-input type="textarea" v-model="safeAIResponse.response.basic_math_example" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="视觉辅助">
+                    <el-input type="textarea" v-model="safeAIResponse.response.visual_aid" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="现实生活的联系">
+                    <el-input type="textarea" v-model="safeAIResponse.response.real_life_connection"
+                        rows="2"></el-input>
+                </el-form-item>
+                <!-- 如果有图表，给出图表选项 -->
+                <el-form-item label="图表" v-if="safeAIResponse.diagram">
+                    <el-input type="textarea" v-model="safeAIResponse.diagram" rows="2"></el-input>
+                </el-form-item>
+                <!-- 如果有结论建议，给出结论建议 -->
+                <el-form-item label="结论建议" v-if="safeAIResponse.conclusion_suggestion">
+                    <el-input type="textarea" v-model="safeAIResponse.conclusion_suggestion" rows="2"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="saveExplanation">保存</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <!-- <div :loading=" isLoadingAIResponse">{{ aiResponse }}
+        </div> -->
+        <el-button type="primary" @click="handleAIAssist()">获取AI辅助内容</el-button>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, defineProps} from 'vue';
+import { ref, watchEffect, defineProps } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { GraphData } from '@/services/graphService';
-import type { KPExplanationContent } from '@/services/KPExplanationService';
+import type { KPExplanation, KPExplanationContent } from '@/services/KPExplanationService';
 import { ChatService } from '@/services/chatService';
 import Kp_explainer_groq from '@/assets/prompts/Kp_explainer_groq.json';
 import { escapeRegExp } from '@/utils/escapeRegExp'
+import { ElMessage } from 'element-plus'
+import { useKPExplanationStore } from '@/stores/KPExplanationStore';
+import { findSubjectId, findGradeId } from '@/utils/lookupHelpers'
 
 const props = defineProps({
     nodeUuid: {
@@ -77,6 +84,8 @@ const aiResponse = ref<KPExplanationContent>();
 const isLoadingAIResponse = ref<boolean>(false);
 const graphData = ref<GraphData | undefined>();
 const neighborhoodVisible = ref(false);
+const editKPExplanationVisible = ref(false);
+const kpExplanationStore = useKPExplanationStore();
 
 watchEffect(async () => {
     if (props.nodeUuid) {
@@ -84,6 +93,7 @@ watchEffect(async () => {
         console.log(props.nodeUuid)
         graphData.value = await graphStore.getNeighborhood(props.nodeUuid);
         neighborhoodVisible.value = true;
+        editKPExplanationVisible.value = true;
     }
 }
 );
@@ -133,12 +143,50 @@ async function handleAIAssist() {
             }
         }
 
-        // 现在，promptsClone包含了已替换占位符的提示内容，准备发送
-        const response = await ChatService.grokAIResponse({ messages: promptsClone });        
+        try {
+            // 尝试获取AI辅助内容
+            const response = await ChatService.grokAIResponse({ messages: promptsClone });
+            if (response) {
+                aiResponse.value = response.response;
+                console.log(aiResponse.value?.welcome_message)
+            }
+        } catch (error) {
+            console.error('获取AI辅助内容失败:', error);
+            ElMessage.error('获取AI辅助内容失败，请稍后再试');
+        }
         isLoadingAIResponse.value = false;
-        if (response) {
-            aiResponse.value = response.response;
-            console.log(aiResponse.value?.welcome_message)
+    }
+}
+
+// 定义保存函数
+async function saveExplanation() {
+    if (graphStore.currentNode) {
+        const subjectId = await findSubjectId(graphStore.currentNode.properties.subject);
+        const gradeId = await findGradeId(graphStore.currentNode.properties.grade);
+
+        if (subjectId === undefined || gradeId === undefined) {
+            console.error('无法获取年级ID或科目ID');
+            ElMessage.error('无法保存解释：无效的年级或科目ID');
+            return;
+        }
+
+        try {
+            const explanationData = {
+                knowledge_point_uuid: props.nodeUuid,
+                content: safeAIResponse.value,
+                grade_id: gradeId,
+                subject_id: subjectId,
+            };
+            await kpExplanationStore.createExplanation(explanationData as KPExplanation);
+            // const savedExplanation = await kpExplanationStore.createExplanation(explanationData as KPExplanation);
+            // if (savedExplanation) {
+            //     kpExplanationStore.explanations.push(savedExplanation);
+            //     editKPExplanationVisible.value = false;
+            //     ElMessage.success('知识点解释已保存');
+            // }
+        } catch (error) {
+            console.error('保存知识点解释失败:', error);
+            ElMessage.error('保存失败，请重试');
         }
     }
 }

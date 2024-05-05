@@ -44,6 +44,13 @@
                 <span>图谱管理</span>
             </el-menu-item>
 
+            <el-menu-item index="60" @click="goToRoute('KPManage')">
+                <el-icon>
+                    <DataAnalysis />
+                </el-icon>
+                <span>知识点管理</span>
+            </el-menu-item>
+
             <el-menu-item index="7" @click="goToRoute('Questions')">
                 <el-icon>
                     <document />

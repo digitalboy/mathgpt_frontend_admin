@@ -24,6 +24,8 @@ export interface KPExplanation {
     id?: number;
     knowledge_point_uuid: string;
     content: KPExplanationContent;
+    grade_id: number;
+    subject_id: number;
     rating?: number;    
 }
 
@@ -31,7 +33,7 @@ export class KPExplanationService extends BaseService {
     // 根据 knowledge_point_uuid 创建知识点解释
     public static async createExplanation(explanationData: KPExplanation): Promise<KPExplanation | undefined> {
         try {
-            const response = await this.axiosInstance.post('/knowledge_point_explanation/new', explanationData);
+            const response = await this.axiosInstance.post('/knowlage_point_explanation/new', explanationData);
             return response.data;
         } catch (error) {
             console.error('createExplanation:', error);
@@ -43,7 +45,7 @@ export class KPExplanationService extends BaseService {
     // 获取所有知识点解释
     public static async getExplanations(): Promise<KPExplanation[] | undefined> {
         try {
-            const response = await this.axiosInstance.get('/knowledge_point_explanation/get');
+            const response = await this.axiosInstance.get('/knowlage_point_explanation/get');
             return response.data;
         } catch (error) {
             console.error('getExplanations:', error);
@@ -55,7 +57,7 @@ export class KPExplanationService extends BaseService {
     // 获取单个知识点解释详情
     public static async getExplanationById(explanationId: number): Promise<KPExplanation | undefined> {
         try {
-            const response = await this.axiosInstance.get(`/knowledge_point_explanation/get/${explanationId}`);
+            const response = await this.axiosInstance.get(`/knowlage_point_explanation/get/${explanationId}`);
             return response.data;
         } catch (error) {
             console.error(`getExplanationById ${explanationId}:`, error);
@@ -67,7 +69,7 @@ export class KPExplanationService extends BaseService {
     // 更新知识点解释
     public static async updateExplanation(explanationId: number, explanationData: KPExplanation): Promise<KPExplanation | undefined> {
         try {
-            const response = await this.axiosInstance.put(`/knowledge_point_explanation/update/${explanationId}`, explanationData);
+            const response = await this.axiosInstance.put(`/knowlage_point_explanation/update/${explanationId}`, explanationData);
             return response.data;
         } catch (error) {
             console.error(`updateExplanation ${explanationId}:`, error);
@@ -79,7 +81,7 @@ export class KPExplanationService extends BaseService {
     // 删除知识点解释
     public static async deleteExplanation(explanationId: number): Promise<void | undefined> {
         try {
-            await this.axiosInstance.delete(`/knowledge_point_explanation/delete/${explanationId}`);
+            await this.axiosInstance.delete(`/knowlage_point_explanation/delete/${explanationId}`);
         } catch (error) {
             console.error(`deleteExplanation ${explanationId}:`, error);
             this.handleError(error);

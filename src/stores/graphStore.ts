@@ -23,17 +23,16 @@ export const useGraphStore = defineStore('graph', {
             this.currentEdge = edge;
         },
 
-        async fetchNodesAndEdges() {
+        async fetchNodesAndEdges(grade?: string, subject?: string) {
             // console.log('Fetching nodes and edges...');
             this.isDataLoading = true;
             try {
-                const graphData = await GraphService.getNodesAndEdges();
+                const graphData = await GraphService.getNodesAndEdges(grade, subject);
                 if (graphData) {
                     // 直接使用从服务返回的节点和边数组
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;
-                    // console.log('Processed nodes:', this.nodes);
-                    // console.log('Processed edges:', this.edges);
+                    
                     console.log('状态：成功获取节点和边。');
                 }
             } catch (error) {

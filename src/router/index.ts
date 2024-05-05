@@ -93,6 +93,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/student/StudentAllGraph.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/kpmanage',
+    name: 'KPManage',
+    component: () => import('@/views/KPManage.vue'),
+    meta: { requiresAuth: true }
+  },
 ];
 
 const router = createRouter({
