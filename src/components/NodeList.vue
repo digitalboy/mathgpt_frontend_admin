@@ -9,11 +9,11 @@
         <el-table-column prop="properties.publisher" label="出版商"></el-table-column>
         <el-table-column prop="properties.description" label="描述"></el-table-column>
         <el-table-column prop="properties.uuid" label="UUID"></el-table-column>
-
+        <el-table-column prop="explanation_count" label="解释数量" sortable></el-table-column>
         <!-- 如果有特定的操作需求，可以在这里添加操作列 -->
         <el-table-column label="操作">
             <template #default="{ row }">
-                <el-button type="primary" circle @click="editNode(row)">编辑</el-button>
+                <el-button type="primary" circle @click="editNode(row)">解释</el-button>
             </template>
         </el-table-column>
 
