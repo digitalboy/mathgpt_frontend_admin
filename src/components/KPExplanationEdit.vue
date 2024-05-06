@@ -1,23 +1,22 @@
 <template>
     <el-dialog title="编辑知识点解释" v-model="editKPExplanationVisible">
         <div v-loading="isLoadingAIResponse">
-            <el-form :model="aiResponse" label-width="120px">
+            <el-form :model="safeAIResponse" label-width="120px">
+
                 <el-form-item label="欢迎信息">
                     <el-input type="textarea" v-model="safeAIResponse.welcome_message" rows="2"></el-input>
                 </el-form-item>
-                <el-form-item label="关系">
+
+                <!-- <el-form-item label="关系">
                     <el-input type="textarea" v-model="safeAIResponse.response.relationship" rows="2"></el-input>
                 </el-form-item>
+
                 <el-form-item label="定义">
                     <el-input type="textarea" v-model="safeAIResponse.response.definition" rows="2"></el-input>
                 </el-form-item>
-                <!-- 给出流行的定义 -->
+                
                 <el-form-item label="通俗的定义">
                     <el-input type="textarea" v-model="safeAIResponse.response.popular_definition" rows="2"></el-input>
-                </el-form-item>
-                <!-- 如果有数学定义，给出数学定义 -->
-                <el-form-item label="数学定义" v-if="safeAIResponse.response.math_definition">
-                    <el-input type="textarea" v-model="safeAIResponse.response.math_definition" rows="2"></el-input>
                 </el-form-item>
                 <el-form-item label="可能的混淆">
                     <el-input type="textarea" v-model="safeAIResponse.response.confusion" rows="2"></el-input>
@@ -41,14 +40,14 @@
                     <el-input type="textarea" v-model="safeAIResponse.response.real_life_connection"
                         rows="2"></el-input>
                 </el-form-item>
-                <!-- 如果有图表，给出图表选项 -->
+                
                 <el-form-item label="图表" v-if="safeAIResponse.diagram">
                     <el-input type="textarea" v-model="safeAIResponse.diagram" rows="2"></el-input>
                 </el-form-item>
-                <!-- 如果有结论建议，给出结论建议 -->
+                
                 <el-form-item label="结论建议" v-if="safeAIResponse.conclusion_suggestion">
                     <el-input type="textarea" v-model="safeAIResponse.conclusion_suggestion" rows="2"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" @click="saveExplanation">保存</el-button>
                 </el-form-item>
@@ -61,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, defineProps } from 'vue';
+import { ref, watchEffect, defineProps, watch } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { GraphData } from '@/services/graphService';
 import type { KPExplanation, KPExplanationContent } from '@/services/KPExplanationService';
@@ -105,6 +104,7 @@ const emptyAIResponse: KPExplanationContent = {
         definition: '',
         popular_definition: '',
         // 初始化时不包括可选属性
+        math_definition: '', // 确保这里设置了初始值
         confusion: '',
         example: '',
         symbols: '',
@@ -114,17 +114,40 @@ const emptyAIResponse: KPExplanationContent = {
         basic_math_example: ''
     },
     // 初始化时不包括可选属性
+    diagram: '', // 确保这里设置了初始值
+    conclusion_suggestion: '', // 确保这里设置了初始值
 };
 
 const safeAIResponse = ref<KPExplanationContent>(emptyAIResponse);
 
-watchEffect(() => {
-    if (aiResponse.value != undefined) {
-        safeAIResponse.value = aiResponse.value;
+watch(() => kpExplanationStore.currentExplanation, (newExplanation) => {
+    if (newExplanation) {
+        if (typeof aiResponse.value === 'string') {
+            // 如果是字符串，尝试将它解析成对象
+            safeAIResponse.value = JSON.parse(aiResponse.value);
+        } else {
+            // 如果已经是对象，直接用它来设置 safeAIResponse
+            safeAIResponse.value = aiResponse.value as KPExplanationContent;
+        }
     } else {
-        safeAIResponse.value = emptyAIResponse;
+        safeAIResponse.value = {
+            welcome_message: '',
+            response: {
+                relationship: '',
+                definition: '',
+                popular_definition: '',
+                confusion: '', example: '',
+                symbols: '',
+                popular_example: '',
+                visual_aid: '',
+                real_life_connection: '',
+                basic_math_example: ''
+            }, diagram: '',
+            conclusion_suggestion: '',
+        };
     }
-});
+}, { immediate: true });
+
 
 async function handleAIAssist() {
     if (graphData.value && graphStore.currentNode) {
@@ -148,7 +171,16 @@ async function handleAIAssist() {
             const response = await ChatService.grokAIResponse({ messages: promptsClone });
             if (response) {
                 aiResponse.value = response.response;
-                console.log(aiResponse.value?.welcome_message)
+                kpExplanationStore.currentExplanation = {
+                    knowledge_point_uuid: props.nodeUuid as string,
+                    grade_id: 1,
+                    subject_id: 3,
+                    content: aiResponse.value as KPExplanationContent,
+                    // 其他需要的属性
+                };
+                console.log(aiResponse.value)
+                console.log(kpExplanationStore.currentExplanation)
+
             }
         } catch (error) {
             console.error('获取AI辅助内容失败:', error);
@@ -177,13 +209,13 @@ async function saveExplanation() {
                 grade_id: gradeId,
                 subject_id: subjectId,
             };
-            await kpExplanationStore.createExplanation(explanationData as KPExplanation);
-            // const savedExplanation = await kpExplanationStore.createExplanation(explanationData as KPExplanation);
-            // if (savedExplanation) {
-            //     kpExplanationStore.explanations.push(savedExplanation);
-            //     editKPExplanationVisible.value = false;
-            //     ElMessage.success('知识点解释已保存');
-            // }
+            // await kpExplanationStore.createExplanation(explanationData as KPExplanation);
+            const savedExplanation = await kpExplanationStore.createExplanation(explanationData as KPExplanation);
+            if (savedExplanation) {
+                kpExplanationStore.explanations.push(savedExplanation);
+                editKPExplanationVisible.value = false;
+                ElMessage.success('知识点解释已保存');
+            }
         } catch (error) {
             console.error('保存知识点解释失败:', error);
             ElMessage.error('保存失败，请重试');

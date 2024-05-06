@@ -11,6 +11,7 @@ export class ChatService extends BaseService {
         } catch (error) {
             console.error('Failed to fetch AI response:', error);
             this.handleError(error);
+            return undefined;
         }
     }
 

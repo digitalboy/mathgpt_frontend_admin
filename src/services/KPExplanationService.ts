@@ -4,19 +4,19 @@ import { BaseService } from './baseService';
 export interface KPExplanationContent {
     welcome_message: string;
     response: {
-        relationship: string;
-        definition: string;
-        popular_definition: string;
+        relationship?: string;
+        definition?: string;
+        popular_definition?: string;
         math_definition?: string;
-        confusion: string;
-        example: string;
-        symbols: string;
-        popular_example: string;
-        basic_math_example: string;
-        visual_aid: string;
-        real_life_connection: string;
+        confusion?: string;
+        example?: string;
+        symbols?: string;
+        popular_example?: string;
+        basic_math_example?: string;
+        visual_aid?: string;
+        real_life_connection?: string;
     };
-    diagram?: string[];
+    diagram?: string;
     conclusion_suggestion?: string;
 }
 
