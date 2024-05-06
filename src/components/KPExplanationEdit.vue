@@ -88,7 +88,7 @@ const kpExplanationStore = useKPExplanationStore();
 
 watchEffect(async () => {
     if (props.nodeUuid) {
-        aiResponse.value = undefined
+        aiResponse.value = emptyAIResponse
         console.log(props.nodeUuid)
         graphData.value = await graphStore.getNeighborhood(props.nodeUuid);
         neighborhoodVisible.value = true;
@@ -103,8 +103,8 @@ const emptyAIResponse: KPExplanationContent = {
         relationship: '',
         definition: '',
         popular_definition: '',
-        // 初始化时不包括可选属性
-        math_definition: '', // 确保这里设置了初始值
+        
+        math_definition: '', 
         confusion: '',
         example: '',
         symbols: '',
@@ -112,10 +112,9 @@ const emptyAIResponse: KPExplanationContent = {
         visual_aid: '',
         real_life_connection: '',
         basic_math_example: ''
-    },
-    // 初始化时不包括可选属性
-    diagram: '', // 确保这里设置了初始值
-    conclusion_suggestion: '', // 确保这里设置了初始值
+    },    
+    diagram: '', 
+    conclusion_suggestion: '', 
 };
 
 const safeAIResponse = ref<KPExplanationContent>(emptyAIResponse);
@@ -211,7 +210,7 @@ async function saveExplanation() {
             };
             // await kpExplanationStore.createExplanation(explanationData as KPExplanation);
             const savedExplanation = await kpExplanationStore.createExplanation(explanationData as KPExplanation);
-            if (savedExplanation) {
+            if (savedExplanation != undefined) {
                 kpExplanationStore.explanations.push(savedExplanation);
                 editKPExplanationVisible.value = false;
                 ElMessage.success('知识点解释已保存');
