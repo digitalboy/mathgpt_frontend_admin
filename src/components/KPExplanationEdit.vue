@@ -7,7 +7,7 @@
                     <el-input type="textarea" v-model="safeAIResponse.welcome_message" rows="2"></el-input>
                 </el-form-item>
 
-                <!-- <el-form-item label="关系">
+                <el-form-item label="关系">
                     <el-input type="textarea" v-model="safeAIResponse.response.relationship" rows="2"></el-input>
                 </el-form-item>
 
@@ -41,13 +41,13 @@
                         rows="2"></el-input>
                 </el-form-item>
                 
-                <el-form-item label="图表" v-if="safeAIResponse.diagram">
+                <!-- <el-form-item label="图表" v-if="safeAIResponse.diagram">
                     <el-input type="textarea" v-model="safeAIResponse.diagram" rows="2"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 
                 <el-form-item label="结论建议" v-if="safeAIResponse.conclusion_suggestion">
                     <el-input type="textarea" v-model="safeAIResponse.conclusion_suggestion" rows="2"></el-input>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="saveExplanation">保存</el-button>
                 </el-form-item>
