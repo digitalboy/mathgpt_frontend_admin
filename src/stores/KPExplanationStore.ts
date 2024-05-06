@@ -40,9 +40,11 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                 if (newExplanation) {
                     this.explanations.push(newExplanation);
                     this.setCurrentExplanation(newExplanation);
+                    return newExplanation;
                 }
             } catch (error) {
                 console.error('Failed to create explanation:', error);
+                return null;
             }
         },
         async updateExplanation(id: number, explanationData: KPExplanation) {

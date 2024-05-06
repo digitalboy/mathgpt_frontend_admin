@@ -86,6 +86,7 @@ const neighborhoodVisible = ref(false);
 const editKPExplanationVisible = ref(false);
 const kpExplanationStore = useKPExplanationStore();
 
+
 watchEffect(async () => {
     if (props.nodeUuid) {
         aiResponse.value = emptyAIResponse
@@ -102,8 +103,7 @@ const emptyAIResponse: KPExplanationContent = {
     response: {
         relationship: '',
         definition: '',
-        popular_definition: '',
-        
+        popular_definition: '',        
         math_definition: '', 
         confusion: '',
         example: '',
@@ -151,6 +151,8 @@ watch(() => kpExplanationStore.currentExplanation, (newExplanation) => {
 async function handleAIAssist() {
     if (graphData.value && graphStore.currentNode) {
         isLoadingAIResponse.value = true;
+        const subjectId = await findSubjectId(graphStore.currentNode.properties.subject);
+        const gradeId = await findGradeId(graphStore.currentNode.properties.grade);
         const knowledgePointName = escapeRegExp(graphStore.currentNode.properties.node_name);
         const promptsClone = JSON.parse(JSON.stringify(Kp_explainer_groq));
 
@@ -167,13 +169,14 @@ async function handleAIAssist() {
 
         try {
             // 尝试获取AI辅助内容
+            console.log(promptsClone)
             const response = await ChatService.grokAIResponse({ messages: promptsClone });
             if (response) {
                 aiResponse.value = response.response;
                 kpExplanationStore.currentExplanation = {
                     knowledge_point_uuid: props.nodeUuid as string,
-                    grade_id: 1,
-                    subject_id: 3,
+                    grade_id: gradeId as number,
+                    subject_id: subjectId as number,
                     content: aiResponse.value as KPExplanationContent,
                     // 其他需要的属性
                 };
@@ -210,10 +213,13 @@ async function saveExplanation() {
             };
             // await kpExplanationStore.createExplanation(explanationData as KPExplanation);
             const savedExplanation = await kpExplanationStore.createExplanation(explanationData as KPExplanation);
-            if (savedExplanation != undefined) {
+            console.log(savedExplanation)
+            if (savedExplanation != null) {
                 kpExplanationStore.explanations.push(savedExplanation);
                 editKPExplanationVisible.value = false;
                 ElMessage.success('知识点解释已保存');
+                kpExplanationStore.currentExplanation = null
+
             }
         } catch (error) {
             console.error('保存知识点解释失败:', error);
