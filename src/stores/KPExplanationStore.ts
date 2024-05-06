@@ -19,9 +19,11 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                 const explanations = await KPExplanationService.getExplanations();
                 if (explanations) {
                     this.explanations = explanations;
+                    return explanations;
                 }
             } catch (error) {
                 console.error('Failed to load explanations:', error);
+                return null;
             }
         },
         async fetchExplanationById(id: number) {
@@ -29,9 +31,11 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                 const explanation = await KPExplanationService.getExplanationById(id);
                 if (explanation) {
                     this.setCurrentExplanation(explanation);
+                    return explanation;
                 }
             } catch (error) {
                 console.error(`Failed to get explanation details for ID ${id}:`, error);
+                return null;
             }
         },
         async createExplanation(explanationData: KPExplanation) {
@@ -40,13 +44,13 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                 if (newExplanation) {
                     this.explanations.push(newExplanation);
                     this.setCurrentExplanation(newExplanation);
-                    return newExplanation;
+                    return newExplanation;  // 成功时返回新的解释对象
                 }
             } catch (error) {
                 console.error('Failed to create explanation:', error);
-                return null;
             }
-        },
+            return null;  // 失败时返回 null
+        }, 
         async updateExplanation(id: number, explanationData: KPExplanation) {
             try {
                 const updatedExplanation = await KPExplanationService.updateExplanation(id, explanationData);
@@ -55,11 +59,13 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                     if (index !== -1) {
                         this.explanations[index] = updatedExplanation;
                         this.setCurrentExplanation(updatedExplanation);
+                        return updatedExplanation;  // 成功时返回更新后的解释对象
                     }
                 }
             } catch (error) {
                 console.error(`Failed to update explanation for ID ${id}:`, error);
             }
+            return null;  // 失败时返回 null
         },
         async deleteExplanation(id: number) {
             try {
@@ -68,8 +74,10 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                 if (this.currentExplanation?.id === id) {
                     this.currentExplanation = null;
                 }
+                return true;  // 成功时返回 true
             } catch (error) {
                 console.error(`Failed to delete explanation for ID ${id}:`, error);
+                return false;  // 失败时返回 false
             }
         }
     }
