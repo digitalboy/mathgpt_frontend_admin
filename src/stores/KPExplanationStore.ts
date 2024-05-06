@@ -26,6 +26,19 @@ export const useKPExplanationStore = defineStore('kpExplanation', {
                 return null;
             }
         },
+
+        async fetchExplanationsByUUID(uuid: string) {
+            try {
+                const explanations = await KPExplanationService.getExplanationByUUID(uuid); // 使用新的服务方法
+                if (explanations) {
+                    this.explanations = explanations;
+                    return explanations;
+                }
+            } catch (error) {
+                console.error(`Failed to load explanations for UUID ${uuid}:`, error);
+            }
+        },
+
         async fetchExplanationById(id: number) {
             try {
                 const explanation = await KPExplanationService.getExplanationById(id);

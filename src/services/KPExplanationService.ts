@@ -54,6 +54,19 @@ export class KPExplanationService extends BaseService {
         }
     }
 
+    public static async getExplanationByUUID(uuid: string): Promise<KPExplanation[] | undefined> {
+        try {
+            const response = await this.axiosInstance.get(`/knowlage_point_explanation/get_by_uuid`, {
+                params: { uuid }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('getExplanationByUUID:', error);
+            this.handleError(error);
+            return undefined;
+        }
+    }
+
     // 获取单个知识点解释详情
     public static async getExplanationById(explanationId: number): Promise<KPExplanation | undefined> {
         try {
