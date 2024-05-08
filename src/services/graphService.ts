@@ -4,7 +4,7 @@ import { BaseService } from './baseService';
 export interface Node {    
     explanation_count: number;
     identity: number;
-    labels: string[];
+    labels: string;
     properties: {
         description: string;
         grade: string;

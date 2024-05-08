@@ -46,6 +46,8 @@ const nodeData = ref<Node>({
         grade: '',
         uuid: ''
     },
+    explanation_count: 0,
+    identity: 0
 });
 
 const rules = {
