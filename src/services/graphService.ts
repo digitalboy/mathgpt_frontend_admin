@@ -2,21 +2,29 @@
 import { BaseService } from './baseService';
 
 export interface Node {    
-    labels: string;
-    explanation_count?: number;
+    explanation_count: number;
+    identity: number;
+    labels: string[];
     properties: {
         description: string;
         grade: string;
         node_name: string;
         publisher: string;
         subject: string;
-        uuid: string;  // 确保包括这个属性
+        uuid: string;
     };
-    elementId?: string;  // 如果这个是用于某些特定逻辑，保留它
+    total_questions?: number;
+    unreached_questions?: number;
+    answered_questions?: number;
+    correct_answer_rate?: number;
+    correct_answers?: number;
+    uuid?: string;
+    elementId?: string;
     color?: {
         border: string;
         background: string;
     };
+    borderWidth?:number
 }
 
 export interface Edge {
@@ -36,15 +44,14 @@ export interface GraphData {
 
 export class GraphService extends BaseService {
     // 获取节点和边
-    public static async getNodesAndEdges(grade?: string, subject?: string): Promise<GraphData | undefined> {
-        console.log('获取节点和边...');
+    public static async getNodesAndEdges(grade?: string, subject?: string, student_id?: number): Promise<GraphData | undefined> {
         try {
-            const response = await this.axiosInstance.get<GraphData>('/graph/get_nodes_edges', { params: { grade, subject } });
-            console.log('服务：节点和边获取成功！');
-            // console.log(response.data);
+            const params = { grade, subject, student_id };
+            const response = await this.axiosInstance.get<GraphData>('/graph/get_nodes_edges', { params });
+            console.log('知识点的节点和边获取成功！');
             return response.data;
         } catch (error) {
-            console.error('获取节点和边失败：', error);
+            console.error('获取知识点的节点和边失败：', error);
             this.handleError(error);
             return undefined;
         }

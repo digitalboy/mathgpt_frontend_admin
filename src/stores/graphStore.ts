@@ -23,22 +23,16 @@ export const useGraphStore = defineStore('graph', {
             this.currentEdge = edge;
         },
 
-        async fetchNodesAndEdges(grade?: string, subject?: string) {
-            // console.log('Fetching nodes and edges...');
-            this.isDataLoading = true;
+        async fetchNodesAndEdges(grade?: string, subject?: string, studentId?: number) {
             try {
-                const graphData = await GraphService.getNodesAndEdges(grade, subject);
+                const graphData = await GraphService.getNodesAndEdges(grade, subject, studentId);
                 if (graphData) {
-                    // 直接使用从服务返回的节点和边数组
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;
-                    
-                    console.log('状态：成功获取节点和边。');
+                    console.log('知识点的节点和边获取成功！');
                 }
             } catch (error) {
-                console.error('状态：获取节点和边失败', error);
-            } finally {
-                this.isDataLoading = false;
+                console.error('获取知识点的节点和边失败：', error);
             }
         },
 
@@ -95,6 +89,7 @@ export const useGraphStore = defineStore('graph', {
                 console.error('删除节点失败：', error);
             }
         },
+        
         async deleteEdge(start_uuid: string, end_uuid: string, rel_type: string) {
             try {
                 const response = await GraphService.deleteEdge(start_uuid, end_uuid, rel_type);

@@ -9,31 +9,73 @@
 import { ref, onMounted, watchEffect } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { useAuthStore } from '@/stores/authStore';
-import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
-import { StudentAnswerRecord } from '@/services/studentAnswerRecordService';
 import { Network } from 'vis-network/standalone';
 // import { ElMessage } from 'element-plus';
 
 const visContainer = ref(null);
 const authStore = useAuthStore();
-const studentAnswerRecordStore = useStudentAnswerRecordStore();
+
 const graphStore = useGraphStore();
 const loading =ref(true)
 
 onMounted(async () => {
-    // 正常加载图形数据...
-    loading.value = true;
-    await graphStore.fetchNodesAndEdges();
-
-    // 如果用户是学生，获取他们的答题记录并更新图形
     if (authStore.user && authStore.user.role === 'student') {
-        console.log("authStore.user.role", authStore.user.role)
-        await studentAnswerRecordStore.fetchStudentAnswerRecordsByStudent(authStore.user.id);
-        // 过滤出错误的答题记录的知识点 UUID
-        markNodesByAnswerStatus(studentAnswerRecordStore.studentAnswerRecords);
+        const studentId = authStore.user.id;
+        const grade = authStore.user.grade_name;
+        const subject = '数学'; // 暂时固定为数学
+
+        await graphStore.fetchNodesAndEdges(grade, subject, studentId);
+
+        graphStore.nodes.forEach(node => {
+            const totalQuestions = node.total_questions ?? 0;
+            const answeredQuestions = node.answered_questions ?? 0;
+            const correctAnswers = node.correct_answers ?? 0;
+
+            const coverageRate = totalQuestions > 0 ? answeredQuestions / totalQuestions : 0;
+            const correctRate = answeredQuestions > 0 ? correctAnswers / answeredQuestions : 0;
+
+            // 设置背景色
+            let backgroundColor, borderColor, borderWidth;
+            if (correctRate === 1) {
+                backgroundColor = '#00b050'; // 鲜绿色
+            } else if (correctRate >= 0.75) {
+                backgroundColor = '#92d050'; // 浅绿色
+            } else if (correctRate >= 0.50) {
+                backgroundColor = '#ffff00'; // 黄色
+            } else if (correctRate >= 0.25) {
+                backgroundColor = '#ff9900'; // 橙色
+            } else if (correctRate > 0) {
+                backgroundColor = '#ff0000'; // 红色
+            } else {
+                backgroundColor = '#a6a6a6'; // 灰色
+            }
+
+            // 设置边框颜色和宽度
+            borderColor = darkenColor(backgroundColor, 8); // 边框颜色加深20%
+            if (coverageRate >= 0.80) {
+                borderWidth = 8;
+            } else if (coverageRate >= 0.50) {
+                borderWidth = 6;
+            } else if (coverageRate >= 0.20) {
+                borderWidth = 4;
+            } else {
+                borderWidth = 1;
+            }
+
+            node.color = {
+                background: backgroundColor,
+                border: borderColor
+            };
+            node.borderWidth = borderWidth; // 设置节点的边框宽度
+        });
+
+    } else {
+        // 非学生角色使用默认颜色
+        await graphStore.fetchNodesAndEdges();
+        graphStore.nodes.forEach(node => {
+            node.color = { background: 'lightgray', border: 'gray' }; // 默认颜色
+        });
     }
-    // 更新节点数据...
-    loading.value = false;
 });
 
 watchEffect(() => {
@@ -43,7 +85,13 @@ watchEffect(() => {
                 id: node.properties.uuid,  // 使用 uuid 作为唯一标识符
                 label: node.properties.node_name,
                 title: node.properties.node_name,
-                color: node.color ? node.color : undefined
+                color: node.color ? node.color : undefined,
+                borderWidth: node.borderWidth ,                
+                borderColor: node.color?.border ?? 'defaultBorder',
+                scaling: {
+                    min: 10,
+                    max: 30,
+                }
             })),
             edges: graphStore.edges.map(edge => ({
                 from: edge.start_uuid,  // 确保这些字段匹配节点的 uuid
@@ -111,35 +159,37 @@ function handleGraphClick(params: any) {
     }
 }
 
-// 此方法用于标记图中的错误节点
-const markNodesByAnswerStatus = (studentAnswerRecords: StudentAnswerRecord[]) => {
-    const nodeStatusMap: { [uuid: string]: boolean } = {};
-  
-    studentAnswerRecords.forEach(record => {
-        // 确保 knowlage_point_uuid 不是 undefined，然后再赋值
-        if (typeof record.knowlage_point_uuid !== "undefined") {
-            nodeStatusMap[record.knowlage_point_uuid] = record.is_fully_correct ?? false; // 使用空值合并操作符作为兜底值
-        }
-    });
+function darkenColor(rgbColor: string, amount: number): string {
+    // 将 hex 转换为 RGB
+    let [r, g, b] = rgbColor.match(/\w\w/g)!.map(x => parseInt(x, 16));
+    // 转换 RGB 为 HSL
+    r /= 255, g /= 255, b /= 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let l = (max + min) / 2;
+    let h = 0;
+    let s = 0;
 
-    graphStore.nodes.forEach(node => {
-        if (node.properties.uuid in nodeStatusMap) {
-            if (nodeStatusMap[node.properties.uuid]) {
-                // 如果答题正确，标记为绿色
-                node.color = {
-                    border: '#21ba45',
-                    background: '#a5d6a7'
-                };
-            } else {
-                // 如果答题错误，标记为红色
-                node.color = {
-                    border: '#ff0000',
-                    background: '#ffaaaa'
-                };
-            }
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) {
+            h = (g - b) / d + (g < b ? 6 : 0);
+        } else if (max === g) {
+            h = (b - r) / d + 2;
+        } else if (max === b) {
+            h = (r - g) / d + 4;
         }
-    });
-};
+        h /= 6;
+    }
+
+    // 降低亮度
+    l -= amount / 100;
+    s = s * 100;  // 将饱和度转换为百分比
+    h = h * 360;  // 将色相转换为角度
+
+    return `hsl(${Math.round(h)}, ${Math.round(s)}%, ${Math.round(l * 100)}%)`;
+}
 
 </script>
 
