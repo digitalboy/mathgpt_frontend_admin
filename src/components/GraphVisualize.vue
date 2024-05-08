@@ -81,22 +81,47 @@ onMounted(async () => {
 watchEffect(() => {
     if (!graphStore.isDataLoading && visContainer.value && graphStore.nodes?.length > 0 && graphStore.edges?.length > 0) {
         const graphData = {
-            nodes: graphStore.nodes.map(node => ({
-                id: node.properties.uuid,  // 使用 uuid 作为唯一标识符
-                label: node.properties.node_name,
-                title: node.properties.node_name,
-                color: node.color ? node.color : undefined,
-                borderWidth: node.borderWidth ,                
-                borderColor: node.color?.border ?? 'defaultBorder',
-                scaling: {
-                    min: 10,
-                    max: 30,
+            nodes: graphStore.nodes.map(node => {
+                const totalQuestions = node.total_questions ?? 0;
+                const answeredQuestions = node.answered_questions ?? 0;
+                const correctAnswers = node.correct_answers ?? 0;
+                const correctRate = answeredQuestions > 0 ? (correctAnswers / answeredQuestions * 100).toFixed(2) : 'N/A';
+
+                let labelContent = node.properties.node_name;
+                if (correctRate !== 'N/A') {
+                    labelContent = `${node.properties.node_name}\n${correctRate}%`;
                 }
-            })),
+
+                const titleContent = `${node.properties.node_name}
+                    
+                    总题数: ${totalQuestions}
+                    已答题数: ${answeredQuestions}
+                    正确题数: ${correctAnswers}
+                    正确率: ${correctRate}%
+                `;
+
+                return {
+                    id: node.properties.uuid,  // 使用 uuid 作为唯一标识符
+                    label: labelContent,    
+                    title: titleContent,
+                    color: node.color ? node.color : undefined,
+                    borderWidth: node.borderWidth,                
+                    borderColor: node.color?.border ?? 'defaultBorder',
+                    scaling: {
+                        min: 10,
+                        max: 30,
+                    },
+                    font: {
+                        multi: 'html',
+                        size: 8
+                    },
+                    
+                };
+            }),
             edges: graphStore.edges.map(edge => ({
                 from: edge.start_uuid,  // 确保这些字段匹配节点的 uuid
                 to: edge.end_uuid,
-                label: edge.type,
+                // label: edge.type,
                 // title: `Since: ${edge.properties.since}`,
                 arrows: 'to',
                 id: `${edge.start_uuid}-${edge.end_uuid}-${edge.type}`
@@ -109,6 +134,14 @@ watchEffect(() => {
             nodes: {
                 shape: 'dot',
                 size: 10,
+                font: {
+                    multi: 'html',
+                    color: '#343434'
+                },
+                scaling: {
+                    min: 10,
+                    max: 30
+                }
             },
             edges: {
                 smooth: true,
@@ -118,7 +151,6 @@ watchEffect(() => {
                     align: 'middle'
                 }
             }
-
         };
         const network = new Network(visContainer.value, graphData, options);
         network.on("click", function (params) {
