@@ -77,6 +77,7 @@ const handleSubmit = async () => {
         try {
             console.log(completeData.content)
             const newQuestion = await questionStore.createQuestion(completeData);
+            console.log(newQuestion)
             if (newQuestion) { 
                 resetFormData();
                 console.log('题目创建成功！hahaha');

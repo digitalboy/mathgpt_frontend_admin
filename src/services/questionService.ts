@@ -3,12 +3,22 @@ import { BaseService } from './baseService';
 
 export interface Question {
     id?: number;
-    content: object;
+    content: {
+        question_type: string;
+        bloom_taxonomy_level: string;
+        question_text: string;
+        options: {
+            option_id: string;
+            option_text: string;
+        }[];
+        correct_answer: string[];
+        difficulty_level: string;
+    };
     knowledge_point_uuid: string;
     subject_id: number;
     textbook_version_id: number;
     grade_id: number;
-    description?: string;
+    description?: string | null;
 }
 
 export class QuestionService extends BaseService {
