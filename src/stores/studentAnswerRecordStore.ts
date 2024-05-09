@@ -1,15 +1,27 @@
 // stores/studentAnswerRecordStore.ts
 import { defineStore } from 'pinia';
-import { StudentAnswerRecord, StudentAnswerRecordService } from '@/services/studentAnswerRecordService';
+import {
+    StudentAnswerRecord,
+    AnswerRecordResponse,
+    StudentAnswerRecordService
+} from '@/services/studentAnswerRecordService';
 
 export const useStudentAnswerRecordStore = defineStore('studentAnswerRecord', {
     state: () => ({
         studentAnswerRecords: [] as StudentAnswerRecord[],
         currentRecord: null as StudentAnswerRecord | null,
+        currentStudentAnswerRecord: null as StudentAnswerRecord | null,
+        currentAnswerRecordResponse: null as AnswerRecordResponse | null
     }),
     actions: {
         setCurrentRecord(record: StudentAnswerRecord) {
             this.currentRecord = record;
+        },
+        setCurrentStudentAnswerRecord(record: StudentAnswerRecord | null) {
+            this.currentStudentAnswerRecord = record;
+        },
+        setCurrentAnswerRecordResponse(response: AnswerRecordResponse | null) {
+            this.currentAnswerRecordResponse = response;
         },
         async fetchStudentAnswerRecords() {
             try {
@@ -29,6 +41,16 @@ export const useStudentAnswerRecordStore = defineStore('studentAnswerRecord', {
                 }
             } catch (error) {
                 console.error('获取学生答案记录失败:', error);
+            }
+        },
+        async fetchAnswerRecordByStudentAndQuestion(studentId: number, questionId: number) {
+            try {
+                const record = await StudentAnswerRecordService.getAnswerRecordByStudentAndQuestion(studentId, questionId);
+                if (record) {
+                    this.setCurrentAnswerRecordResponse(record);
+                }
+            } catch (error) {
+                console.error('获取某道题目的历史记录失败:', error);
             }
         },
         async createStudentAnswerRecord(recordData: StudentAnswerRecord) {
