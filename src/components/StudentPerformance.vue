@@ -67,10 +67,8 @@
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
                             <el-table-column label="讲解">
                                 <template #default="scope">
-
                                     <el-button type="primary" :icon="Reading" circle
-                                        @click="handleEdit(scope.$index, scope.row)" />
-
+                                        @click="handleExplainKp(scope.$index, scope.row)" />
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -80,6 +78,12 @@
                         <el-table :data="data.most_missed_questions" style="width: 100%" stripe table-layout="fixed">
                             <el-table-column prop="question_text" label="题目" width="200"></el-table-column>
                             <el-table-column prop="error_count" label="错误次数"></el-table-column>
+                            <el-table-column label="讲解">
+                                <template #default="scope">
+                                    <el-button type="primary" :icon="Reading" circle
+                                        @click="handleExplainQuestion(scope.row)" />
+                                </template>
+                            </el-table-column>
                         </el-table>
                     </el-col>
                 </div>
@@ -94,12 +98,14 @@ import { computed, onMounted, ref, nextTick } from 'vue';
 import { useStudentStore } from '@/stores/studentStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useGraphStore } from '@/stores/graphStore';
+import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
 import KPExplainer from '@/components/KPExplainer.vue';
 import { Reading } from '@element-plus/icons-vue'
 
 const studentStore = useStudentStore();
 const graphStore = useGraphStore();
 const authStore = useAuthStore();
+const studentAnswerRecordStore = useStudentAnswerRecordStore();
 const studentId = authStore.user?.id;
 const nodesNamesMap = ref(new Map<string, string>());
 
@@ -137,7 +143,7 @@ onMounted(async () => {
 
 
 
-const handleEdit = async (_index: number, row: any) => {
+const handleExplainKp = async (_index: number, row: any) => {
     console.log("index::::", row.knowledge_point_uuid);
     selectedNodeUuid.value = row.knowledge_point_uuid;
 
@@ -148,6 +154,13 @@ const handleEdit = async (_index: number, row: any) => {
     } else {
         console.error("找不到对应的节点");
         // 可以在这里处理节点未找到的情况
+    }
+}
+
+const handleExplainQuestion = async (row: any) => {
+    console.log(row.question_id)
+    if (studentId) {
+        await studentAnswerRecordStore.fetchAnswerRecordByStudentAndQuestion(studentId, row.question_id);
     }
 }
 </script>

@@ -37,6 +37,7 @@ export const useQuestionStore = defineStore('question', {
                 if (newQuestion) {
                     this.questions.push(newQuestion);
                     this.setCurrentQuestion(newQuestion);
+                    return newQuestion;
                 }
             } catch (error) {
                 console.error('创建题目失败:', error);

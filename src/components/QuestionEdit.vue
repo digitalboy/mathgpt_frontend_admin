@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item label="正确答案">
             <el-radio-group v-model="editableData.correct_answer[0]">
-                <el-radio v-for="option in editableData.options" :label="option.option_id" :key="option.option_id">
+                <el-radio v-for="option in editableData.options" :value="option.option_id" :key="option.option_id">
                     {{ option.option_id }}
                 </el-radio>
             </el-radio-group>
@@ -23,9 +23,9 @@
         </el-form-item>
         <el-form-item label="难度级别">
             <el-radio-group v-model="editableData.difficulty_level">
-                <el-radio label="easy">易</el-radio>
-                <el-radio label="medium">中</el-radio>
-                <el-radio label="hard">难</el-radio>
+                <el-radio value="easy">易</el-radio>
+                <el-radio value="medium">中</el-radio>
+                <el-radio value="hard">难</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item>
@@ -65,21 +65,23 @@ const handleSubmit = async () => {
             return;
         }
 
-        const completeData = {
-            question_type: editableData.value.question_type,
-            bloom_taxonomy_level: editableData.value.bloom_taxonomy_level,
-            content: JSON.stringify(editableData.value),  // 将整个题目JSON字符串化
+        const completeData = {            
+            content: editableData.value,  // 将整个题目JSON字符串化
             knowledge_point_uuid: currentNode.properties.uuid,
             subject_id: subjectId,
             textbook_version_id: textbookVersionId,
             grade_id: gradeId,
-            description: editableData.value.explanation
+           
         };
 
         try {
-            await questionStore.createQuestion(completeData);
-            resetFormData();
-            console.log('题目创建成功！');
+            console.log(completeData.content)
+            const newQuestion = await questionStore.createQuestion(completeData);
+            if (newQuestion) { 
+                resetFormData();
+                console.log('题目创建成功！hahaha');
+            }
+            
         } catch (error) {
             console.error('题目创建失败:', error);
         }

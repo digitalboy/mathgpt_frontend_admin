@@ -48,6 +48,7 @@ export const useStudentAnswerRecordStore = defineStore('studentAnswerRecord', {
                 const record = await StudentAnswerRecordService.getAnswerRecordByStudentAndQuestion(studentId, questionId);
                 if (record) {
                     this.setCurrentAnswerRecordResponse(record);
+                    console.log(record)
                 }
             } catch (error) {
                 console.error('获取某道题目的历史记录失败:', error);

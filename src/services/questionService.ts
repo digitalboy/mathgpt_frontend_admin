@@ -3,7 +3,7 @@ import { BaseService } from './baseService';
 
 export interface Question {
     id?: number;
-    content: string;
+    content: object;
     knowledge_point_uuid: string;
     subject_id: number;
     textbook_version_id: number;

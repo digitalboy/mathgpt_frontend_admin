@@ -17,8 +17,7 @@ export interface Node {
     unreached_questions?: number;
     answered_questions?: number;
     correct_answer_rate?: number;
-    correct_answers?: number;
-    uuid?: string;
+    correct_answers?: number;    
     elementId?: string;
     color?: {
         border: string;
