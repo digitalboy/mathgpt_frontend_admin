@@ -129,14 +129,16 @@ const nodes = computed(() => {
 });
 
 const getNodeClass = (node: any) => {
-    if (node.color) {
-        if (node.color.background === '#00b050' || node.color.background === '#92d050') {
-            return 'node-correct';
-        } else if (node.color.background === '#ff0000' || node.color.background === '#ff9900') {
-            return 'node-wrong';
-        }
-    }
-    return '';
+    const colorMap: Record<string, string> = {
+        '#00b050': 'node-perfect',   // 完全正确
+        '#92d050': 'node-correct',   // 大部分正确
+        '#ffff00': 'node-partial',   // 部分正确
+        '#ff9900': 'node-warning',   // 警告
+        '#ff0000': 'node-wrong',     // 错误
+        '#a6a6a6': 'node-uninvolved' // 未涉及
+    };
+
+    return colorMap[node.color?.background] ?? '';
 };
 
 function darkenColor(rgbColor: string, amount: number): string {
@@ -179,9 +181,7 @@ function darkenColor(rgbColor: string, amount: number): string {
     align-items: center;
 }
 
-.el-radio.node-wrong {
-    color: #ff0000;
-    border-color: #ff0000 !important;
+.el-radio {
     margin-right: 10px;
     min-width: 70px;
     width: 150px;
@@ -193,17 +193,44 @@ function darkenColor(rgbColor: string, amount: number): string {
     flex-basis: auto;
 }
 
+/* 完全正确的节点 */
+.el-radio.node-perfect {
+    color: #00b050;
+    border-color: #00b050 !important;
+    /* text-shadow: 1px 1   px 2px rgb(0, 0, 0); */
+}
+
+/* 大部分正确的节点 */
 .el-radio.node-correct {
-    color: #21ba45;
-    border-color: #21ba45 !important;
-    margin-right: 10px;
-    min-width: 70px;
-    width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
+    color: #92d050;
+    border-color: #92d050 !important;
+    /* text-shadow: 1px 1px 2px rgb(0, 0, 0); */
+}
+
+/* 部分正确的节点 */
+.el-radio.node-partial {
+    color: #cccc06;
+    border-color: #ffff00 !important;
+    /* text-shadow: 1px 1px 2px rgb(0, 0, 0); */
+}
+
+/* 警告节点 */
+.el-radio.node-warning {
+    color: #ff9900;
+    border-color: #ff9900 !important;
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+/* 错误的节点 */
+.el-radio.node-wrong {
+    color: #ff0000;
+    border-color: #ff0000 !important;
+    /* text-shadow: 1px 1px 2px rgb(0, 0, 0); */
+}
+
+/* 未涉及的节点 */
+.el-radio.node-uninvolved {
+    color: #555454;
+    border-color: #a6a6a6 !important;
 }
 </style>
