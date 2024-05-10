@@ -4,7 +4,10 @@
         <el-card class="question-card">
             <template #header>
                 <div>
-                    <span>{{ questionData.question_text }}</span>
+                    <!-- {{questionData.question_text}}<br /> -->
+                    <span>
+                        <VueMathjax :formula="latexFormat(questionData.question_text)" />
+                    </span>
                 </div>
             </template>
 
@@ -14,14 +17,13 @@
                     <template #extra>
                         <el-button @click="handleNextQuestion">下一题</el-button>
                     </template>
-                </el-result>
-                <el-card><el-text :type="questionData.resultType">{{ questionData.explanation }}</el-text></el-card>
+                </el-result>                
             </div>
 
             <div v-else>
                 <el-radio-group v-model="questionData.selectedOption">
                     <el-radio v-for="option in questionData.options" :value="option.option_id" :key="option.option_id">
-                        {{ option.option_text }}
+                        <VueMathjax :formula="latexFormat(option.option_text)" />
                     </el-radio>
                 </el-radio-group>
             </div>
@@ -34,12 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
 import { useStudentAnswerRecordStore } from '@/stores/studentAnswerRecordStore';
 import { useAuthStore } from '@/stores/authStore';
 import type { QuestionData } from '@/types';
+// import VueMathjax from 'vue-mathjax-next';
 
-const studentAnswerRecordStore=useStudentAnswerRecordStore();
+const studentAnswerRecordStore = useStudentAnswerRecordStore();
 const authStore = useAuthStore();
 
 authStore.initializeAuth();
@@ -61,7 +63,7 @@ const submitAnswer = async (question: QuestionData) => {
                 student_answer: question.selectedOption,
                 // 添加其他必需的记录字段
             };
-            console.log("record:::",record)
+            console.log("record:::", record)
             // 检查答案是否正确
             const isCorrect = question.correct_answer.includes(question.selectedOption);
 
@@ -84,4 +86,19 @@ const submitAnswer = async (question: QuestionData) => {
 const handleNextQuestion = () => {
     emits('nextQuestion');
 };
+
+// 函数来处理题干和选项内容
+const latexFormat = (text: string): string => {
+    // 去除内容中的$$
+    text = text.replace(/\$\$/g, "");
+    // 用$$包裹内容
+    const formattedText = `$$ ${text} $$`;
+    return formattedText;
+};
+
 </script>
+
+<style scoped>
+
+
+</style>
