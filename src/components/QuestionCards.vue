@@ -37,7 +37,7 @@ const getQuestionDetails = async () => {
             if (questionStore.questions) {
                 questionDetails.value = questionStore.questions.map(question => {
                     // 解析每个问题的 content JSON 字符串
-                    const parsedQuestion = JSON.parse(JSON.stringify(question.content));
+                    const parsedQuestion = JSON.parse(question.content as any);
                     console.log("qid::::", question.id)
                     // 初始化每个问题的选中选项
                     parsedQuestion.id = question.id;

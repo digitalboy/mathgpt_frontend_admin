@@ -8,10 +8,10 @@ export interface QuestionData {
         option_text: string;
     }>;
     correct_answer: string[];
-    explanation: string;
+    explanation?: string;
     difficulty_level: string;
-    selectedOption?: string;
-    id?: number;
-    showResult?: boolean;
-    resultType?: 'success' | 'error';
+    selectedOption?: string; // 将属性设置为可选属性
+    id?: number; // 将属性设置为可选属性
+    showResult?: boolean; // 将属性设置为可选属性
+    resultType?: 'success' | 'error'; // 将属性设置为可选属性
 }
