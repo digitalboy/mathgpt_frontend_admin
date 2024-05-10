@@ -1,17 +1,33 @@
 <!-- src/components/QuestionCards.vue -->
 <template>
-    <div class="question-cards-container">
-        <div class="question-counter" v-if="questionDetails.length > 0">
-            <span>问题 {{ currentIndex + 1 }} / {{ questionDetails.length }}</span>
-        </div>
-        <!-- Conditions on v-if ensure only one question is displayed at a time -->
-        <question-card v-if="currentQuestion" :question-data="currentQuestion" @nextQuestion="showNextQuestion" />
+    <div style="width: 100%;">
+        <el-row v-if="questionDetails.length > 0">
+            <el-col :span="24">
+                <div>
+                    <!-- <span>问题 {{ currentIndex + 1 }} / {{ questionDetails.length }}</span> -->
+                </div>
+            </el-col>
+        </el-row>
 
-        <!-- This would be a placeholder or loader in case no question is available -->
+        <el-row v-if="currentQuestion">
+            <el-col :span="24">
+                <question-card :question-data="currentQuestion"  />
+            </el-col>
+        </el-row>
+
+        <el-row v-if="questionDetails.length > 0">
+            <el-col :span="24">
+                <el-pagination @current-change="handlePageChange" :current-page.sync="currentPage" :page-size="pageSize"
+                    :total="questionDetails.length" background layout="prev, pager, next">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
         <div v-else class="empty-state">
             <span>请选择一个知识点</span>
         </div>
     </div>
+
 </template>
 
 <script setup lang="ts">
@@ -24,11 +40,12 @@ import type { QuestionData } from '@/types';
 const questionStore = useQuestionStore();
 const graphStore = useGraphStore();
 
-const currentIndex = ref(0);
+const currentPage = ref(1); // Current page index
+const pageSize = 1; // Number of questions per page
 const questionDetails = ref<QuestionData[]>([]);
 
 // Computed property to get current question based on the currentIndex
-const currentQuestion = computed(() => questionDetails.value[currentIndex.value]);
+const currentQuestion = computed(() => questionDetails.value[(currentPage.value - 1) * pageSize]);
 
 const getQuestionDetails = async () => {
     if (graphStore.currentNode?.properties.uuid) {
@@ -54,18 +71,15 @@ const getQuestionDetails = async () => {
     }
 };
 
-const showNextQuestion = () => {
-    if (currentIndex.value < questionDetails.value.length - 1) {
-        currentIndex.value++;
-    } else {
-        // Reset index or show a completion message
-        currentIndex.value = 0;
-    }
+
+// Handle page change event
+const handlePageChange = (page: number) => {
+    currentPage.value = page;
 };
 
 watch(() => graphStore.currentNode, () => {
     questionDetails.value = [];
-    currentIndex.value = 0;  // Reset index when currentNode changes
+    currentPage.value = 1;  // Reset current page index when currentNode changes
     getQuestionDetails();
 }, { immediate: true });
 </script>

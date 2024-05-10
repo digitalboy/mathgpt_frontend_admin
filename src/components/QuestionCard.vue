@@ -4,7 +4,6 @@
         <el-card class="question-card">
             <template #header>
                 <div>
-                    <!-- {{questionData.question_text}}<br /> -->
                     <span>
                         <VueMathjax :formula="latexFormat(questionData.question_text)" />
                     </span>
@@ -14,10 +13,10 @@
             <div v-if="questionData.showResult">
                 <el-result :icon="questionData.resultType === 'success' ? 'success' : 'error'"
                     :title="questionData.resultType === 'success' ? '回答正确！' : '回答错误！'" sub-title="请根据提示继续学习或尝试其他问题。">
-                    <template #extra>
+                    <!-- <template #extra>
                         <el-button @click="handleNextQuestion">下一题</el-button>
-                    </template>
-                </el-result>                
+                    </template> -->
+                </el-result>
             </div>
 
             <div v-else>
@@ -51,7 +50,6 @@ const { questionData } = defineProps<{
     questionData: QuestionData;
 }>();
 
-const emits = defineEmits(['nextQuestion']);
 
 const submitAnswer = async (question: QuestionData) => {
     if (studentId && question.selectedOption) {
@@ -83,9 +81,6 @@ const submitAnswer = async (question: QuestionData) => {
     }
 };
 
-const handleNextQuestion = () => {
-    emits('nextQuestion');
-};
 
 // 函数来处理题干和选项内容
 const latexFormat = (text: string): string => {
@@ -99,6 +94,16 @@ const latexFormat = (text: string): string => {
 </script>
 
 <style scoped>
+.question-card {
+    width: 900px;
 
+}
 
+.question-card-container {
+    width: 100%;
+    height: 20em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>

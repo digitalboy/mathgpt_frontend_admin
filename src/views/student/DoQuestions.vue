@@ -2,12 +2,16 @@
     <div>
         <h1>练习</h1>
         <el-row :gutter="20">
-            <el-card>
-                <NodesBySearch :display-type="displayType" />
-            </el-card>
+            <el-rol :span="24">
+                <el-card>
+                    <NodesBySearch :display-type="displayType" />
+                </el-card>
+            </el-rol>
         </el-row>
         <el-row :gutter="20">
-            <QuestionCards />
+            <el-rol :span="24">
+                <QuestionCards />
+            </el-rol>
         </el-row>
     </div>
 </template>
