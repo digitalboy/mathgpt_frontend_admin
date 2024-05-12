@@ -2,16 +2,19 @@
     <div>
         <h1>练习</h1>
         <el-row :gutter="20">
-            <el-rol :span="24">
+            <el-col :span="24">
                 <el-card>
                     <NodesBySearch :display-type="displayType" />
                 </el-card>
-            </el-rol>
+            </el-col>
         </el-row>
-        <el-row :gutter="20">
-            <el-rol :span="24">
+        <el-divider>
+            <el-icon><star-filled /></el-icon>
+        </el-divider>
+        <el-row :gutter="20" class="question-cartd-container">
+            <el-col :span="24">
                 <QuestionCards />
-            </el-rol>
+            </el-col>
         </el-row>
     </div>
 </template>
@@ -33,3 +36,7 @@ watch(
     { immediate: true } // 立即触发，以便组件加载时设置初始值
 );
 </script>
+
+<style scoped>
+
+</style>

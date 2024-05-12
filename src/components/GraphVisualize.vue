@@ -73,7 +73,8 @@ onMounted(async () => {
         // 非学生角色使用默认颜色
         await graphStore.fetchNodesAndEdges();
         graphStore.nodes.forEach(node => {
-            node.color = { background: 'lightgray', border: 'gray' }; // 默认颜色
+            node.color = { background: 'lightblue', border: 'gray' };
+            node.borderWidth = 2;
         });
     }
 });
@@ -113,7 +114,7 @@ watchEffect(() => {
                     },
                     font: {
                         multi: 'html',
-                        size: 8
+                        size: 12
                     },
                     
                 };

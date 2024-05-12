@@ -19,8 +19,8 @@
                 </el-result>
             </div>
 
-            <div v-else>
-                <el-radio-group v-model="questionData.selectedOption">
+            <div v-else class="radio-container">
+                <el-radio-group v-model="questionData.selectedOption" class="radio-container">
                     <el-radio v-for="option in questionData.options" :value="option.option_id" :key="option.option_id">
                         <VueMathjax :formula="latexFormat(option.option_text)" />
                     </el-radio>
@@ -28,7 +28,9 @@
             </div>
 
             <template #footer v-if="!questionData.showResult">
-                <el-button type="primary" @click="submitAnswer(questionData)">提交答案</el-button>
+                <div class="button-container">
+                    <el-button type="primary" @click="submitAnswer(questionData)">提交答案</el-button>
+                </div>
             </template>
         </el-card>
     </div>
@@ -99,11 +101,18 @@ const latexFormat = (text: string): string => {
 
 }
 
-.question-card-container {
-    width: 100%;
-    height: 20em;
+.radio-container {
     display: flex;
-    align-items: center;
+    /* grid-template-columns: 2fr 1fr; */
+    grid-gap: 10px;    
+    align-items: left;
     justify-content: center;
+}
+
+.button-container {
+    display: grid;
+    justify-items: end;
+
+    /* justify-content: end; */
 }
 </style>

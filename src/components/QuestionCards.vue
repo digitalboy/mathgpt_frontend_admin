@@ -10,13 +10,13 @@
         </el-row>
 
         <el-row v-if="currentQuestion">
-            <el-col :span="24">
-                <question-card :question-data="currentQuestion"  />
+            <el-col :span="24" class="question-cartd-container">
+                <question-card :question-data="currentQuestion" />
             </el-col>
         </el-row>
 
         <el-row v-if="questionDetails.length > 0">
-            <el-col :span="24">
+            <el-col :span="24" class="pagination-container">
                 <el-pagination @current-change="handlePageChange" :current-page.sync="currentPage" :page-size="pageSize"
                     :total="questionDetails.length" background layout="prev, pager, next">
                 </el-pagination>
@@ -83,3 +83,20 @@ watch(() => graphStore.currentNode, () => {
     getQuestionDetails();
 }, { immediate: true });
 </script>
+
+<style scoped>
+.question-cartd-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.pagination-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+
+}
+</style>
