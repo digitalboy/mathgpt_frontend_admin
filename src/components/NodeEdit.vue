@@ -16,8 +16,8 @@
             <el-form-item label="学科" prop="subject">
                 <el-input v-model="nodeData.properties.subject"></el-input>
             </el-form-item>
-            <el-form-item label="年级" prop="grade">
-                <el-input v-model="nodeData.properties.grade"></el-input>
+            <el-form-item label="年级" prop="grade" required>
+                <grade-dropdown v-model="nodeData.properties.grade"></grade-dropdown>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm">提交</el-button>
@@ -30,8 +30,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
-import { Node } from '@/services/graphService'; // 引入 Node 接口
+import { Node } from '@/services/graphService';
 import { ElMessage, FormInstance } from 'element-plus';
+import GradeDropdown from '@/components/GradeDropdown.vue';
 
 const graphStore = useGraphStore();
 const editNodeVisible = ref(false);
@@ -64,7 +65,7 @@ const rules = {
         { required: true, message: '请输入学科', trigger: 'blur' }
     ],
     grade: [
-        { required: true, message: '请输入年级', trigger: 'blur' }
+        { required: true, message: '请选择年级', trigger: 'blur' }
     ],
     uuid: [
         { required: true, message: 'UUID是必需的', trigger: 'blur' }
@@ -112,9 +113,7 @@ const submitForm = () => {
     });
 };
 
-
 const cancel = () => {
     editNodeVisible.value = false;
 };
 </script>
-

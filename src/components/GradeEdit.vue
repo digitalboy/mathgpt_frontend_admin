@@ -54,7 +54,7 @@ watch(() => gradeStore.currentGrade, (newGrade) => {
 // 监视对话框的可见性
 watch(editGradeVisible, (newValue) => {
     if (!newValue) {
-        gradeStore.setCurrentGrade(null); // 当对话框关闭时清除当前年级状态
+        // gradeStore.setCurrentGrade(null); // 当对话框关闭时清除当前年级状态
     }
 });
 

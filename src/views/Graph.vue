@@ -3,10 +3,10 @@
     <h1>知识图谱</h1>
 
     <el-row :gutter="20">
-        <el-col :span="16">
+        <el-col :span="20">
             <GraphVisualize />
         </el-col>
-        <el-col :span="8">
+        <el-col :span="4">
             <KPExplanationEdit :nodeUuid="nodeUuid" />
         </el-col>
     </el-row>

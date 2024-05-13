@@ -10,13 +10,26 @@ export const useGradeStore = defineStore('grade', {
     actions: {
         setCurrentGrade(grade: Grade | null) {
             this.currentGrade = grade;
+            localStorage.setItem('currentGradeId', grade ? grade.id!.toString() : '');
+            localStorage.setItem('currentGradeName', grade ? grade.name!.toString() : '');
         },
         async fetchGrades() {
             try {
                 const grades = await GradeService.getGrades();
                 if (grades) {
                     this.grades = grades;
-                    console.log(this.grades)
+                    console.log(this.grades);
+                    const storedGradeId = localStorage.getItem('currentGradeId');
+                    if (storedGradeId) {
+                        const gradeId = parseInt(storedGradeId);
+                        const storedGrade = this.grades.find(g => g.id === gradeId);
+                        // 在尝试设置当前年级之前，检查 storedGrade 是否存在
+                        if (storedGrade) {
+                            this.setCurrentGrade(storedGrade);
+                        } else {
+                            this.setCurrentGrade(null); // 如果找不到对应的年级，显示为 null
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('加载年级列表失败:', error);

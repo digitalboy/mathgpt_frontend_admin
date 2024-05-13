@@ -70,8 +70,9 @@ onMounted(async () => {
         });
 
     } else {
-        // 非学生角色使用默认颜色
-        await graphStore.fetchNodesAndEdges();
+        const storedGrade = localStorage.getItem('currentGradeName');
+        const subject = '数学';
+        await graphStore.fetchNodesAndEdges(storedGrade as string, subject);
         graphStore.nodes.forEach(node => {
             node.color = { background: 'lightblue', border: 'gray' };
             node.borderWidth = 2;
@@ -122,10 +123,14 @@ watchEffect(() => {
             edges: graphStore.edges.map(edge => ({
                 from: edge.start_uuid,  // 确保这些字段匹配节点的 uuid
                 to: edge.end_uuid,
-                // label: edge.type,
+                label: edge.type,
                 // title: `Since: ${edge.properties.since}`,
                 arrows: 'to',
-                id: `${edge.start_uuid}-${edge.end_uuid}-${edge.type}`
+                id: `${edge.start_uuid}-${edge.end_uuid}-${edge.type}`,
+                font: {
+                    multi: 'html',
+                    size: 8
+                },
             }))
         };
 
