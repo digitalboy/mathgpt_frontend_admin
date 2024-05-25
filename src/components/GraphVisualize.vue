@@ -16,9 +16,16 @@ const visContainer = ref(null);
 const authStore = useAuthStore();
 
 const graphStore = useGraphStore();
-const loading =ref(true)
+const loading = ref(true)
+
+// 从本地存储中获取关系类型
+const getStoredEdgeTypes = () => {
+    const storedEdgeTypes = localStorage.getItem('selectedRelationships');
+    return storedEdgeTypes ? JSON.parse(storedEdgeTypes) : [];
+};
 
 onMounted(async () => {
+    const edgeTypes = getStoredEdgeTypes();
     if (authStore.user && authStore.user.role === 'student') {
         const studentId = authStore.user.id;
         const grade = authStore.user.grade_name;
@@ -72,7 +79,7 @@ onMounted(async () => {
     } else {
         const storedGrade = localStorage.getItem('currentGradeName');
         const subject = '数学';
-        await graphStore.fetchNodesAndEdges(storedGrade as string, subject);
+        await graphStore.fetchNodesAndEdges(storedGrade as string, subject,undefined,edgeTypes);
         graphStore.nodes.forEach(node => {
             node.color = { background: 'lightblue', border: 'gray' };
             node.borderWidth = 2;
@@ -149,14 +156,17 @@ watchEffect(() => {
                     max: 30
                 }
             },
-            edges: {
-                smooth: true,
+            edges: {    
+                smooth: false,
                 font: {
                     size: 10,
                     color: '#aaaaaa',
                     align: 'middle'
                 }
-            }
+            },
+            layout: {
+                improvedLayout: false // 禁用改进的布局算法
+            },
         };
         const network = new Network(visContainer.value, graphData, options);
         network.on("click", function (params) {

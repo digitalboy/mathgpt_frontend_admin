@@ -31,7 +31,8 @@ export interface Edge {
     start_uuid: string;
     end_uuid: string;
     properties: {
-        since: number;  // 明确属性的类型
+        since?: number;
+        description?: string;
     };
 }
 
@@ -43,9 +44,12 @@ export interface GraphData {
 
 export class GraphService extends BaseService {
     // 获取节点和边
-    public static async getNodesAndEdges(grade?: string, subject?: string, student_id?: number): Promise<GraphData | undefined> {
+    public static async getNodesAndEdges(grade?: string, subject?: string, student_id?: number, edge_types?:string[]): Promise<GraphData | undefined> {
         try {
-            const params = { grade, subject, student_id };
+            const params: any = { grade, subject, student_id, edge_types };
+            if (edge_types) {
+                params.edge_types = edge_types.join(',');
+            }
             const response = await this.axiosInstance.get<GraphData>('/graph/get_nodes_edges', { params });
             console.log('知识点的节点和边获取成功！');
             return response.data;
