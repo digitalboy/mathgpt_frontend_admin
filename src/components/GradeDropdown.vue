@@ -1,53 +1,56 @@
 <!-- src\components\GradeDropdown.vue -->
 <template>
   <div>
-    <el-select v-if="grades.length > 0" v-model="selectedGradeId" placeholder="请选择年级" @change="handleGradeChange">
+    <el-select v-model="selectedGradeIds" placeholder="请选择年级" multiple collapse-tags @change="handleGradeChange">
       <el-option v-for="grade in grades" :key="grade.id" :label="grade.name" :value="grade.id"></el-option>
     </el-select>
-    <div v-else><el-text class="mx-1" type="warning">正在加载数据...</el-text></div>
+    <div v-if="isLoading"><el-text class="mx-1" type="warning">正在加载数据...</el-text></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { useGradeStore } from '@/stores/gradeStore';
-// import { ElMessage } from 'element-plus';
 
 const gradeStore = useGradeStore();
-const selectedGradeId = ref<number | null>(null);
+const selectedGradeIds = ref<number[]>([]);
+const isLoading = ref(true);
 
-// 使用计算属性确保响应式更新
 const grades = computed(() => gradeStore.grades);
 
-// 当选中的年级 ID 变化时，更新当前年级状态
-watch(selectedGradeId, (newId) => {
-  if (newId !== null) {
-    const grade = grades.value.find(g => g.id === newId) || null;
-    gradeStore.setCurrentGrade(grade);
-  } else {
-    gradeStore.setCurrentGrade(null);
-  }
+watch(grades, () => {
+  isLoading.value = false; // 数据加载完成后更新加载状态
 });
 
-const handleGradeChange = (newGradeId: number | null) => {
-  console.log(`Selected Grade ID: ${newGradeId}`);
+watch(selectedGradeIds, (newIds) => {
+  console.log(`Selected Grade IDs: ${newIds}`);
+  // 更新本地存储中的选中年级 ID 数组
+  localStorage.setItem('selectedGradeIds', JSON.stringify(newIds));
+});
+
+const handleGradeChange = (newGradeIds: number[]) => {
+  console.log(`Selected Grade IDs: ${newGradeIds}`);
+  selectedGradeIds.value = newGradeIds;
+
+  // 根据选中的年级 ID 更新当前选中年级的名称列表
+  gradeStore.setCurrentGradeNames(newGradeIds.map(id => {
+    const grade = grades.value.find(grade => grade.id === id);
+    return grade ? grade.name : '';
+  }));
 };
 
 onMounted(async () => {
   await gradeStore.fetchGrades();
-  // 检查本地存储是否有保存的年级ID
-  const storedGradeId = localStorage.getItem('currentGradeId');
-  if (storedGradeId) {
-    const gradeId = parseInt(storedGradeId, 10);
-    selectedGradeId.value = gradeId;
-  } else if (grades.value.length > 0) {
-    // 如果本地没有存储，选择列表中的第一个年级
-    selectedGradeId.value = grades.value[0].id as number;
+  // 从本地存储中获取已选年级 ID 数组
+  const storedGradeIds = localStorage.getItem('selectedGradeIds');
+  if (storedGradeIds) {
+    const gradeIds = JSON.parse(storedGradeIds) as number[];
+    selectedGradeIds.value = gradeIds;
+    // 初始化当前选中年级的名称列表
+    gradeStore.setCurrentGradeNames(gradeIds.map(id => {
+      const grade = grades.value.find(grade => grade.id === id);
+      return grade ? grade.name : '';
+    }));
   }
 });
-
 </script>
-
-<style scoped>
-/* 添加适当的样式 */
-</style>

@@ -23,9 +23,9 @@ export const useGraphStore = defineStore('graph', {
             this.currentEdge = edge;
         },
 
-        async fetchNodesAndEdges(grade?: string, subject?: string, studentId?: number, edgeTypes?: string[]) {
+        async fetchNodesAndEdges(grades?: string, subject?: string, studentId?: number, edgeTypes?: string[]) {
             try {
-                const graphData = await GraphService.getNodesAndEdges(grade, subject, studentId, edgeTypes);
+                const graphData = await GraphService.getNodesAndEdges(grades, subject, studentId, edgeTypes);
                 if (graphData) {
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;

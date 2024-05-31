@@ -5,13 +5,17 @@ import { Grade, GradeService } from '@/services/gradeService';
 export const useGradeStore = defineStore('grade', {
     state: () => ({
         grades: [] as Grade[],
-        currentGrade: null as Grade | null,
+        currentGrades: [] as Grade[],
+        currentGradeNames: [] as string[],
     }),
     actions: {
-        setCurrentGrade(grade: Grade | null) {
-            this.currentGrade = grade;
-            localStorage.setItem('currentGradeId', grade ? grade.id!.toString() : '');
-            localStorage.setItem('currentGradeName', grade ? grade.name!.toString() : '');
+        setCurrentGrades(grades: Grade[]) {
+            this.currentGrades = grades;
+            localStorage.setItem('currentGradeIds', JSON.stringify(grades.map(grade => grade.id)));            
+        },
+        setCurrentGradeNames(names: string[]) {
+            this.currentGradeNames = names;
+            localStorage.setItem('currentGradeNames', JSON.stringify(names));
         },
         async fetchGrades() {
             try {
@@ -19,16 +23,11 @@ export const useGradeStore = defineStore('grade', {
                 if (grades) {
                     this.grades = grades;
                     console.log(this.grades);
-                    const storedGradeId = localStorage.getItem('currentGradeId');
-                    if (storedGradeId) {
-                        const gradeId = parseInt(storedGradeId);
-                        const storedGrade = this.grades.find(g => g.id === gradeId);
-                        // 在尝试设置当前年级之前，检查 storedGrade 是否存在
-                        if (storedGrade) {
-                            this.setCurrentGrade(storedGrade);
-                        } else {
-                            this.setCurrentGrade(null); // 如果找不到对应的年级，显示为 null
-                        }
+                    const storedGradeIds = localStorage.getItem('currentGradeIds');
+                    if (storedGradeIds) {
+                        const gradeIds = JSON.parse(storedGradeIds) as number[];
+                        const storedGrades = this.grades.filter(grade => gradeIds.includes(grade.id!));
+                        this.setCurrentGrades(storedGrades);
                     }
                 }
             } catch (error) {
@@ -39,7 +38,12 @@ export const useGradeStore = defineStore('grade', {
             try {
                 const grade = await GradeService.getGradeById(gradeId);
                 if (grade) {
-                    this.setCurrentGrade(grade);
+                    // 将获取的年级添加到当前选中年级列表中
+                    this.currentGrades.push(grade);
+                    // 更新当前选中年级的名称列表
+                    this.currentGradeNames.push(grade.name);
+                    // 存储当前选中年级的名称
+                    localStorage.setItem('currentGradeNames', JSON.stringify(this.currentGradeNames));
                 }
             } catch (error) {
                 console.error('获取年级详细信息失败:', error);
@@ -49,8 +53,12 @@ export const useGradeStore = defineStore('grade', {
             try {
                 const newGrade = await GradeService.createGrade(gradeData);
                 if (newGrade) {
-                    this.grades.push(newGrade);
-                    this.setCurrentGrade(newGrade);
+                    // 将新创建的年级添加到当前选中年级列表中
+                    this.currentGrades.push(newGrade);
+                    // 更新当前选中年级的名称列表
+                    this.currentGradeNames.push(newGrade.name);
+                    // 存储当前选中年级的名称
+                    localStorage.setItem('currentGradeNames', JSON.stringify(this.currentGradeNames));
                 }
             } catch (error) {
                 console.error('创建年级失败:', error);
@@ -60,10 +68,14 @@ export const useGradeStore = defineStore('grade', {
             try {
                 const updatedGrade = await GradeService.updateGrade(gradeId, gradeData);
                 if (updatedGrade) {
-                    const index = this.grades.findIndex(g => g.id === gradeId);
+                    // 更新当前选中年级列表中对应年级的数据
+                    const index = this.currentGrades.findIndex(g => g.id === gradeId);
                     if (index !== -1) {
-                        this.grades[index] = updatedGrade;
-                        this.setCurrentGrade(updatedGrade);
+                        this.currentGrades[index] = updatedGrade;
+                        // 更新当前选中年级的名称列表
+                        this.currentGradeNames[index] = updatedGrade.name;
+                        // 存储当前选中年级的名称
+                        localStorage.setItem('currentGradeNames', JSON.stringify(this.currentGradeNames));
                     }
                 }
             } catch (error) {
@@ -73,9 +85,14 @@ export const useGradeStore = defineStore('grade', {
         async deleteGrade(gradeId: number) {
             try {
                 await GradeService.deleteGrade(gradeId);
-                this.grades = this.grades.filter(g => g.id !== gradeId);
-                if (this.currentGrade?.id === gradeId) {
-                    this.currentGrade = null;
+                // 从当前选中年级列表中移除对应年级的数据
+                this.currentGrades = this.currentGrades.filter(g => g.id !== gradeId);
+                // 找到要删除的年级名称并从当前选中年级名称列表中移除
+                const gradeNameIndex = this.currentGradeNames.findIndex(name => name === this.grades.find(grade => grade.id === gradeId)?.name);
+                if (gradeNameIndex !== -1) {
+                    this.currentGradeNames.splice(gradeNameIndex, 1);
+                    // 存储当前选中年级的名称
+                    localStorage.setItem('currentGradeNames', JSON.stringify(this.currentGradeNames));
                 }
             } catch (error) {
                 console.error('删除年级失败:', error);

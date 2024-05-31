@@ -77,9 +77,15 @@ onMounted(async () => {
         });
 
     } else {
-        const storedGrade = localStorage.getItem('currentGradeName');
+        const storedGrades = localStorage.getItem('currentGradeNames');
+        const parsedGrades = JSON.parse(storedGrades || '[]') as string[];
         const subject = '数学';
-        await graphStore.fetchNodesAndEdges(storedGrade as string, subject,undefined,edgeTypes);
+        const formattedGrades = parsedGrades.join(',');
+        if (edgeTypes.length > 0) {
+            await graphStore.fetchNodesAndEdges(formattedGrades, subject, undefined, edgeTypes);
+        } else {
+            await graphStore.fetchNodesAndEdges(formattedGrades, subject);
+        }
         graphStore.nodes.forEach(node => {
             node.color = { background: 'lightblue', border: 'gray' };
             node.borderWidth = 2;

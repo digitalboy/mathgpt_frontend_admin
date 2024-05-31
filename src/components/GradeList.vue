@@ -24,7 +24,7 @@ const gradeStore = useGradeStore();
 const grades = computed(() => gradeStore.grades);
 
 const editGrade = (grade: Grade) => {
-    gradeStore.setCurrentGrade(grade);
+    gradeStore.setCurrentGrades(grade);
 };
 
 onMounted(() => {
