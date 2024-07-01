@@ -23,14 +23,9 @@ export const useGraphStore = defineStore('graph', {
             this.currentEdge = edge;
         },
 
-        async fetchNodesAndEdges(grades?: string, subject?: string, studentId?: number, edgeTypes?: string[]) {
+        async fetchNodesAndEdges(grades?: string, subject?: string, studentId?: number, edgeTypes?: string[], textbookVersion?: string) {
             try {
-                const graphData = await GraphService.getNodesAndEdges(grades, subject, studentId, edgeTypes);
-                if (graphData) {
-                    this.nodes = graphData.nodes;
-                    this.edges = graphData.edges;
-                    console.log('知识点的节点和边获取成功！');
-                }
+                const graphData = await GraphService.getNodesAndEdges(grades, subject, studentId, edgeTypes, textbookVersion);
                 if (graphData) {
                     this.nodes = graphData.nodes;
                     this.edges = graphData.edges;

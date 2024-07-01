@@ -24,8 +24,16 @@ const getStoredEdgeTypes = () => {
     return storedEdgeTypes ? JSON.parse(storedEdgeTypes) : [];
 };
 
+// 从本地存储中获取出版社
+const getStoredPublisher = () => {
+    const storedPublisher = localStorage.getItem('currentPublisher');
+    return storedPublisher ? storedPublisher : '人民教育出版社';
+};
+
 onMounted(async () => {
     const edgeTypes = getStoredEdgeTypes();
+    const textbookVersion = getStoredPublisher();
+    
     if (authStore.user && authStore.user.role === 'student') {
         const studentId = authStore.user.id;
         const grade = authStore.user.grade_name;
@@ -82,7 +90,7 @@ onMounted(async () => {
         const subject = '数学';
         const formattedGrades = parsedGrades.join(',');
         if (edgeTypes.length > 0) {
-            await graphStore.fetchNodesAndEdges(formattedGrades, subject, undefined, edgeTypes);
+            await graphStore.fetchNodesAndEdges(formattedGrades, subject, undefined, edgeTypes, textbookVersion);
         } else {
             await graphStore.fetchNodesAndEdges(formattedGrades, subject);
         }

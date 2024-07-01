@@ -10,7 +10,7 @@
             </el-form-item>
             <el-form-item label="描述" prop="description">
                 <el-input v-model="grade.description"></el-input>
-            </el-form-item>            
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm">提交</el-button>
                 <el-button @click="cancel">取消</el-button>
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useGradeStore } from '@/stores/gradeStore';
-import { Grade } from '@/services/gradeService'; // 引入 Grade 接口
+import { Grade } from '@/services/gradeService';
 import { ElMessage, FormInstance } from 'element-plus';
 
 const gradeStore = useGradeStore();
@@ -31,21 +31,19 @@ const gradeForm = ref<FormInstance | null>(null);
 const grade = ref<Grade>({
     id: 0,
     name: '',
-    description: '',  // 确保包含 description    
+    description: '',
 });
 
 const rules = {
     name: [
         { required: true, message: '请输入年级名称', trigger: 'blur' }
-    ],
-    school_id: [
-        { required: true, message: '请输入所属学校ID', trigger: 'blur' }
     ]
 };
 
 // 监视年级状态的变化
-watch(() => gradeStore.currentGrade, (newGrade) => {
-    if (newGrade) {
+watch(() => gradeStore.currentGrades, (newGrades) => {
+    if (newGrades.length > 0) {
+        const newGrade = newGrades[0];
         grade.value = { ...newGrade };
         editGradeVisible.value = true;
     }
@@ -54,14 +52,14 @@ watch(() => gradeStore.currentGrade, (newGrade) => {
 // 监视对话框的可见性
 watch(editGradeVisible, (newValue) => {
     if (!newValue) {
-        // gradeStore.setCurrentGrade(null); // 当对话框关闭时清除当前年级状态
+        grade.value = { id: 0, name: '', description: '' };
     }
 });
 
 const submitForm = () => {
     gradeForm.value?.validate((valid: boolean) => {
         if (valid) {
-            if (typeof grade.value.id === 'number' ) {
+            if (typeof grade.value.id === 'number') {
                 console.log('更新数据：', grade.value);
                 gradeStore.updateGrade(grade.value.id, grade.value)
                     .then(() => {
@@ -72,7 +70,7 @@ const submitForm = () => {
                         ElMessage.error('更新失败，请重试: ' + error.message);
                     });
             } else {
-                ElMessage.error('无有效的年级ID或学校ID，请检查数据');
+                ElMessage.error('无有效的年级ID，请检查数据');
             }
         } else {
             ElMessage.error('请检查输入的数据');
@@ -80,7 +78,6 @@ const submitForm = () => {
         }
     });
 };
-
 
 const cancel = () => {
     editGradeVisible.value = false;

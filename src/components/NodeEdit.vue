@@ -1,3 +1,4 @@
+<!-- src\components\NodeEdit.vue -->
 <template>
     <el-dialog title="编辑节点信息" v-model="editNodeVisible">
         <el-form :model="nodeData.properties" :rules="rules" ref="nodeForm" label-position="right" label-width="auto">
@@ -48,7 +49,8 @@ const nodeData = ref<Node>({
         uuid: ''
     },
     explanation_count: 0,
-    identity: 0
+    identity: 0,
+    prerequisite_from_count: 0
 });
 
 const rules = {

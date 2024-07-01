@@ -45,9 +45,9 @@ export interface GraphData {
 
 export class GraphService extends BaseService {
     // 获取节点和边
-    public static async getNodesAndEdges(grades?: string, subject?: string, student_id?: number, edge_types?:string[]): Promise<GraphData | undefined> {
+    public static async getNodesAndEdges(grades?: string, subject?: string, student_id?: number, edge_types?: string[], textbook_version?: string): Promise<GraphData | undefined> {
         try {
-            const params: any = { grades, subject, student_id, edge_types };
+            const params: any = { grades, subject, student_id, edge_types, textbook_version };
             if (edge_types) {
                 params.edge_types = edge_types.join(',');
             }

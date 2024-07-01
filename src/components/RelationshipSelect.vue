@@ -4,7 +4,7 @@
         <el-select v-model="selectedRelationships" multiple placeholder="请选择关系" style="width: 100%;">
             <el-option v-for="relation in relationships" :key="relation.type" :label="relation.type"
                 :value="relation.type">
-                <template #default="{ option }">
+                <template #default="{  }">
                     <span>{{ relation.type }} - {{ relation.description }}</span>
                 </template>
             </el-option>

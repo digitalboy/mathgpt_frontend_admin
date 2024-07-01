@@ -24,7 +24,7 @@ const gradeStore = useGradeStore();
 const grades = computed(() => gradeStore.grades);
 
 const editGrade = (grade: Grade) => {
-    gradeStore.setCurrentGrades(grade);
+    gradeStore.setCurrentGrades([grade]); // 将单个年级对象包装在数组中
 };
 
 onMounted(() => {
