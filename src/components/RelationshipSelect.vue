@@ -1,6 +1,6 @@
 <!-- src/components/RelationshipSelect.vue -->
 <template>
-    <el-form-item label="节点关系" prop="selectedRelationships">
+    <el-form-item prop="selectedRelationships">
         <el-select v-model="selectedRelationships" multiple placeholder="请选择关系" style="width: 100%;">
             <el-option v-for="relation in relationships" :key="relation.type" :label="relation.type"
                 :value="relation.type">
