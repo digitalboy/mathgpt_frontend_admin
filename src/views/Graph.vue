@@ -1,10 +1,9 @@
 <!-- src/views/Graph.vue -->
 <template>
     <h1>知识图谱</h1>
-
     <el-row :gutter="20">
         <el-col :span="20">
-            <GraphVisualize />
+            <GraphVisualize :key="graphKey" />
         </el-col>
         <el-col :span="4">
             <KPExplanationEdit :nodeUuid="nodeUuid" />
@@ -21,13 +20,13 @@ import KPExplanationEdit from '@/components/KPExplanationEdit.vue';
 import { useGraphStore } from '@/stores/graphStore';
 
 const graphStore = useGraphStore();
-
-const nodeUuid = ref("")
+const nodeUuid = ref("");
+const graphKey = ref(Date.now());  // 使用时间戳作为唯一的 key
 
 watch(() => graphStore.currentNode, (newNode) => {
     if (newNode) {
         nodeUuid.value = newNode.properties.uuid;
-        console.log(nodeUuid.value)
+        console.log(nodeUuid.value);
     }
 }, { immediate: true });
 

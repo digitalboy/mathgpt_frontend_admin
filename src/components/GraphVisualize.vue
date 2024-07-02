@@ -10,13 +10,11 @@ import { ref, onMounted, watchEffect } from 'vue';
 import { useGraphStore } from '@/stores/graphStore';
 import { useAuthStore } from '@/stores/authStore';
 import { Network } from 'vis-network/standalone';
-// import { ElMessage } from 'element-plus';
 
 const visContainer = ref(null);
 const authStore = useAuthStore();
-
 const graphStore = useGraphStore();
-const loading = ref(true)
+const loading = ref(true);
 
 // 从本地存储中获取关系类型
 const getStoredEdgeTypes = () => {
@@ -30,16 +28,17 @@ const getStoredPublisher = () => {
     return storedPublisher ? storedPublisher : '人民教育出版社';
 };
 
-onMounted(async () => {
+const fetchData = async () => {
     const edgeTypes = getStoredEdgeTypes();
     const textbookVersion = getStoredPublisher();
-    
+    const subject = '数学'; // 暂时固定为数学
+
     if (authStore.user && authStore.user.role === 'student') {
         const studentId = authStore.user.id;
         const grade = authStore.user.grade_name;
-        const subject = '数学'; // 暂时固定为数学
 
-        await graphStore.fetchNodesAndEdges(grade, subject, studentId);
+        await graphStore.fetchNodesAndEdges(grade, subject, studentId, edgeTypes, textbookVersion);
+        console.log("student");
 
         graphStore.nodes.forEach(node => {
             const totalQuestions = node.total_questions ?? 0;
@@ -87,18 +86,22 @@ onMounted(async () => {
     } else {
         const storedGrades = localStorage.getItem('currentGradeNames');
         const parsedGrades = JSON.parse(storedGrades || '[]') as string[];
-        const subject = '数学';
         const formattedGrades = parsedGrades.join(',');
-        if (edgeTypes.length > 0) {
-            await graphStore.fetchNodesAndEdges(formattedGrades, subject, undefined, edgeTypes, textbookVersion);
-        } else {
-            await graphStore.fetchNodesAndEdges(formattedGrades, subject);
-        }
+
+        await graphStore.fetchNodesAndEdges(formattedGrades, subject, undefined, edgeTypes, textbookVersion);
+        console.log("admin");
+
         graphStore.nodes.forEach(node => {
             node.color = { background: 'lightblue', border: 'gray' };
             node.borderWidth = 2;
         });
     }
+};
+
+onMounted(async () => {
+    await fetchData();
+    console.log("onMounted");
+    loading.value = false;
 });
 
 watchEffect(() => {
@@ -125,10 +128,10 @@ watchEffect(() => {
 
                 return {
                     id: node.properties.uuid,  // 使用 uuid 作为唯一标识符
-                    label: labelContent,    
+                    label: labelContent,
                     title: titleContent,
                     color: node.color ? node.color : undefined,
-                    borderWidth: node.borderWidth,                
+                    borderWidth: node.borderWidth,
                     borderColor: node.color?.border ?? 'defaultBorder',
                     scaling: {
                         min: 10,
@@ -138,7 +141,7 @@ watchEffect(() => {
                         multi: 'html',
                         size: 12
                     },
-                    
+
                 };
             }),
             edges: graphStore.edges.map(edge => ({
@@ -170,7 +173,7 @@ watchEffect(() => {
                     max: 30
                 }
             },
-            edges: {    
+            edges: {
                 smooth: false,
                 font: {
                     size: 10,
@@ -186,13 +189,10 @@ watchEffect(() => {
         network.on("click", function (params) {
             handleGraphClick(params);
         });
-        loading.value = false
     } else if (!graphStore.isDataLoading) {
         // ElMessage.warning('未加载任何图形数据');
     }
 });
-
-
 
 function handleGraphClick(params: any) {
     // console.log("点击事件: ", params);
