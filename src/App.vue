@@ -16,7 +16,7 @@
       <router-view />
     </el-col>
     <el-col :span="24" class="hidden-lg-and-up">
-      <router-view />
+      <!-- <router-view /> -->
     </el-col>
   </el-row>
 </template>
