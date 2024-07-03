@@ -23,6 +23,7 @@
             <el-form-item>
                 <el-button type="primary" @click="submitForm">提交</el-button>
                 <el-button @click="cancel">取消</el-button>
+                <el-button @click="copyNodeInfo">复制节点信息</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -117,5 +118,15 @@ const submitForm = () => {
 
 const cancel = () => {
     editNodeVisible.value = false;
+};
+
+
+const copyNodeInfo = () => {
+    const nodeInfo = JSON.stringify(nodeData.value.properties, null, 2);
+    navigator.clipboard.writeText(nodeInfo).then(() => {
+        ElMessage.success('节点信息已复制到剪贴板');
+    }).catch((error) => {
+        ElMessage.error('复制失败，请重试: ' + error.message);
+    });
 };
 </script>
