@@ -1,10 +1,11 @@
 <!-- src\components\GradeDropdown.vue -->
 <template>
   <div>
-    <el-select v-model="selectedGradeIds" placeholder="请选择年级" multiple collapse-tags @change="handleGradeChange">
+    <el-select v-if="grades.length > 0" v-model="selectedGradeIds" placeholder="请选择年级" multiple collapse-tags
+      @change="handleGradeChange">
       <el-option v-for="grade in grades" :key="grade.id" :label="grade.name" :value="grade.id"></el-option>
     </el-select>
-    <div v-if="isLoading"><el-text class="mx-1" type="warning">正在加载数据...</el-text></div>
+    <div v-else>正在加载数据...</div>
   </div>
 </template>
 

@@ -24,7 +24,12 @@ import TextbookVersionDropdown from '@/components/TextbookVersionDropdown.vue';
 
 <style scoped>
 .app-header {
-    padding: 10px;
+    /* display: flex; */
+    align-items: center;
+    padding-top: 23px;
+    padding-left: 20px;
+    padding-right: 20px;
+
     background-color: #3c7fb6;
     color: white;
 }
