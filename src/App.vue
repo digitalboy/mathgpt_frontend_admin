@@ -1,4 +1,4 @@
-<!-- src/App.vue -->
+<!-- src\App.vue -->
 <template>
   <el-row>
     <el-col :span="24">
@@ -25,6 +25,7 @@
 import 'element-plus/theme-chalk/display.css';
 import AppHeaderStudent from '@/components/AppHeaderStudent.vue';
 import AppHeaderAdmin from '@/components/AppHeaderAdmin.vue';
+import AppHeaderGuest from '@/components/AppHeaderGuest.vue'; // 导入访客头部组件
 import SideMenu from '@/components/SideMenu.vue';
 import { computed } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
@@ -36,9 +37,17 @@ export default {
   },
   setup() {
     const authStore = useAuthStore();
+    // 根据角色计算要使用的头部组件
     const headerComponent = computed(() => {
-      return authStore.user?.role === 'admin' ? AppHeaderAdmin : AppHeaderStudent;
+      if (!authStore.user?.isLoggedIn) {
+        return AppHeaderGuest; // 未登录时显示访客头部组件
+      } else if (authStore.user?.role === 'admin') {
+        return AppHeaderAdmin;
+      } else {
+        return AppHeaderStudent;
+      }
     });
+
     return {
       headerComponent
     };
@@ -47,6 +56,7 @@ export default {
 </script>
 
 <style>
+/* 你的全局样式 */
 h1,
 h2 {
   color: #525457;
