@@ -173,7 +173,7 @@ function handleGraphClick(params: any) {
 <style scoped>
 .vis-container {
     width: 100%;
-    height: 800px;
+    height: 750px;
     border: 1px solid #e4e4e4;
 }
 </style>
